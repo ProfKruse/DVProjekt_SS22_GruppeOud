@@ -116,9 +116,9 @@
          {
              print($gbdatum);
             $month=$gbdatum[0]; 
-            $day=2; 
-            $year=3;
-            print($month);
+            $day=$gbdatum[1]; 
+            $year=$gbdatum[2]; ;
+            
 
              if ( !checkdate($month, $day, $year) )
                 return false;
@@ -141,10 +141,10 @@
     <?PHP
 // Ausführen wenn Formular gesendet
     if (isset($_POST["submit"]))
-        {
+        {  if (isset($_POST["geburtsdatum"]) 
+            or (!empty($_POST["geburtsdatum"])))
 
-if (isset($_POST["geburtsdatum"])) 
-{
+       {
         $datum = $_POST["geburtsdatum"];
         $age = ageCalculator($datum);
     if ( $age == false )
@@ -203,7 +203,7 @@ if (isset($_POST["geburtsdatum"]))
 
         if (isset($_POST["mietbeginn"]) 
         or (!empty($_POST["mietbeginn"])))
-        // or ($_POST["mietbeginn"] == ""))
+       
         {
         $errors[] = "Bitte wählen Sie ein Datum für den Mietbeginn aus."; 
         }
