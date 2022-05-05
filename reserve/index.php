@@ -114,24 +114,23 @@
  <?php
          function ageCalculator( $gbdatum ) 
          {
-             print($gbdatum);
-            $month=$gbdatum[0]; 
-            $day=$gbdatum[1]; 
-            $year=$gbdatum[2]; ;
+              $geb_tag=substr($gbdatum,0,2);
+              $geb_mon=substr($gbdatum,3,2);
+              $geb_jahr=substr($gbdatum,6,4);
             
 
-             if ( !checkdate($month, $day, $year) )
+             if ( !checkdate($geb_mon, $geb_tag, $geb_jahr) )
                 return false;
         
              $cur_day = date("d");
              $cur_month = date("m");
              $cur_year = date("Y");
 
-             $calc_year = $cur_year - $year;
+             $calc_year = $cur_year - $geb_jahr;
     
-             if( $month > $cur_month )
+             if( $geb_mon > $cur_month )
                 return $calc_year - 1;
-             elseif ( $month == $cur_month && $day > $cur_day )
+             elseif ( $month == $cur_month && $geb_tag > $cur_day )
                 return $calc_year - 1;
             else
                  return $calc_year;
