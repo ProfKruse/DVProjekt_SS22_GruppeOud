@@ -55,7 +55,7 @@
             </p>
             <p>
             <label for= "geburtsdatum">Geburtsdatum:</label> 
-            <input type="date" id="geburtsdatum">
+            <input type="date" name="geburtsdatum" id="geburtsdatum">
             </p>
             <p>
             <label for= "ausweisnummer">Ausweisnummer:</label> 
@@ -114,13 +114,13 @@
  <?php
          function ageCalculator( $gbdatum ) 
          {
-              $geb_tag=substr($gbdatum,0,2);
-              $geb_mon=substr($gbdatum,3,2);
-              $geb_jahr=substr($gbdatum,6,4);
+              $geb_tag=substr($gbdatum,7,2);
+              $geb_mon=substr($gbdatum,5,2);
+              $geb_jahr=substr($gbdatum,0,4);
             
 
-             if ( !checkdate($geb_mon, $geb_tag, $geb_jahr) )
-                return false;
+             //if ( !checkdate($geb_mon, $geb_tag, $geb_jahr) )
+               // return false;
         
              $cur_day = date("d");
              $cur_month = date("m");
@@ -130,39 +130,22 @@
     
              if( $geb_mon > $cur_month )
                 return $calc_year - 1;
-             elseif ( $month == $cur_month && $geb_tag > $cur_day )
+             elseif ( $geb_mon == $cur_month && $geb_tag > $cur_day )
                 return $calc_year - 1;
             else
                  return $calc_year;
 
 } 
 ?>
-    <?PHP
-// Ausführen wenn Formular gesendet
-    if (isset($_POST["submit"]))
-        {  if (isset($_POST["geburtsdatum"]) 
-            or (!empty($_POST["geburtsdatum"])))
-
-       {
-        $datum = $_POST["geburtsdatum"];
-        $age = ageCalculator($datum);
-    if ( $age == false )
-        echo "Geben Sie ein gültiges Alter ein!";
-        
-        elseif($age <18)
-        echo "Sie müssen mind. 18 Jahre alt sein, um ein Auto mieten zu können!";
-        else
-        echo "Dein Alter ist: " . ageCalculator($datum); 
-        }}
-?>
+   
 <?php
 // Formulareingaben überprüfen und Fehlermeldungen ausgeben
-         $errors = array();
+        $errors = array();
        
         if (!isset($_POST["vorname"])
         or ($_POST["vorname"] == ""))
         {
-        $errors[] = "Der Vorname fehlt."; 
+        $errors[] = " Der Vorname fehlt."; 
         }
         if (!isset($_POST["nachname"])
         or($_POST["nachname"] == "")) 
@@ -172,12 +155,12 @@
         if (!isset($_POST["straße"]) 
         or($_POST["straße"] == "")) 
         {
-        $errors[] = "Die Straße fehlt."; 
+        $errors[] = " Die Straße fehlt."; 
         }
         if (!isset($_POST["hausnummer"]) 
         or ($_POST["hausnummer"] == ""))
         {
-        $errors[] = "Die Hausnummer fehlt."; 
+        $errors[] = " Die Hausnummer fehlt."; 
         }
         if (!isset($_POST["PLZ"]) 
         or ($_POST["PLZ"] == ""))
@@ -187,24 +170,34 @@
         if (!isset($_POST["wohnort"]) 
         or ($_POST["wohnort"] == ""))
         {
-        $errors[] = "Der Wohnort fehlt."; 
+        $errors[] = " Der Wohnort fehlt."; 
+        }
+        if (!isset($_POST["geburtsdatum"]) 
+        or (empty($_POST["geburtsdatum"])))
+        {
+        $errors[] = " Das Geburtsdatum fehlt."; 
         }
         if (isset($_POST["geburtsdatum"]) 
-        or (!empty($_POST["geburtsdatum"])))
-        {
-        $errors[] = "Das Geburtsdatum fehlt."; 
-        }
+             or (!empty($_POST["geburtsdatum"])))
+            {
+                $datum = $_POST["geburtsdatum"];
+                $age = ageCalculator($datum);
+                //if ( $age == false )
+                  //  echo "Geben Sie ein gültiges Alter ein!";
+                if($age <18){
+                    $errors[] = " Sie müssen mind. 18 Jahre alt sein, um ein Auto mieten zu können!"; }
+            }
         if (!isset($_POST["ausweisnummer"]) 
         or ($_POST["ausweisnummer"] == ""))
         {
-        $errors[] = "Die Ausweisnummer fehlt."; 
+        $errors[] = " Die Ausweisnummer fehlt."; 
         }
 
         if (isset($_POST["mietbeginn"]) 
         or (!empty($_POST["mietbeginn"])))
        
         {
-        $errors[] = "Bitte wählen Sie ein Datum für den Mietbeginn aus."; 
+        $errors[] = " Bitte wählen Sie ein Datum für den Mietbeginn aus."; 
         }
         if (isset($_POST["mietende"]) 
         or (!empty($_POST["mietende"])))
@@ -219,11 +212,11 @@
         implode("<br>", $errors);
         }
         else{
-            echo "Vielen Dank, Ihre Daten wurden gepeichert";
+            echo "Vielen Dank, Ihre Daten wurden gepeichert.";
         }
 ?>
 
-         
+
         
         </fieldset>
    </form>
@@ -233,5 +226,3 @@
         </div>
 </body>
 </html>
-
-
