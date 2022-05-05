@@ -37,34 +37,34 @@
             <legend>Daten</legend>
             <p>
             <label for= "vorname">Vorname:</label>
-            <input type ="text" name ="vorname" id= "vorname"/>
+            <input type ="text" name ="vorname" id= "vorname" required/>
             </p>
             <p>
             <label for= "nachname">Nachname:</label>
-            <input type ="text" name ="nachname" id= "nachname"/>
+            <input type ="text" name ="nachname" id= "nachname" required/>
             </p>
             <p>
             <label for= "straße">Straße:</label>  <input type ="text" name ="straße" id= "straße"/> <label for= "hausnummer">Hausnummer:</label>
-           <input type ="number" name ="hausnummer" id= "hausnummer"/>
+           <input type ="number" name ="hausnummer" id= "hausnummer" min="1" required/>
             </p>
             <p>
             <label for= "PLZ">PLZ:</label>
-            <input type ="text" name ="PLZ" id= "PLZ"/>
+            <input type ="number" name ="PLZ" min="10000" max="99999" id= "PLZ"/>
             <label for= "wohnort">Wohnort:</label>
-            <input type ="text" name ="wohnort" id= "wohnort"/>
+            <input type ="text" name ="wohnort" id= "wohnort" required/>
             </p>
             <p>
             <label for= "geburtsdatum">Geburtsdatum:</label> 
-            <input type="date" name="geburtsdatum" id="geburtsdatum">
+            <input type="date" name="geburtsdatum" id="geburtsdatum" required>
             </p>
             <p>
             <label for= "ausweisnummer">Ausweisnummer:</label> 
-            <input type="text"name ="ausweisnummer" id="ausweisnummer">
+            <input type="text" name ="ausweisnummer" id="ausweisnummer" required>
             </p>
             <label for= "mietbeginn">Mietbeginn:</label> 
-            <input type="date" id="mietbeginn">
+            <input type="date" id="mietbeginn" required>
             <label for= "mietende">Mietende:</label> 
-            <input type="date" id="mietende">
+            <input type="date" id="mietende" required>
             <p>
             <label for= "automarke">Automarke:</label> 
             <select>
@@ -142,41 +142,7 @@
 // Formulareingaben überprüfen und Fehlermeldungen ausgeben
         $errors = array();
        
-        if (!isset($_POST["vorname"])
-        or ($_POST["vorname"] == ""))
-        {
-        $errors[] = " Der Vorname fehlt."; 
-        }
-        if (!isset($_POST["nachname"])
-        or($_POST["nachname"] == "")) 
-        {
-        $errors[] = "Der Nachname fehlt."; 
-        }
-        if (!isset($_POST["straße"]) 
-        or($_POST["straße"] == "")) 
-        {
-        $errors[] = " Die Straße fehlt."; 
-        }
-        if (!isset($_POST["hausnummer"]) 
-        or ($_POST["hausnummer"] == ""))
-        {
-        $errors[] = " Die Hausnummer fehlt."; 
-        }
-        if (!isset($_POST["PLZ"]) 
-        or ($_POST["PLZ"] == ""))
-        {
-        $errors[] = "Die PLZ fehlt."; 
-        }
-        if (!isset($_POST["wohnort"]) 
-        or ($_POST["wohnort"] == ""))
-        {
-        $errors[] = " Der Wohnort fehlt."; 
-        }
-        if (!isset($_POST["geburtsdatum"]) 
-        or (empty($_POST["geburtsdatum"])))
-        {
-        $errors[] = " Das Geburtsdatum fehlt."; 
-        }
+        
         if (isset($_POST["geburtsdatum"]) 
              or (!empty($_POST["geburtsdatum"])))
             {
@@ -187,25 +153,7 @@
                 if($age <18){
                     $errors[] = " Sie müssen mind. 18 Jahre alt sein, um ein Auto mieten zu können!"; }
             }
-        if (!isset($_POST["ausweisnummer"]) 
-        or ($_POST["ausweisnummer"] == ""))
-        {
-        $errors[] = " Die Ausweisnummer fehlt."; 
-        }
-
-        if (isset($_POST["mietbeginn"]) 
-        or (!empty($_POST["mietbeginn"])))
        
-        {
-        $errors[] = " Bitte wählen Sie ein Datum für den Mietbeginn aus."; 
-        }
-        if (isset($_POST["mietende"]) 
-        or (!empty($_POST["mietende"])))
-        
-        {
-        $errors[] = " Bitte wählen Sie ein Datum für das Mietende aus."; 
-        }
-
         if (count($errors)) 
         {
         echo "Ihre Daten konnten nicht gespeichert werden, bitte prüfen Sie die Eingabe." .
@@ -226,3 +174,5 @@
         </div>
 </body>
 </html>
+
+
