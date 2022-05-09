@@ -3,8 +3,13 @@
     --formInputWidth: 375px;
 }
 
+@font-face {
+    font-family: custom;
+    src: url("../fonts/Calibri Regular.ttf");
+  }
+
 * {
-    font-family: "Calibri";
+    font-family: custom; 
     color: #212568;
 }
 
