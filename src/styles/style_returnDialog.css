@@ -1,0 +1,10 @@
+@import "global.css";
+
+textarea {
+    width: calc(2*var(--formInputWidth));
+    resize: none;
+}
+
+table {
+    margin: 100px;
+}
