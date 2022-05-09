@@ -29,9 +29,14 @@
                 <div class="group">
                     <label for="kfztyp"><b>*Kfz-Typ</b></label>
                     <select name="kfztyp">
-                        <option value="">Typ 1</option>
-                        <option value="">Typ 2</option>
-                        <option value="">Typ 3</option>
+                        <option value="">Van</option>
+                        <option value="">Limousine</option>
+                        <option value="">Cabriolet</option>
+                        <option value="">Sportwagen</option>
+                        <option value="">Pickup</option>
+                        <option value="">Kombi</option>
+                        <option value="">SUV</option>
+                        <option value="">Kleinwagen</option>
                     </select>
 
                     <label for="abgabestation"><b>*Abgabestation</b></label>
