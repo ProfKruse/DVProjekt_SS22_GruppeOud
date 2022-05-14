@@ -1,0 +1,5 @@
+@import "global.css";
+
+input#land {
+    width: calc(2*var(--formInputWidth));
+}
