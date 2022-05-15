@@ -24,7 +24,7 @@ session_start();
                         <li><a href="reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
                         <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><a href="logout.php">Logout</a></li>
+                        <li><a href="../login/logout.php">Logout</a></li>
                     </b>
                 </ul>
             </nav>
