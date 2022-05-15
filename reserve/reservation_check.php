@@ -1,3 +1,13 @@
+<?php
+   
+session_start();
+    include("../login/db_inc.php");
+    include("../login/functions.php");
+
+    $user_data = check_login($con);
+
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,10 +21,10 @@
             <nav>
                 <ul>
                     <b>
-                        <li><a href="">Reservieren</a></li>
+                        <li><a href="reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
-                        <li><a href="">Rechnungen</a></li>
-                        <li><a href="">Konto</a></li>
+                        <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
+                        <li><a href="logout.php">Logout</a></li>
                     </b>
                 </ul>
             </nav>

@@ -1,3 +1,40 @@
+<?php
+session_start();
+    include("db_inc.php");
+    include("functions.php");
+
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
+
+        $user_name = $_POST['user_name'];
+        $password = $_POST['password'];
+
+
+        if(!empty($user_name) && !empty($password) && !is_numeric($user_name)){
+            
+            $query = "select * from users where user_name = '$user_name' limit 1 ";
+            $result = mysqli_query($con,$query);
+
+            if($result){
+                if($result && mysqli_num_rows($result) > 0){
+                    $user_data = mysqli_fetch_assoc($result);
+                    if($user_data['password'] === $password) {
+                        $_SESSION['user_id'] = $user_data['user_id'];
+                        header("Location: ../reserve/reservation_check.php");
+                        die;
+                    }
+        
+                } 
+            }
+            echo "wrong username or password!";
+            
+        }else{
+            echo "wrong username or password!";
+        }
+    
+    }
+
+?>
+
 <!DOCTYPE html>
 <html>
     <head> 
@@ -7,16 +44,17 @@
     </head>
     <body>
         <main>
-            <h1>Login</h1>
+            <h1>Anmeldung</h1>
             <center>
                 <div class="frame">
-                    <form action="" method="POST">
-                        <label for="nutzerid">*Nutzer-ID</label>
-                        <input type="text" name="nutzerid" placeholder="User-ID">
+                    <form method="POST">
+                        <label for="user_name">*Nutzer-ID</label>
+                        <input type="text" name="user_name" placeholder="user_name">
 
-                        <label for="nutzerpassw">*Passwort</label>
-                        <input type="password" name="nutzerpassw" placeholder="Passwort">
-                        <button type="submit">Login</button>
+                        <label for="password">*Passwort</label>
+                        <input type="password" name="password" placeholder="Passwort">
+                        <button type="submit">Anmelden</button>
+                        <a href="register.php">Neues Konto erstellen</a>
                     </form>
                 </div>
             </center>
