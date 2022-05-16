@@ -42,15 +42,12 @@
                             <label for="email">*E-Mail</label>
                             <input type="text" name="email" placeholder="E-Mail" required>
 
-                            <label for="kontostand">*Kontostand</label>
-                            <input type="number" name="kontostand" placeholder="Kontostand" required>
-
                             <label for="land">*Land</label>
                             <input type="text" name="land" placeholder="Land" required>
                         </div>
 
                         <br>
-                        <button type="submit">Login</button>
+                        <button type="submit">Registrieren</button>
                     </form>
                 </div>
             </center>
