@@ -2,12 +2,12 @@
 <html>
     <head> 
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/global.css">
+        <link rel="stylesheet" href="../src/styles/login.css">
         <title>Anmeldung</title>
     </head>
     <body>
         <main>
-            <h1>Login</h1>
+            <h1>Anmelden</h1>
             <center>
                 <div class="frame">
                     <form action="" method="POST">
@@ -16,7 +16,8 @@
 
                         <label for="nutzerpassw">*Passwort</label>
                         <input type="password" name="nutzerpassw" placeholder="Passwort">
-                        <button type="submit">Login</button>
+                        <button type="submit">Anmelden</button>
+                        <b id="fehlermeldung">Falsche Benutzer ID oder falsches Passwort!</b>
                     </form>
                 </div>
             </center>
