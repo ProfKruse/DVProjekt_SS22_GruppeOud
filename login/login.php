@@ -7,7 +7,8 @@ session_start();
 
         $user_name = $_POST['user_name'];
         $password = $_POST['password'];
-
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        echo $hash;
 
         if(!empty($user_name) && !empty($password) && !is_numeric($user_name)){
             
@@ -22,7 +23,6 @@ session_start();
                         header("Location: ../reserve/reservation_check.php");
                         die;
                     }
-        
                 } 
             }
             echo "wrong username or password!";
@@ -30,9 +30,7 @@ session_start();
         }else{
             echo "wrong username or password!";
         }
-    
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -49,10 +47,11 @@ session_start();
                 <div class="frame">
                     <form method="POST">
                         <label for="user_name">*Nutzer-ID</label>
-                        <input type="text" name="user_name" placeholder="user_name">
+                        <input type="text" name="user_name" placeholder="user_name" required>
 
                         <label for="password">*Passwort</label>
-                        <input type="password" name="password" placeholder="Passwort">
+                        <input type="password" name="password" placeholder="Passwort" required>
+                        <a href="restPassword.php">Passwort vergessen?</a>
                         <button type="submit">Anmelden</button>
                         <a href="register.php">Neues Konto erstellen</a>
                     </form>
