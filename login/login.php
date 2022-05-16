@@ -17,7 +17,7 @@
                         <label for="nutzerpassw">*Passwort</label>
                         <input type="password" name="nutzerpassw" placeholder="Passwort">
                         <button type="submit">Anmelden</button>
-                        <b id="fehlermeldung">Falsche Benutzer ID oder falsches Passwort!!</b>
+                        <b id="fehlermeldung">Falsche Benutzer ID oder falsches Passwort!</b>
                     </form>
                 </div>
             </center>
