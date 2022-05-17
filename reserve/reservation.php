@@ -24,33 +24,52 @@
             <h1>Reservierung</h1>
             <center>
             <div class="frame">
-                <form action="" method="POST">
+                <form action="reservation_processing.php" method="POST">
                 <!-------------------------------------------------------------->
                 <div class="group">
-                    <label for="kfztyp"><b>*Kfz-Typ</b></label>
-                    <select name="kfztyp">
-                        <option value="">Van</option>
-                        <option value="">Limousine</option>
-                        <option value="">Cabriolet</option>
-                        <option value="">Sportwagen</option>
-                        <option value="">Pickup</option>
-                        <option value="">Kombi</option>
-                        <option value="">SUV</option>
-                        <option value="">Kleinwagen</option>
-                    </select>
+                    <?php
+                        require_once(__DIR__ . '\global.php');
 
-                    <label for="abgabestation"><b>*Abgabestation</b></label>
-                    <input type="text" name="abgabestation" placeholder="Abgabestation" required>
+                        $options = "";
+                        $arr = databaseSelectQuery("kfzTypID","kfztypen");
+
+                        foreach($arr as $id) {
+                            $options .= "<option value='$id'> $id </option>";
+                        }              
+
+                        $stationen = "<label for='kfztyp'><b>*Kfz-Typ</b></label>".
+                                        "<select name='kfztyp'>".$options."</select>";
+
+                        ECHO $stationen;
+                    ?>
+
+                    <label for="message"><b>Message</b></label>
+                    <input type="text" name="message" placeholder="Message">
+
+                    
+
                 </div>
 
                 <!-------------------------------------------------------------->
 
                 <div class="group">
-                    <label for="abholstation"><b>*Abholstation</b></label>
-                    <input type="text" name="abholstation" placeholder="Abholstation" required>
+                    <?php
+                        require_once(__DIR__ . '\global.php');
 
-                    <label for="message"><b>Message</b></label>
-                    <input type="text" name="message" placeholder="Message">
+                        $options = "";
+                        $arr = databaseSelectQuery("mietstationID","mietstationen");
+
+                        foreach($arr as $id) {
+                            $options .= "<option value='$id'> $id </option>";
+                        }              
+
+                        $stationen = "<label for='abholstation'><b>*Abholstation</b></label>".
+                                        "<select name='abholstation'>".$options."</select>".
+                                     "<label for='abgabestation'><b>*Abgabestation</b></label>".
+                                        "<select name='abgabestation'>".$options."</select>";
+
+                        ECHO $stationen;
+                    ?>
                 </div>
                 <br>
                 

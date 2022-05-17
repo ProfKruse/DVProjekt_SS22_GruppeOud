@@ -24,8 +24,10 @@
             <h1>Reservierung fehlgeschlagen</h1>
             <center>
                 <div class="frame">
-                    <h1>Kfz 123</h1>
-                    <h2>ist leider nicht verfügbar. Stattdessen Kfz 789 reservieren?</h2>
+                    <?php
+                        echo "<h1>Es steht leider kein KFZ des Typs". $_POST['kfztyp'] ." in der Abholstation ". $_POST['abholstation']. "</h1>";
+                    ?>
+                    <h2>zur Verfügung. Stattdessen Kfz 789 reservieren?</h2>
                     <br>
                 </div>
 
