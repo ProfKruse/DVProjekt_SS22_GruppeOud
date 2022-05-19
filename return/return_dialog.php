@@ -28,7 +28,7 @@
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="textfield1"><b>*Mietvertragsnummer</b></label>
-                    <input type="text" name="textfield1" placeholder="12345" required >
+                    <input type="text" name="textfield1" placeholder="12345" minlenght=11 maxlength=11 required >
                 </div>
                 
                 <div class="group">
