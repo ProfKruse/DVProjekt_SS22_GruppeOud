@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/style_reservationProcessing.css">
+        <link rel="stylesheet" href="../src/styles/global.css">
         <title>Reservierung erfolgreich</title>
     </head>
     <body>
@@ -32,7 +32,10 @@
                     ?>
                 </div>
 
-                <button type="button" onclick="window.location='reservation_check.php'">Daten prüfen</button>
+                <div class="buttons" style="width: 150px;">
+                    <button type="button" onclick="history.back()">Zurück</button>
+                    <button type="button" onclick="window.location='reservation_check.php'">Daten prüfen</button>
+                </div>
             </center>
             
         </main>

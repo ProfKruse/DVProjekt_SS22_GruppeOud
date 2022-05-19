@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/style_reservationProcessing.css">
+        <link rel="stylesheet" href="../src/styles/global.css">
         <title>Reservierung fehlgeschlagen</title>
     </head>
     <body>
