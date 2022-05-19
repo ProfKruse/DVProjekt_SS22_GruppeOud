@@ -11,6 +11,14 @@ while($zeile = $erg->fetch_array())
 {
     echo"<tr>
             <td>[$zeile['mietvertragID']</td>
+            <td>[$zeile['status']</td>
+            <td>[$zeile['mietdauerTage']</td>
+            <td>[$zeile['mietgebuehr']</td>
+            <td>[$zeile['zahlart']</td>
+            <td>[$zeile['tarif']</td>
+            <td>[$zeile['abholstation']</td>
+            <td>[$zeile['rueckgabestation']</td>
+            <td>[$zeile['vertragID']</td>
             <td>01.01.2022</td>
             <td>05.05.2022</td>
         </tr>";
