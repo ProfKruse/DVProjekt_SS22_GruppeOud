@@ -24,15 +24,15 @@
             <h1>KFZ Rücknahme</h1>
             <center>
             <div class="frame">
-            <form action="" method="POST">
+            <form action="mietvertragIdentifizieren.php" method="POST">
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="textfield1"><b>*Mietvertragsnummer</b></label>
-                    <input type="text" name="textfield1" placeholder="12345" minlenght=11 maxlength=11 required >
+                    <input type="text" name="textfield1" placeholder="12345" maxlength=11 required >
                 </div>
                 
                 <div class="group">
-                    <label for="abfragen"><b>Daten abfragen</b></label>
+                    <label for="abfragen"><b>Daten abfragen</b></label> 
                     <button type="button">Abfragen</button>
                 </div>
             </form>
