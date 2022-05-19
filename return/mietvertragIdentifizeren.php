@@ -1,4 +1,5 @@
 <?php
+echo "Test";
 $con =   mysqli_connect("localhost","root","","autovermietung");
 if($con->connect_error){
     echo "Fehler bei  der Verbindung" . mysqli_connect_error();
