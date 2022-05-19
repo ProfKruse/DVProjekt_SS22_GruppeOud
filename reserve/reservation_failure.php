@@ -21,10 +21,9 @@
         </header>
         <!--Reservierungseingaben-->
         <main>
-            <h1>Reservierung fehlgeschlagen</h1>
             <center>
                 <div id="failureFrame" class="frame">
-                    <h1 id="fehlermeldung">Reservierung fehlgeschlagen</h1>
+                    <h1 id="fehlermeldung">Prüfung fehlgeschlagen</h1>
                     <?php
                         session_start();
                         include_once(__DIR__ . "\global.php");
@@ -33,17 +32,18 @@
                         $kfzids = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende", "WHERE mietstationID = ".$_SESSION['abholstation']);
                         if(count($kfzids) > 0) {
                             $kfztypids = databaseSelectQuery("kfzTypID","kfzs","WHERE kfzID IN (".implode(',',$kfzids).")");
-                            $_SESSION["altkfzid"] = $kfztypids[0];
+                            $altkfzid = $kfztypids[0];
                         }               
-                        echo "<h1>Es steht leider kein KFZ des Typs ". $_SESSION['kfztyp'] ."<br> in der Abholstation ". $_SESSION['abholstation']. " zur Verfügung.</h1>";
+                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION['kfztyp'] ."<br> in der Abholstation ". $_SESSION['abholstation']. " zur Verfügung.</h2>";
                         
-                        if (!isset($_SESSION['altkfzid'])) {
+                        if ($altkfzid == NULL) {
                             echo "<h2>Es steht aktuell kein Fahrzeug in der Abholstation zur Verfügung</h2>";
                             $buttons = "<button type='button' onclick=\"window.location='reservation.php'\">Zurück</button>";
                         }
                         else {
-                            echo "<h2>Stattdessen ein KFZ vom Typ ".$_SESSION['altkfzid']." reservieren?</h2>";
+                            echo "<h2>Stattdessen ein KFZ vom Typ ".$altkfzid." reservieren?</h2>";
 
+                            $_SESSION["kfztyp"] = $altkfzid;
                             $buttons = "<button type='button' onclick=\"window.location='reservation_check.php'\">Ja</button>".
                                 "<button type='button' onclick=\"window.location='reservation.php'\">Nein</button>";
                         }

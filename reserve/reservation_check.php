@@ -25,7 +25,7 @@
             <center>
             <div class="frame">
                 <?php session_start() ?>
-                <form action="" method="POST">
+                <form action="reservation_confirmation.php" method="POST">
                 <!-------------------------------------------------------------->
                     <div class="group">
                         <label for="vorname"><b>*Vorname</b></label>
@@ -42,7 +42,7 @@
 
                     <div class="group">
                         <label for="kfztyp"><b>*KFZ-Typ</b></label>
-                        <input type="text" name="kfztyp" value="<?php if(isset($_SESSION['altkfzid'])){echo $_SESSION['altkfzid'];}else{echo $_SESSION['kfztyp'];} ?>" readonly required>
+                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfztyp'] ?>" readonly required>
                     
                         <label for="abholstation"><b>*Abholstation</b></label>
                         <input type="text" name="abholstation" value="<?php echo $_SESSION['abholstation'] ?>" readonly required>     

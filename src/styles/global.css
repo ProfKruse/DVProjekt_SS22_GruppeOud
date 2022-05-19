@@ -44,6 +44,10 @@ div#failureFrame {
     color: rgb(204, 0, 0);
 }
 
+#erfolgsmeldung {
+    color: rgb(29, 107, 29);
+}
+
 /* Footer */
 
 footer {

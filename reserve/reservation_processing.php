@@ -1,7 +1,9 @@
 <?php
     session_start();
     include_once(__DIR__ . "\global.php");
+    $_SESSION["kunde"] = 123;
     $_SESSION["kfztyp"] = $_POST["kfztyp"];
+    $_SESSION["mietstation"] = $_POST["abholstation"];
     $_SESSION["abholstation"] = $_POST["abholstation"];
     $_SESSION["abgabestation"] = $_POST["abgabestation"];
     $_SESSION["message"] = $_POST["message"];

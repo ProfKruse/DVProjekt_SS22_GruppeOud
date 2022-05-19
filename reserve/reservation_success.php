@@ -21,14 +21,13 @@
         </header>
         <!--Reservierungseingaben-->
         <main>
-            <h1>Reservierung erfolgreich</h1>
             <center>
-                <div id="successFrame" class="frame">
-                    <h1>Reservierung erfolgreich</h1>
+                <div id="successFrame" class="frame" style="width: 500px">
+                    <h1 id="erfolgsmeldung">Prüfung erfolgreich</h1>
                     <?php
                         session_start();
-                        echo "<h1>KFZ des Typs ". $_SESSION['kfztyp'] ." kann in der Abholstation ". $_SESSION['abholstation']. "</h1>".
-                                "<h2>erfolgreich reserviert werden.</h2>";
+                        echo "<h2>KFZ des Typs ". $_SESSION['kfztyp'] ." <br> kann in der Abholstation ". $_SESSION['abholstation'].
+                                "<br>reserviert werden.</h2>";
                     ?>
                 </div>
 
@@ -39,8 +38,6 @@
             </center>
             
         </main>
-        <!--Sonstige Links-->
-        <aside>
 
         <!--Footer-->
         <footer>

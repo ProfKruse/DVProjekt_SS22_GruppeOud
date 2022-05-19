@@ -30,10 +30,6 @@
                         session_start();
                         require_once(__DIR__ . '\global.php');
                         
-                        if (isset($_SESSION["altkfzid"])) {
-                            unset($_SESSION["altkfzid"]);
-                        }
-
                         $options = "";
                         $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
 
