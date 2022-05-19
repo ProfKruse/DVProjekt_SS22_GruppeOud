@@ -29,13 +29,13 @@
                 <!-------------------------------------------------------------->
                     <div class="group">
                         <label for="vorname"><b>*Vorname</b></label>
-                        <input type="text" name="vorname" required>
+                        <input type="text" name="vorname" value="<?php echo $_SESSION['vorname'] ?>" required>
 
                         <label for="nachname"><b>*Nachname</b></label>
-                        <input type="text" name="nachname" required>
+                        <input type="text" name="nachname" value="<?php echo $_SESSION['nachname'] ?>" required>
 
                         <label for="telefonnr"><b>*Telefonnr.</b></label>
-                        <input type="text" name="telefonnr" required>
+                        <input type="text" name="telefonnr" value="<?php echo $_SESSION['telefonnr'] ?>" required>
                     </div>
 
                 <!-------------------------------------------------------------->
@@ -48,7 +48,7 @@
                         <input type="text" name="abholstation" value="<?php echo $_SESSION['abholstation'] ?>" readonly required>     
                         
                         <label for="email"><b>*Email-Adresse</b></label>
-                        <input type="text" name="email" required>
+                        <input type="text" name="email" value="<?php echo $_SESSION['email'] ?>" required>
                     </div>
                     
                 <!-------------------------------------------------------------->
@@ -61,15 +61,15 @@
                     <br>
                 
                     <br>
-                    <label for="checkbox1" id="checkbox">
-                        <input type="checkbox" name="checkbox1"><b>Die Daten sind korrekt</b>
+                    <label for="bedingung" id="checkbox">
+                        <input type="checkbox" name="bedingung"><b>Die Daten sind korrekt</b>
                     </label>
                     <br>
 
                     <b class="invisible" id="fehlermeldung">Bitte bestätigen sie die Korrektheit der Daten</b><br><br>
                     <div class="buttons" style="width: 50px">
                         <button type="button" onclick="if(window.confirm('Möchten sie die Reservierung wirklich abbrechen?')){window.location='..\\index.php'}">Abbrechen</button>
-                        <button type="submit" onclick="if(form.checkbox1.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}">Reservieren</button>
+                        <button type="button" onclick="if(form.bedingung.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}"">Reservieren</button>
                     </div>
                 </form>
             </div>

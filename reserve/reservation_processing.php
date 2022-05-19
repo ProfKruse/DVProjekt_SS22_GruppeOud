@@ -5,6 +5,10 @@
     $_SESSION["abholstation"] = $_POST["abholstation"];
     $_SESSION["abgabestation"] = $_POST["abgabestation"];
     $_SESSION["message"] = $_POST["message"];
+    $_SESSION["vorname"] = "Vorname";
+    $_SESSION["nachname"] = "Nachname";
+    $_SESSION["telefonnr"] = "1234567890";
+    $_SESSION["email"] = "vorname.nachname@gmail.com";
 
     $kfzids = databaseSelectQuery("kfzID","kfzs","WHERE kfzTypID = ".$_SESSION['kfztyp']);
     $verfugbare_autos = array();
