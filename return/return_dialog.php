@@ -40,30 +40,6 @@
             <br>
             <br>
             <br>
-            <center>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Mietvertragsnummer</th>
-                            <th>Miete-Anfang</th>
-                            <th>Miete-Ende</th>
-                            <th>Zahlart</th>
-                            <th>Kosten</th>
-                            <th>Ausgangszustand</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>12345</td>
-                            <td>01.01.2022</td>
-                            <td>05.05.2022</td>
-                            <td>...</td>
-                            <td>500€</td>
-                            <td>...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </center>
 
             <form action="" method="POST">
                 <div class="group">

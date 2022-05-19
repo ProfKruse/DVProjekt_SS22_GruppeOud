@@ -19,8 +19,6 @@ while($zeile = $erg->fetch_array())
             <td>[$zeile['abholstation']</td>
             <td>[$zeile['rueckgabestation']</td>
             <td>[$zeile['vertragID']</td>
-            <td>01.01.2022</td>
-            <td>05.05.2022</td>
         </tr>";
 }
 
