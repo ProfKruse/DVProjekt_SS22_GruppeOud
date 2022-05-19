@@ -25,21 +25,22 @@
             <center>
             <div class="frame">
                 <form action="reservation_processing.php" method="POST">
-                <!-------------------------------------------------------------->
                 <div class="group">
                     <?php
+                        session_start();
                         require_once(__DIR__ . '\global.php');
+                        
+                        if (isset($_SESSION["altkfzid"])) {
+                            unset($_SESSION["altkfzid"]);
+                        }
 
                         $options = "";
-                        $arr = databaseSelectQuery("kfzTypID","kfztypen");
+                        $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
 
-                        foreach($arr as $id) {
-                            $options .= "<option value='$id'> $id </option>";
-                        }              
+                        foreach($arr as $id)
+                            $options .= "<option value='$id'> $id </option>";       
 
-                        $stationen = "<label for='kfztyp'><b>*Kfz-Typ</b></label>".
-                                        "<select name='kfztyp'>".$options."</select>";
-
+                        $stationen = "<label for='kfztyp'><b>*Kfz-Typ</b></label>"."<select name='kfztyp'>".$options."</select>";
                         echo $stationen;
                     ?>
 
@@ -48,31 +49,22 @@
 
                 </div>
 
-                <!-------------------------------------------------------------->
-
                 <div class="group">
                     <?php
                         require_once(__DIR__ . '\global.php');
 
                         $options = "";
-                        $arr = databaseSelectQuery("mietstationID","mietstationen");
+                        $arr = databaseSelectQuery("mietstationID","mietstationen", "");
 
-                        foreach($arr as $id) {
+                        foreach($arr as $id)
                             $options .= "<option value='$id'> $id </option>";
-                        }              
-
-                        $stationen = "<label for='abholstation'><b>*Abholstation</b></label>".
-                                        "<select name='abholstation'>".$options."</select>".
-                                     "<label for='abgabestation'><b>*Abgabestation</b></label>".
-                                        "<select name='abgabestation'>".$options."</select>";
-
+    
+                        $stationen = "<label for='abholstation'><b>*Abholstation</b></label>"."<select name='abholstation'>".$options."</select>".
+                        "<label for='abgabestation'><b>*Abgabestation</b></label>"."<select name='abgabestation'>".$options."</select>";
                         echo $stationen;
                     ?>
                 </div>
-                <br>
-                
-                <br>
-
+                <br><br>
                 <div class="buttons" style="width: 50px">
                     <button type="button" onclick="window.location='..\\index.php'">Reservierung abbrechen</button>
                     <button type="submit">Eingaben prüfen</button>

@@ -42,7 +42,7 @@
 
                     <div class="group">
                         <label for="kfztyp"><b>*KFZ-Typ</b></label>
-                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfztyp'] ?>" readonly required>
+                        <input type="text" name="kfztyp" value="<?php if(isset($_SESSION['altkfzid'])){echo $_SESSION['altkfzid'];}else{echo $_SESSION['kfztyp'];} ?>" readonly required>
                     
                         <label for="abholstation"><b>*Abholstation</b></label>
                         <input type="text" name="abholstation" value="<?php echo $_SESSION['abholstation'] ?>" readonly required>     
@@ -66,8 +66,11 @@
                     </label>
                     <br>
 
-                    <b class="invisible" id="fehlermeldung">Bitte bestätigen sie die Korrektheit der Daten</b>
-                    <button type="submit" onclick="if(form.checkbox1.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}">Reservieren</button>
+                    <b class="invisible" id="fehlermeldung">Bitte bestätigen sie die Korrektheit der Daten</b><br><br>
+                    <div class="buttons" style="width: 50px">
+                        <button type="button" onclick="if(window.confirm('Möchten sie die Reservierung wirklich abbrechen?')){window.location='..\\index.php'}">Abbrechen</button>
+                        <button type="submit" onclick="if(form.checkbox1.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}">Reservieren</button>
+                    </div>
                 </form>
             </div>
             </center>
