@@ -40,13 +40,11 @@
                         $stationen = "<label for='kfztyp'><b>*Kfz-Typ</b></label>".
                                         "<select name='kfztyp'>".$options."</select>";
 
-                        ECHO $stationen;
+                        echo $stationen;
                     ?>
 
                     <label for="message"><b>Message</b></label>
                     <input type="text" name="message" placeholder="Message">
-
-                    
 
                 </div>
 
@@ -68,18 +66,17 @@
                                      "<label for='abgabestation'><b>*Abgabestation</b></label>".
                                         "<select name='abgabestation'>".$options."</select>";
 
-                        ECHO $stationen;
+                        echo $stationen;
                     ?>
                 </div>
                 <br>
                 
                 <br>
-                <label for="checkbox1" id="checkbox">
-                    <input type="checkbox" name="checkbox1"><b>Checkbox Text</b>
-                </label>
-                <br>
 
-                <button type="submit">Send</button>
+                <div class="buttons" style="width: 50px">
+                    <button type="button" onclick="window.location='..\\index.php'">Reservierung abbrechen</button>
+                    <button type="submit">Eingaben prüfen</button>
+                </div>
             </form>
         </div>
 </center>

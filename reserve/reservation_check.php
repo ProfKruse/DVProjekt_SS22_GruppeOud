@@ -24,46 +24,50 @@
             <h1>Überprüfung</h1>
             <center>
             <div class="frame">
+                <?php session_start() ?>
                 <form action="" method="POST">
                 <!-------------------------------------------------------------->
                     <div class="group">
-                        <label for="textfield1"><b>*Text field 1</b></label>
-                        <input type="text" name="textfield1" placeholder="xxx" required>
+                        <label for="vorname"><b>*Vorname</b></label>
+                        <input type="text" name="vorname" required>
 
-                        <label for="textfield3"><b>*Text field 3</b></label>
-                        <select name="kfztyp">
-                            <option value="">Typ 1</option>
-                            <option value="">Typ 2</option>
-                            <option value="">Typ 3</option>
-                        </select>
+                        <label for="nachname"><b>*Nachname</b></label>
+                        <input type="text" name="nachname" required>
+
+                        <label for="telefonnr"><b>*Telefonnr.</b></label>
+                        <input type="text" name="telefonnr" required>
                     </div>
 
                 <!-------------------------------------------------------------->
 
                     <div class="group">
-                        <label for="textfield2"><b>*Text field 2</b></label>
-                        <input type="text" name="textfield2" placeholder="xxx" required>
+                        <label for="kfztyp"><b>*KFZ-Typ</b></label>
+                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfztyp'] ?>" readonly required>
                     
-                        <label for="textfield4"><b>*Select Date</b></label>
-                        <input type="date" name="textfield4" placeholder="xxx" required>
+                        <label for="abholstation"><b>*Abholstation</b></label>
+                        <input type="text" name="abholstation" value="<?php echo $_SESSION['abholstation'] ?>" readonly required>     
+                        
+                        <label for="email"><b>*Email-Adresse</b></label>
+                        <input type="text" name="email" required>
                     </div>
-
+                    
                 <!-------------------------------------------------------------->
 
                     <br>
                     <div class="group">
                         <label for="message"><b>Message</b></label>
-                        <textarea name="message"></textarea>
+                        <textarea name="message"><?php echo $_SESSION['message'] ?></textarea>
                     </div>
                     <br>
                 
                     <br>
                     <label for="checkbox1" id="checkbox">
-                        <input type="checkbox" name="checkbox1"><b>Checkbox Text</b>
+                        <input type="checkbox" name="checkbox1"><b>Die Daten sind korrekt</b>
                     </label>
                     <br>
 
-                    <button type="submit">Send</button>
+                    <b class="invisible" id="fehlermeldung">Bitte bestätigen sie die Korrektheit der Daten</b>
+                    <button type="submit" onclick="if(form.checkbox1.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}">Reservieren</button>
                 </form>
             </div>
             </center>

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/style_reservationFailure.css">
+        <link rel="stylesheet" href="../src/styles/style_reservationProcessing.css">
         <title>Reservierung fehlgeschlagen</title>
     </head>
     <body>
@@ -23,17 +23,31 @@
         <main>
             <h1>Reservierung fehlgeschlagen</h1>
             <center>
-                <div class="frame">
+                <div id="failureFrame" class="frame">
+                    <h1 id="fehlermeldung">Reservierung fehlgeschlagen</h1>
                     <?php
-                        echo "<h1>Es steht leider kein KFZ des Typs". $_POST['kfztyp'] ." in der Abholstation ". $_POST['abholstation']. "</h1>";
-                    ?>
-                    <h2>zur Verfügung. Stattdessen Kfz 789 reservieren?</h2>
-                    <br>
+                        session_start();
+                        $connection = new mysqli("localhost","root","","autovermietung");
+                            if($connection->connect_error) {
+                                die("Es konnte keine Verbindung zur Datenbank aufgebaut werden");
+                            }
+
+                        $result = $connection->query("SELECT kfzTypID FROM kfzs WHERE kfzID IN (SELECT kfzID FROM mietstationen_mietwagenbestaende WHERE mietstationID = ".$_SESSION['abholstation'].")");
+
+                        $altKfzID = $result->fetch_assoc()["kfzTypID"];
+
+                        #$alternative = ($result->fetch_array() == null) ? "a" : "b";
+    
+                        $result->free_result();
+                        $connection->close();
+                            echo "<h1>Es steht leider kein KFZ des Typs ". $_SESSION['kfztyp'] ."<br> in der Abholstation zur Verfügung ". $_SESSION['abholstation']. "</h1>".
+                                    "<h2>Stattdessen ein KFZ vom Typ $altKfzID reservieren?</h2>";
+                        ?>
                 </div>
 
-                <div id="buttons">
-                    <button type="button">Ja</button>
-                    <button type="button">Nein</button>
+                <div class="buttons" style="width:175px">
+                    <button type="button" onclick="window.location=''">Ja</button>
+                    <button type="button" onclick="window.location='reservation.php'">Nein</button>
                 </div>
             </center>
             
