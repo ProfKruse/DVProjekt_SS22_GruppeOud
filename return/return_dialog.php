@@ -59,9 +59,8 @@
                     exit();
                 }
                 if (isset($_POST['mietvertagsid'])) {
-                    $test = $_POST["mietvertagsid"];
-                }
-                $sql = "SELECT * FROM mietvertraege WHERE (mietvertragsID='" . $_POST["mietvertagsid"] . ")'";
+                    $mietvertragsid = $_POST["mietvertagsid"];
+                    $sql = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid;
                 $db_erg = mysqli_query( $con, $sql );
                 if ( ! $db_erg )
                 {
@@ -73,7 +72,7 @@
                             <td>{$zeile['mietvertragID']}</td>
                             <td>{$zeile['status']}</td>
                             <td>{$zeile['mietdauerTage']}</td>
-                            <td>{$zeile['mietgebuehr']}</td>
+                            <td>{$zeile['mietgebuehr']}</td>    
                             <td>{$zeile['zahlart']}</td>
                             <td>{$zeile['tarif']}</td>
                             <td>{$zeile['abholstation']}</td>
@@ -83,6 +82,7 @@
                 }
                 mysqli_free_result( $db_erg );
                 mysqli_close($con);
+                }
             ?>
                 </tbody>
             </table>
