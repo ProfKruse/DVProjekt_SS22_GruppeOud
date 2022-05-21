@@ -7,9 +7,10 @@ session_start();
 
         $user_name = $_POST['user_name'];
         $password = $_POST['password'];
+        $hash = password_hash($password, PASSWORD_DEFAULT);
         if(!empty($user_name) && !empty($password) && !is_numeric($user_name)){
             $user_id = random_num(20); 
-            $query = "insert into users (user_id,user_name, password) values ('$user_id', '$user_name', '$password')";
+            $query = "insert into users (user_id,user_name, password) values ('$user_id', '$user_name', '$hash')";
             mysqli_query($con,$query);
 
             header("Location: login.php");
@@ -40,9 +41,6 @@ session_start();
 
                             <label for="password">*Password</label>
                             <input type="text" name="password" placeholder="password" required>
-
-
-
                         </div>
 
                         <br>

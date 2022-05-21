@@ -8,7 +8,6 @@ session_start();
         $user_name = $_POST['user_name'];
         $password = $_POST['password'];
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        echo $hash;
 
         if(!empty($user_name) && !empty($password) && !is_numeric($user_name)){
             
@@ -18,7 +17,7 @@ session_start();
             if($result){
                 if($result && mysqli_num_rows($result) > 0){
                     $user_data = mysqli_fetch_assoc($result);
-                    if($user_data['password'] === $password) {
+                    if(password_verify($password, $user_data['password'])) {
                         $_SESSION['user_id'] = $user_data['user_id'];
                         header("Location: ../reserve/reservation_check.php");
                         die;
