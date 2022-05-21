@@ -1,12 +1,5 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/style_returnDialog.css">
-        <title>KFZ Rücknahme</title>
-    </head>
-    <body style="background-image:url()">
-        <?php
+<?php
                 include("db_inc.php");
                 if (isset($_POST['mietvertagsid'])) {
                     $mietvertragsid = $_POST["mietvertagsid"];
@@ -18,7 +11,7 @@
                     }
                     while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC))
                     {
-                        echo"<tr>
+                        echo"<table class='mietdaten'><tr>
                             <td>{$zeile['mietvertragID']}</td>
                             <td>{$zeile['status']}</td>
                             <td>{$zeile['mietdauerTage']}</td>
@@ -28,12 +21,19 @@
                             <td>{$zeile['abholstation']}</td>
                             <td>{$zeile['rueckgabestation']}</td>
                             <td>{$zeile['vertragID']}</td>
-                        </tr>";
+                        </tr></table>";
                     }
                     mysqli_free_result( $db_erg );
                     mysqli_close($con);
                 }
             ?>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../src/styles/style_returnDialog.css">
+        <title>KFZ Rücknahme</title>
+    </head>
+    <body style="background-image:url()">   
         <!--Header-->
         <header>
             <nav>
@@ -65,9 +65,9 @@
                 </div>
             </form>
             <center>
-                <table>
+                <table class="mietdaten">
                     <thead>
-                        <tr>
+                        <tr class="mieten">
                             <th>Mietvertragsnummer</th>
                             <th>Status</th>
                             <th>Mietdauer in Tagen</th>
@@ -106,7 +106,9 @@
                 
                 <br>
                 <button type="submit">Protokoll erzeugen</button></div>
+                
             </form>
+            
         </div>
         </center>
             
