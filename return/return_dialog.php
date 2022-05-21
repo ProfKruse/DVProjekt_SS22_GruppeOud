@@ -1,28 +1,53 @@
 <!DOCTYPE html>
-<?php
-    function mietvertragsAnzeige(){
-                include("db_inc.php");
-                if (isset($_POST['mietvertagsid'])) {
-                    $mietvertragsid = $_POST["mietvertagsid"];
-                    $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid;
-                    $db_erg = mysqli_query( $con, $statement );
-                    if ( ! $db_erg )
-                    {
-                        die('Die eingegebene ID existiert nicht in der DB');
+    <?php
+        function mietvertragsAnzeige(){
+            include("db_inc.php");
+            if (isset($_POST['mietvertagsid'])) {
+                $mietvertragsid = $_POST["mietvertagsid"];
+                $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid;
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg )
+                {
+                    die('Fehler in der SQL Anfrage');
+                }
+                $count =  0;                
+                while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC))
+                {
+                    $count = $count+1;
+                    echo"<center>
+                    <table class='mietdaten'>
+                        <thead>
+                            <tr>
+                                <th>Mietvertragsnummer</th>
+                                <th>Status</th>
+                                <th>Mietdauer in Tagen</th>
+                                <th>Mietgebuehr</th>
+                                <th>Zahlart</th>
+                                <th>Tarif</th>
+                                <th>Abholstation</th>
+                                <th>Rueckgabestation</th>
+                                <th>Vertragsnummer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{$zeile['mietvertragID']}</td>
+                                <td>{$zeile['status']}</td>
+                                <td>{$zeile['mietdauerTage']}</td>
+                                <td>{$zeile['mietgebuehr']}</td>    
+                                <td>{$zeile['zahlart']}</td>
+                                <td>{$zeile['tarif']}</td>
+                                <td>{$zeile['abholstation']}</td>
+                                <td>{$zeile['rueckgabestation']}</td>
+                                <td>{$zeile['vertragID']}</td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                    </center>";
                     }
-                    while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC))
+                    if($count ==  0)
                     {
-                        echo"<tr>
-                            <td>{$zeile['mietvertragID']}</td>
-                            <td>{$zeile['status']}</td>
-                            <td>{$zeile['mietdauerTage']}</td>
-                            <td>{$zeile['mietgebuehr']}</td>    
-                            <td>{$zeile['zahlart']}</td>
-                            <td>{$zeile['tarif']}</td>
-                            <td>{$zeile['abholstation']}</td>
-                            <td>{$zeile['rueckgabestation']}</td>
-                            <td>{$zeile['vertragID']}</td>
-                        </tr>";
+                        echo 'Die eingegebene ID existiert nicht in der DB';    
                     }
                     mysqli_free_result( $db_erg );
                     mysqli_close($con);
@@ -66,28 +91,9 @@
                     <button type="submit" name='submit'>Abfragen</button>
                 </div>
             </form>
-            <center>
-                <table class="mietdaten">
-                    <thead>
-                        <tr class="mieten">
-                            <th>Mietvertragsnummer</th>
-                            <th>Status</th>
-                            <th>Mietdauer in Tagen</th>
-                            <th>Mietgebuehr</th>
-                            <th>Zahlart</th>
-                            <th>Tarif</th>
-                            <th>Abholstation</th>
-                            <th>Rueckgabestation</th>
-                            <th>Vertragsnummer</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                            mietvertragsAnzeige();
-                        ?>
-                </tbody>
-            </table>
-            </center>
+            <?php
+                mietvertragsAnzeige();
+            ?>
             <br>
             <br>
             <br>
