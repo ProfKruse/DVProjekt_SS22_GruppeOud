@@ -6,6 +6,34 @@
         <title>KFZ Rücknahme</title>
     </head>
     <body style="background-image:url()">
+        <?php
+                include("db_inc.php");
+                if (isset($_POST['mietvertagsid'])) {
+                    $mietvertragsid = $_POST["mietvertagsid"];
+                    $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid;
+                    $db_erg = mysqli_query( $con, $statement );
+                    if ( ! $db_erg )
+                    {
+                        die('Die eingegebene ID existiert nicht in der DB');
+                    }
+                    while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC))
+                    {
+                        echo"<tr>
+                            <td>{$zeile['mietvertragID']}</td>
+                            <td>{$zeile['status']}</td>
+                            <td>{$zeile['mietdauerTage']}</td>
+                            <td>{$zeile['mietgebuehr']}</td>    
+                            <td>{$zeile['zahlart']}</td>
+                            <td>{$zeile['tarif']}</td>
+                            <td>{$zeile['abholstation']}</td>
+                            <td>{$zeile['rueckgabestation']}</td>
+                            <td>{$zeile['vertragID']}</td>
+                        </tr>";
+                    }
+                    mysqli_free_result( $db_erg );
+                    mysqli_close($con);
+                }
+            ?>
         <!--Header-->
         <header>
             <nav>
@@ -28,7 +56,7 @@
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="textfield1"><b>*Mietvertragsnummer</b></label>
-                    <input type="text" name="mietvertagsid" id="mietvertagsid" placeholder="12345" maxlength=11 required >
+                    <input type="text" name="mietvertagsid" id="mietvertagsid" maxlength=11 required >
                 </div>
                 
                 <div class="group">
@@ -52,38 +80,6 @@
                         </tr>
                     </thead>
                     <tbody>
-            <?php
-                $con =   mysqli_connect("localhost","root","","autovermietung");
-                if($con->connect_error){
-                    echo "Fehler bei  der Verbindung" . mysqli_connect_error();
-                    exit();
-                }
-                if (isset($_POST['mietvertagsid'])) {
-                    $mietvertragsid = $_POST["mietvertagsid"];
-                    $sql = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid;
-                $db_erg = mysqli_query( $con, $sql );
-                if ( ! $db_erg )
-                {
-                    die('Ungültige Abfrage: ' . mysqli_error());
-                }
-                while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC))
-                {
-                    echo"<tr>
-                            <td>{$zeile['mietvertragID']}</td>
-                            <td>{$zeile['status']}</td>
-                            <td>{$zeile['mietdauerTage']}</td>
-                            <td>{$zeile['mietgebuehr']}</td>    
-                            <td>{$zeile['zahlart']}</td>
-                            <td>{$zeile['tarif']}</td>
-                            <td>{$zeile['abholstation']}</td>
-                            <td>{$zeile['rueckgabestation']}</td>
-                            <td>{$zeile['vertragID']}</td>
-                        </tr>";
-                }
-                mysqli_free_result( $db_erg );
-                mysqli_close($con);
-                }
-            ?>
                 </tbody>
             </table>
             </center>
