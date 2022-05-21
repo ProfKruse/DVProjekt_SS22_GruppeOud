@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+    function mietvertragsAnzeige(){
                 include("db_inc.php");
                 if (isset($_POST['mietvertagsid'])) {
                     $mietvertragsid = $_POST["mietvertagsid"];
@@ -11,7 +12,7 @@
                     }
                     while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC))
                     {
-                        echo"<table class='mietdaten'><tr>
+                        echo"<tr>
                             <td>{$zeile['mietvertragID']}</td>
                             <td>{$zeile['status']}</td>
                             <td>{$zeile['mietdauerTage']}</td>
@@ -21,11 +22,12 @@
                             <td>{$zeile['abholstation']}</td>
                             <td>{$zeile['rueckgabestation']}</td>
                             <td>{$zeile['vertragID']}</td>
-                        </tr></table>";
+                        </tr>";
                     }
                     mysqli_free_result( $db_erg );
                     mysqli_close($con);
                 }
+            }
             ?>
 <html>
     <head>
@@ -80,6 +82,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                            mietvertragsAnzeige();
+                        ?>
                 </tbody>
             </table>
             </center>
