@@ -56,7 +56,7 @@
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="textfield1"><b>*Mietvertragsnummer</b></label>
-                    <input type="text" name="mietvertagsid" id="mietvertagsid" maxlength=11 required >
+                    <input type="int" name="mietvertagsid" id="mietvertagsid" maxlength=11 required >
                 </div>
                 
                 <div class="group">
