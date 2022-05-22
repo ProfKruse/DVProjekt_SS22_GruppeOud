@@ -47,7 +47,7 @@
                     }
                     if($count ==  0)
                     {
-                        echo 'Die eingegebene ID existiert nicht in der DB';    
+                        echo "<font color='red'>Die eingegebene ID existiert nicht in der DB</font>";    
                     }
                     mysqli_free_result( $db_erg );
                     mysqli_close($con);
@@ -83,7 +83,7 @@
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="textfield1"><b>*Mietvertragsnummer</b></label>
-                    <input type="int" name="mietvertagsid" id="mietvertagsid" maxlength=11 required >
+                    <input type="number" name="mietvertagsid" id="mietvertagsid" maxlength=11 required >
                 </div>
                 
                 <div class="group">
