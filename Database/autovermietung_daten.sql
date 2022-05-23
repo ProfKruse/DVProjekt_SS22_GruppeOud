@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 23. Mai 2022 um 16:17
+-- Erstellungszeit: 23. Mai 2022 um 22:56
 -- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 8.1.6
 
@@ -58,11 +58,11 @@ INSERT INTO `kfztypen` (`kfzTypID`, `typBezeichnung`, `tarifID`) VALUES
 -- Daten für Tabelle `kunden`
 --
 
-INSERT INTO `kunden` (`kundeID`, `strasse`, `hausNr`, `plz`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `creationDate`, `updateDate`, `pseudo`, `password`, `validatedAccount`, `codeResetPassword`) VALUES
-(1, 'Bleibtreustraße', 34, 82061, 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'SvenKappel@einrot.com', 10000, '2022-05-23 13:41:30', '2022-05-23 15:43:44', NULL, NULL, NULL, NULL),
-(2, 'Neue Roßstraße', 80, 55545, 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'MaikOstermann@cuvox.de', 20000, '2022-05-23 13:42:58', '2022-05-23 15:42:58', NULL, NULL, NULL, NULL),
-(3, 'Joachimstaler Straße', 50, 56288, 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'MarkusBader@einrot.com', 5000, '2022-05-23 13:44:37', '2022-05-23 15:44:37', NULL, NULL, NULL, NULL),
-(4, 'Feldstrasse', 63, 39446, 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'DanielOsterhagen@cuvox.de', 0, '2022-05-23 13:45:28', '2022-05-23 15:45:28', NULL, NULL, NULL, NULL);
+INSERT INTO `kunden` (`kundeID`, `Vorname`, `nachname`, `strasse`, `hausNr`, `plz`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `creationDate`, `updateDate`, `pseudo`, `password`, `validatedAccount`, `codeResetPassword`) VALUES
+(1, NULL, NULL, 'Bleibtreustraße', 34, 82061, 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'SvenKappel@einrot.com', 10000, '2022-05-23 13:41:30', '2022-05-23 15:43:44', NULL, NULL, NULL, NULL),
+(2, NULL, NULL, 'Neue Roßstraße', 80, 55545, 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'MaikOstermann@cuvox.de', 20000, '2022-05-23 13:42:58', '2022-05-23 15:42:58', NULL, NULL, NULL, NULL),
+(3, NULL, NULL, 'Joachimstaler Straße', 50, 56288, 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'MarkusBader@einrot.com', 5000, '2022-05-23 13:44:37', '2022-05-23 15:44:37', NULL, NULL, NULL, NULL),
+(4, NULL, NULL, 'Feldstrasse', 63, 39446, 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'DanielOsterhagen@cuvox.de', 0, '2022-05-23 13:45:28', '2022-05-23 15:45:28', NULL, NULL, NULL, NULL);
 
 --
 -- Daten für Tabelle `mietstationen`

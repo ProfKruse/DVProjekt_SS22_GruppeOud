@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 23. Mai 2022 um 16:17
+-- Erstellungszeit: 23. Mai 2022 um 22:56
 -- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 8.1.6
 
@@ -76,6 +76,8 @@ CREATE TABLE `kfztypen` (
 
 CREATE TABLE `kunden` (
   `kundeID` int(11) NOT NULL,
+  `Vorname` varchar(45) DEFAULT NULL,
+  `nachname` varchar(45) DEFAULT NULL,
   `strasse` varchar(45) NOT NULL,
   `hausNr` int(11) NOT NULL,
   `plz` int(11) NOT NULL,
