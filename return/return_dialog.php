@@ -1,11 +1,66 @@
 <!DOCTYPE html>
+    <?php
+        function mietvertragsAnzeige(){
+            include("db_inc.php");
+            if (isset($_POST['mietvertagsid'])) {
+                $mietvertragsid = $_POST["mietvertagsid"];
+                $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid;
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg )
+                {
+                    die('Fehler in der SQL Anfrage');
+                }
+                $count =  0;                
+                while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC))
+                {
+                    $count = $count+1;
+                    echo"<center>
+                    <table class='mietdaten'>
+                        <thead>
+                            <tr>
+                                <th>Mietvertragsnummer</th>
+                                <th>Status</th>
+                                <th>Mietdauer in Tagen</th>
+                                <th>Mietgebuehr</th>
+                                <th>Zahlart</th>
+                                <th>Tarif</th>
+                                <th>Abholstation</th>
+                                <th>Rueckgabestation</th>
+                                <th>Vertragsnummer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{$zeile['mietvertragID']}</td>
+                                <td>{$zeile['status']}</td>
+                                <td>{$zeile['mietdauerTage']}</td>
+                                <td>{$zeile['mietgebuehr']}</td>    
+                                <td>{$zeile['zahlart']}</td>
+                                <td>{$zeile['tarif']}</td>
+                                <td>{$zeile['abholstation']}</td>
+                                <td>{$zeile['rueckgabestation']}</td>
+                                <td>{$zeile['vertragID']}</td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                    </center>";
+                    }
+                    if($count ==  0)
+                    {
+                        echo "<br><br><br><br><br>  <font color='red'>Die eingegebene ID existiert nicht in der DB</font>";    
+                    }
+                    mysqli_free_result( $db_erg );
+                    mysqli_close($con);
+                }
+            }
+            ?>
 <html>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../src/styles/style_returnDialog.css">
         <title>KFZ Rücknahme</title>
     </head>
-    <body style="background-image:url()">
+    <body style="background-image:url()">   
         <!--Header-->
         <header>
             <nav>
@@ -24,46 +79,24 @@
             <h1>KFZ Rücknahme</h1>
             <center>
             <div class="frame">
-            <form action="" method="POST">
+            <form action="return_dialog.php" method="POST">
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="textfield1"><b>*Mietvertragsnummer</b></label>
-                    <input type="text" name="textfield1" placeholder="12345" required >
+                    <input type="number" name="mietvertagsid" id="mietvertagsid" maxlength=11 required >
                 </div>
                 
                 <div class="group">
-                    <label for="abfragen"><b>Daten abfragen</b></label>
-                    <button type="button">Abfragen</button>
+                    <label for="abfragen"><b>Daten abfragen</b></label> 
+                    <button type="submit" name='submit'>Abfragen</button>
                 </div>
             </form>
-
+            <?php
+                mietvertragsAnzeige();
+            ?>
             <br>
             <br>
             <br>
-            <center>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Mietvertragsnummer</th>
-                            <th>Miete-Anfang</th>
-                            <th>Miete-Ende</th>
-                            <th>Zahlart</th>
-                            <th>Kosten</th>
-                            <th>Ausgangszustand</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>12345</td>
-                            <td>01.01.2022</td>
-                            <td>05.05.2022</td>
-                            <td>...</td>
-                            <td>500€</td>
-                            <td>...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </center>
 
             <form action="" method="POST">
                 <div class="group">
@@ -84,7 +117,9 @@
                 
                 <br>
                 <button type="submit">Protokoll erzeugen</button></div>
+                
             </form>
+            
         </div>
         </center>
             
