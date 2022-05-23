@@ -1,7 +1,7 @@
 <?php
 session_start();
-    include("db_inc.php");
-    include("functions.php");
+    include("../database/db_inc.php");
+    include("../functions/functions.php");
 
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
 

@@ -1,7 +1,7 @@
 <?php
 session_start();
-    include("db_inc.php");
-    include("functions.php");
+        include("../database/db_inc.php");
+        include("../functions/functions.php");
 
 
         $emailAdresse = $_POST['emailAdresse']; 
@@ -27,5 +27,4 @@ session_start();
         }else{
             echo "please enter some valide information!";
         }
-    }
 ?>

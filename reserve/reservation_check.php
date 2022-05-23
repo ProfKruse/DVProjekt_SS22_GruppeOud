@@ -1,7 +1,7 @@
 <?php   
 session_start();
-    include("../login/db_inc.php");
-    include("../login/functions.php");
+    include("../database/db_inc.php");
+    include("../functions/functions.php");
     $user_data = check_login($con);
 ?>
 
