@@ -1,0 +1,6 @@
+@import "global.css";
+
+b#fehlermeldung {
+    visibility: hidden;
+    color: red;
+}

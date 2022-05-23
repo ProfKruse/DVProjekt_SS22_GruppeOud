@@ -1,8 +1,19 @@
 <?php
+    /* Klasse zur Behandlung von Ausnahmen und Fehlern */
+    require '../../../php/PHPMailer/src/Exception.php';
+    /* PHPMailer-Klasse */
+    require '../../../php/PHPMailer/src/PHPMailer.php';
+    /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
+    require '../../../php/PHPMailer/src/SMTP.php';
+    
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
+
 function check_login($con){
-    if(isset($_SESSION['user_id'])){      
-        $id = $_SESSION['user_id'];
-        $query = "select * from users where user_id = '$id' limit 1";
+    if(isset($_SESSION['pseudo'])){      
+        $id = $_SESSION['pseudo'];
+        $query = "select * from kunden where pseudo = '$id' limit 1";
 
         $result = mysqli_query($con,$query);
         if($result && mysqli_num_rows($result) > 0){
@@ -14,16 +25,41 @@ function check_login($con){
     die;
 }
 
-function random_num($length){
-    $text = "";
-    if($length < 5){
-        $length = 5;
-    }
-    $len = rand(4,$length);
-    for ($i=0; $i < $len ; $i++) { 
+
+function send_mail($recipient,$subject, $message,$pathAttachment,$nameAttachment){
+
+    $mail=new PHPMailer(true);
+    try {
+        //settings
+
+        $mail->isSMTP();
+        $mail->Host='smtp.mail.yahoo.com';
         
-        $text .= rand(0,9);
+        $mail->Username='sihem.ouldmohand@yahoo.com';
+        $mail->Password='fytbevyafkbqzien';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port=587;
+    
+        $mail->SMTPAuth = true;
+    
+        $mail->setFrom('sihem.ouldmohand@yahoo.com', '');
+    
+        //recipient
+        $mail->addAddress($recipient, '');
+    
+        //content
+        $mail->isHTML(true); 
+        $mail->Subject = 'Test Mail ' . rand();
+        //$mail->Subject=$subject;
+        $mail->Body= $message;
+        $mail->addAttachment($pathAttachment, $nameAttachment);
+        $mail->send();
+        header("Location: ../login/login.php");
+        die;
+    } 
+    catch(Exception $e) {
+        echo 'Email wurde nicht gesendet';
+        echo 'Mailer Error: '.$mail->ErrorInfo;
     }
-    return $text;
 }
 ?>

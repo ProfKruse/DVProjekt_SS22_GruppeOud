@@ -5,29 +5,26 @@ session_start();
 
     if($_SERVER['REQUEST_METHOD'] == "POST"){
 
-        $user_name = $_POST['user_name'];
+        $pseudo = $_POST['pseudo'];
         $password = $_POST['password'];
-        $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        if(!empty($user_name) && !empty($password) && !is_numeric($user_name)){
+        if(!empty($pseudo) && !empty($password)){
             
-            $query = "select * from users where user_name = '$user_name' limit 1 ";
+            $query = "select * from kunden where pseudo = '$pseudo' limit 1 ";
             $result = mysqli_query($con,$query);
-
             if($result){
                 if($result && mysqli_num_rows($result) > 0){
                     $user_data = mysqli_fetch_assoc($result);
                     if(password_verify($password, $user_data['password'])) {
-                        $_SESSION['user_id'] = $user_data['user_id'];
+                        $_SESSION['pseudo'] = $user_data['pseudo'];
                         header("Location: ../reserve/reservation_check.php");
                         die;
                     }
                 } 
             }
-            echo "wrong username or password!";
-            
+            echo "falsche pseudo oder password!";
         }else{
-            echo "wrong username or password!";
+            echo "falsche pseudo oder password!";
         }
     }
 ?>
@@ -36,23 +33,43 @@ session_start();
 <html>
     <head> 
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/global.css">
+        <link rel="stylesheet" href="../src/styles/login.css">
         <title>Anmeldung</title>
     </head>
+    <!--Header-->
+    <header>
+            <nav>
+                <ul>
+                    <b>
+                        <li><a href="">Reservieren</a></li>
+                        <li><a href="">Reservierungen</a></li>
+                        <li><a href="">Rechnungen</a></li>
+                        <li><a href="">Konto</a></li>
+                    </b>
+                </ul>
+            </nav>
+        </header>
     <body>
         <main>
             <h1>Anmeldung</h1>
             <center>
                 <div class="frame">
                     <form method="POST">
-                        <label for="user_name">*Nutzer-ID</label>
-                        <input type="text" name="user_name" placeholder="user_name" required>
+                        <label for="pseudo">*Nutzer-ID</label>
+                        <input type="text" name="pseudo" placeholder="pseudo" required>
 
                         <label for="password">*Passwort</label>
                         <input type="password" name="password" placeholder="Passwort" required>
-                        <a href="restPassword.php">Passwort vergessen?</a>
+                        <a href="resetPassword.php">Passwort vergessen?</a>
                         <button type="submit">Anmelden</button>
                         <a href="register.php">Neues Konto erstellen</a>
+                    
+                        <?php if (isset($_SESSION['error'])){?>
+                            <p style = "color:red;"><?= $_SESSION["error"];?></p>
+                            
+                            <?php unset($_SESSION['error'] );}?>
+
+                        
                     </form>
                 </div>
             </center>
