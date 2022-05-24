@@ -94,6 +94,7 @@ CREATE TABLE `kunden` (
   `telefonNr` varchar(45) DEFAULT NULL,
   `emailAdresse` varchar(45) DEFAULT NULL,
   `kontostand` double DEFAULT NULL,
+  `Anzahl Versuche` int DEFAULT NULL,
   PRIMARY KEY (`kundeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
