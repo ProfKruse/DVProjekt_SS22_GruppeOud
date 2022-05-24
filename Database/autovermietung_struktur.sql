@@ -75,25 +75,27 @@ CREATE TABLE `kfztypen` (
 --
 
 CREATE TABLE `kunden` (
-  `kundeID` int(11) NOT NULL,
-  `Vorname` varchar(45) DEFAULT NULL,
+  `creationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  `updateDate` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `kundeID` int NOT NULL AUTO_INCREMENT,
+  `vorname` varchar(45) DEFAULT NULL,
   `nachname` varchar(45) DEFAULT NULL,
-  `strasse` varchar(45) NOT NULL,
-  `hausNr` int(11) NOT NULL,
-  `plz` int(11) NOT NULL,
-  `land` varchar(45) NOT NULL,
-  `iban` varchar(45) NOT NULL,
-  `bic` varchar(45) NOT NULL,
-  `telefonNr` varchar(45) NOT NULL,
-  `emailAdresse` varchar(45) NOT NULL,
-  `kontostand` double NOT NULL,
-  `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updateDate` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `pseudo` varchar(45) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
-  `validatedAccount` tinyint(1) DEFAULT NULL,
-  `codeResetPassword` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `validatedAccount` Boolean DEFAULT NULL,
+  `codeResetPassword` varchar(45) DEFAULT NULL,
+  `strasse` varchar(45) DEFAULT NULL,
+  `hausNr` varchar(4) DEFAULT NULL,
+  `plz` int DEFAULT NULL,
+  `ort` varchar(45) DEFAULT NULL,
+  `land` varchar(45) DEFAULT NULL,
+  `iban` varchar(45) DEFAULT NULL,
+  `bic` varchar(45) DEFAULT NULL,
+  `telefonNr` varchar(45) DEFAULT NULL,
+  `emailAdresse` varchar(45) DEFAULT NULL,
+  `kontostand` double DEFAULT NULL,
+  PRIMARY KEY (`kundeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
