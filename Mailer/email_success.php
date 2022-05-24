@@ -14,7 +14,7 @@
                         <li><a href="">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
                         <li><a href="">Rechnungen</a></li>
-                        <li><a href="">Konto</a></li>
+                        <li><a href="../login/login.php">Anmeldung</a></li>
                     </b>
                 </ul>
             </nav>
@@ -26,8 +26,7 @@
                     <h2>E-Mail wurde erfolgreich gesendet, bitte überprüfen Sie Ihre E-Mails</h2>
                 </div>
 
-                <button type="button">Startseite</button>
-                <header("Location: login.php");
+                <a href="../index.html"><button>Startseite</button></a>
             </center>
             
         </main>

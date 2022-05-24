@@ -26,7 +26,7 @@ function check_login($con){
 }
 
 
-function send_mail($recipient,$subject, $message,$pathAttachment,$nameAttachment){
+function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttachment=null){
 
     $mail=new PHPMailer(true);
     try {
@@ -42,19 +42,22 @@ function send_mail($recipient,$subject, $message,$pathAttachment,$nameAttachment
     
         $mail->SMTPAuth = true;
     
-        $mail->setFrom('sihem.ouldmohand@yahoo.com', '');
+        $mail->setFrom('sihem.ouldmohand@yahoo.com', 'Team Gamma');
     
         //recipient
         $mail->addAddress($recipient, '');
     
         //content
         $mail->isHTML(true); 
-        $mail->Subject = 'Test Mail ' . rand();
-        //$mail->Subject=$subject;
+        $mail->Subject = $subject;
         $mail->Body= $message;
-        $mail->addAttachment($pathAttachment, $nameAttachment);
+        
+        if($pathAttachment != Null and $nameAttachment !=null){
+            $mail->addAttachment($pathAttachment, $nameAttachment);
+        }
+        
         $mail->send();
-        header("Location: ../login/login.php");
+        header("Location: ../Mailer/email_success.php");
         die;
     } 
     catch(Exception $e) {
