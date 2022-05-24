@@ -47,7 +47,7 @@
                     }
                     if($count ==  0)
                     {
-                        echo "<br><br><br><br><br>  <font color='red'>Die eingegebene ID existiert nicht in der DB</font>";    
+                        echo "<br><br><br><br><br>  <p>Die eingegebene ID existiert nicht in der DB</p>";    
                     }
                     mysqli_free_result( $db_erg );
                     mysqli_close($con);
