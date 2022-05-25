@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html>
+<script>
+    function test(modell)
+    {
+        alert(modell)
+        
+    }
+    </script>
+
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../src/styles/style_checkReservation.css">
@@ -28,12 +36,12 @@
                 <!-------------------------------------------------------------->
                     <div class="group">
                         <label for="Marke"><b>Welche Marke suchen sie?</b></label>
-                        <input type="text" name="Marke" placeholder="xxx" required>
+                        <input type="text" name="marke" placeholder="xxx" required>
 
                         <label for="Modell"><b>Welches Modell suchen sie?</b></label>
-                        <input type="text" name="Modell" placeholder="xxx" required>
+                        <input type="text" name="modell" placeholder="xxx" required>
 
-                        <button type="submit">Anfrage senden</button>
+                        <button type="submit" onClick="test($modell)">Anfrage senden</button>
 
                         <label for="message"><b>Verfügbarkeit</b></label>
                     <input type="text" name="message" placeholder="Message" readonly>
@@ -45,7 +53,7 @@
                   
 
                 <!-------------------------------------------------------------->
- 
+            
                 </form>
                
             </div>
