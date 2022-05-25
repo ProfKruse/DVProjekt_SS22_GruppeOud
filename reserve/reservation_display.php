@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../src/styles/reservation.css">
-        <title>Reservierung</title>
+        <title>Reservierungsdaten anzeigen</title>
     </head>
     <body>
         <!--Header-->
@@ -21,46 +21,53 @@
         </header>
         <!--Reservierungseingaben-->
         <main>
-            <h1>Reservierung</h1>
+            <h1>Reservierungsdaten anzeigen</h1>
             <center>
             <div class="frame">
                 <form action="" method="POST">
                 <!-------------------------------------------------------------->
                 <div class="group">
-                    <label for="kfztyp"><b>*Kfz-Typ</b></label>
-                    <select name="kfztyp">
-                        <option value="">Van</option>
-                        <option value="">Limousine</option>
-                        <option value="">Cabriolet</option>
-                        <option value="">Sportwagen</option>
-                        <option value="">Pickup</option>
-                        <option value="">Kombi</option>
-                        <option value="">SUV</option>
-                        <option value="">Kleinwagen</option>
-                    </select>
+                    <label for="vorname"><b>Vorname</b></label>
+                    <input type="text" name="vorname" placeholder="Vorname" readonly>
 
-                    <label for="abgabestation"><b>*Abgabestation</b></label>
-                    <input type="text" name="abgabestation" placeholder="Abgabestation" required>
+                    <label for="kfz-typ"><b>Kfz-Typ</b></label>
+                    <input type="text" name="kfz-typ" placeholder="Kfz-Typ" readonly>
                 </div>
 
                 <!-------------------------------------------------------------->
 
                 <div class="group">
-                    <label for="abholstation"><b>*Abholstation</b></label>
-                    <input type="text" name="abholstation" placeholder="Abholstation" required>
+                    <label for="nachname"><b>Nachname</b></label>
+                    <input type="text" name="nachname" placeholder="Nachname" readonly>
 
-                    <label for="message"><b>Message</b></label>
-                    <input type="text" name="message" placeholder="Message">
+                    <label for="status"><b>Status</b></label>
+                    <input type="text" name="status" placeholder="Status" readonly>
                 </div>
                 <br>
-                
+
+                <!-------------------------------------------------------------->
+                <div class="group">
+                    <label for="abholstation"><b>Abholstation</b></label>
+                    <input type="text" name="abholstation" placeholder="Abholstation" readonly>
+
+                </div>
+
+                <!-------------------------------------------------------------->
+                <div class="group">
+                    <label for="datum"><b>Datum</b></label>
+                    <input type="text" name="datum" placeholder="Datum" readonly>
+
+                </div>
+
                 <br>
-                <label for="checkbox1" id="checkbox">
-                    <input type="checkbox" name="checkbox1"><b>Checkbox Text</b>
-                </label>
+                <div class="group">
+                    <label for="reservierungsnummer"><b>Reservierungsnummer eingeben:</b></label>
+                    <input type="text" name="reservierungsnummer" placeholder="Reservierungsnummer" readonly>
+
+                </div>
                 <br>
 
-                <button type="submit">Send</button>
+                <button type="submit">Anzeigen</button>
             </form>
         </div>
 </center>
