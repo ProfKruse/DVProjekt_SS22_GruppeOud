@@ -1,5 +1,26 @@
 <!DOCTYPE html>
 <html>
+
+<script>
+    function test()
+    {
+        //Wert aus Reservierungsnummer-Feld einlesen
+        $eingabe = (document.getElementById("reservierungsnummer").value);
+        alert($eingabe);
+        //weitere Funktion inkl. Parameter aufrufen
+        test2($eingabe);
+
+        //Wert in Textfeld schreiben
+        document.getElementById("status").value = $eingabe;
+        alert("test2")
+    }
+    function test2($eingabe)
+    {
+        alert($eingabe);
+    }
+
+</script>
+
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../src/styles/reservation.css">
@@ -24,14 +45,14 @@
             <h1>Reservierungsdaten anzeigen</h1>
             <center>
             <div class="frame">
-                <form action="" method="POST">
+                <form>
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="vorname"><b>Vorname</b></label>
                     <input type="text" name="vorname" placeholder="Vorname" readonly>
 
-                    <label for="kfz-typ"><b>Kfz-Typ</b></label>
-                    <input type="text" name="kfz-typ" placeholder="Kfz-Typ" readonly>
+                    <label for="kfz_typ"><b>Kfz-Typ</b></label>
+                    <input type="text" name="kfz_typ" placeholder="Kfz-Typ" readonly>
                 </div>
 
                 <!-------------------------------------------------------------->
@@ -41,14 +62,14 @@
                     <input type="text" name="nachname" placeholder="Nachname" readonly>
 
                     <label for="status"><b>Status</b></label>
-                    <input type="text" name="status" placeholder="Status" readonly>
+                    <input type="text" name="status" id="status" placeholder="Status" readonly>
                 </div>
                 <br>
 
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="abholstation"><b>Abholstation</b></label>
-                    <input type="text" name="abholstation" placeholder="Abholstation" readonly>
+                    <input type="text" name="abholstation" id="abholstation" placeholder="Abholstation" readonly>
 
                 </div>
 
@@ -59,15 +80,16 @@
 
                 </div>
 
+                
                 <br>
                 <div class="group">
                     <label for="reservierungsnummer"><b>Reservierungsnummer eingeben:</b></label>
-                    <input type="text" name="reservierungsnummer" placeholder="Reservierungsnummer" readonly>
+                    <input type="text" name="reservierungsnummer" id="reservierungsnummer" placeholder="Reservierungsnummer" required>
 
                 </div>
                 <br>
 
-                <button type="submit">Anzeigen</button>
+                <button type="button" onclick="test()">Anzeigen</button>
             </form>
         </div>
 </center>
