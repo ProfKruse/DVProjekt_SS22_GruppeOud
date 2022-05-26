@@ -81,7 +81,7 @@
                 <!--------------------------------------------------------------> 
                 <div class="group"> 
                     <label for="mietvertragsnummer"><b>*Mietvertragsnummer</b></label> 
-                    <input type="number" name="mietvertagsid" id="mietvertagsid" maxlength="11" min="1"  required > 
+                    <input type="number" name="mietvertagsid" id="mietvertagsid" max="99999999999" min="1"  required > 
                 </div> 
                  
                 <div class="group"> 
@@ -110,7 +110,7 @@
                     </select> 
 
                     <label for="mechanik"><b>*Mechanikstatus</b></label> 
-                    <input type="text" name="mechanik" required> 
+                    <input type="text" name="mechanik" maxlength="1000" required> 
                 </div> 
                 <br>
                 <button type="submit">Protokoll erzeugen</button></div> 
