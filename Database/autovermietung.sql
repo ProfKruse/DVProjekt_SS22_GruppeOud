@@ -200,7 +200,8 @@ CREATE TABLE `mietvertraege` (
   `zahlart` varchar(45) NOT NULL,
   `abholstation` int(11) NOT NULL,
   `rueckgabestation` int(11) NOT NULL,
-  `vertragID` int(11) NOT NULL
+  `vertragID` int(11) NOT NULL,
+  `kundeID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -288,7 +289,7 @@ INSERT INTO `reservierungen` (`kundeID`, `kfzTypID`, `mietstationID`, `status`, 
 --
 
 CREATE TABLE `ruecknahmeprotokolle` (
-  `ruecknahmeprotokollID` int(11) NOT NULL,
+  `ruecknahmeprotokollID` int(11) NOT NULL AUTO_INCREMENT,
   `ersteller` int(11) NOT NULL,
   `protokollDatum` date NOT NULL DEFAULT current_timestamp(),
   `tank` float NOT NULL,
@@ -402,8 +403,9 @@ ALTER TABLE `mietvertraege`
   ADD PRIMARY KEY (`mietvertragID`,`vertragID`),
   ADD KEY `mietvertraege_abholstation_idx` (`abholstation`),
   ADD KEY `mietvertraege_rueckgabestation_idx` (`rueckgabestation`),
-  ADD KEY `mietvertraege_vertragID_idx` (`vertragID`);
-
+  ADD KEY `mietvertraege_vertragID_idx` (`vertragID`),
+  ADD KEY `mietvertraege_kundeID_idx` (`kundeID`);
+  
 --
 -- Indizes für die Tabelle `mitarbeiter`
 --
