@@ -201,7 +201,8 @@ CREATE TABLE `mietvertraege` (
   `abholstation` int(11) NOT NULL,
   `rueckgabestation` int(11) NOT NULL,
   `vertragID` int(11) NOT NULL,
-  `kundeID` int(11) NOT NULL
+  `kundeID` int(11) NOT NULL,
+  PRIMARY KEY (`mietvertragID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
