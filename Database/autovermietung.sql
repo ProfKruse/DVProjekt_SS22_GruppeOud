@@ -208,7 +208,7 @@ CREATE TABLE `mietvertraege` (
 -- Daten für Tabelle `mietvertraege`
 --
 
-INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `zahlart`, `abholstation`, `rueckgabestation`, `vertragID`) VALUES
+INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `zahlart`, `abholstation`, `rueckgabestation`, `vertragID` ,`kundeID` ) VALUES
 (1, 'bestätigt', 30, 500, 'Kreditkarte', 1, 2, 1,1),
 (2, 'bestätigt', 60, 2500, 'Rechnung', 4, 3, 2,1);
 
