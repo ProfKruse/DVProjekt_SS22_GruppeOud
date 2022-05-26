@@ -1,10 +1,11 @@
 <!DOCTYPE html> 
-    <?php 
+    <?php
+        session_start();
         function mietvertragsAnzeige(){ 
             include("db_inc.php"); 
-            if (isset($_POST['mietvertagsid'])) { 
-                $mietvertragsid = $_POST["mietvertagsid"]; 
-                $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid; 
+            if (isset($_POST['mietvertagid'])) { 
+                $_SESSION['mietvertragID']  = $_POST["mietvertagid"]; 
+                $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $_SESSION['mietvertragID']; 
                 $db_erg = mysqli_query( $con, $statement ); 
                 if (!$db_erg ) 
                 { 
@@ -26,6 +27,7 @@
                                 <th>Abholstation</th> 
                                 <th>Rueckgabestation</th> 
                                 <th>Vertragsnummer</th> 
+                                <th>Kundennummer</th>
                             </tr> 
                         </thead> 
                         <tbody> 
@@ -38,6 +40,7 @@
                                 <td>{$zeile['abholstation']}</td> 
                                 <td>{$zeile['rueckgabestation']}</td> 
                                 <td>{$zeile['vertragID']}</td> 
+                                <td>{$zeile['kundeID']}</td> 
                             </tr>  
                         </tbody> 
                     </table> 
@@ -51,7 +54,37 @@
                     mysqli_close($con); 
                 } 
             }
-            ?> 
+
+        function datenSpeichern()
+        {  
+            include("db_inc.php");
+           
+            if (isset($_POST['tank'])) 
+            {
+                $tank = trim($_POST['tank']);
+                if (isset($_POST['kilometerstand'])) 
+                {
+                    $kilometerstand = trim($_POST['kilometerstand']);
+                    if (isset($_POST['sauberkeit'])) 
+                    {
+                        $sauberkeit = trim($_POST['sauberkeit']);
+                        if (isset($_POST['mechanik'])) 
+                        {
+                            $mechanik = trim($_POST['mechanik']);
+                            #$timestamp = time();
+                            #$erstellDatum = date("Y-m-d", $timestamp);
+                            
+                                $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand',". $_SESSION['mietvertragID'].")"; 
+                                $ergebnis = $con->query($statement);
+                            
+                            mysqli_close($con);
+                        }
+                    }                       
+                }
+                session_destroy();                
+            }
+        }
+    ?> 
 <html> 
     <head> 
         <meta charset="UTF-8"> 
@@ -81,7 +114,7 @@
                 <!--------------------------------------------------------------> 
                 <div class="group"> 
                     <label for="mietvertragsnummer"><b>*Mietvertragsnummer</b></label> 
-                    <input type="number" name="mietvertagsid" id="mietvertagsid" max="99999999999" min="1"  required > 
+                    <input type="number" name="mietvertagid" id="mietvertagid" max="99999999999" min="1"  required > 
                 </div> 
                  
                 <div class="group"> 
@@ -101,19 +134,22 @@
                     <input type="number" name="kilometerstand" min="0" required> 
 
                     <label for="sauberkeit"><b>*Sauberkeit</b></label> 
-                    <select name="sauberkeit" id="sauberkeit" > 
-                        <option value="">Sehr Sauber</option> 
-                        <option value="">Sauber</option> 
-                        <option value="">Neutral</option> 
-                        <option value="">Leicht schmutzig</option> 
-                        <option value="">Sehr schmutzig</option> 
+                    <select name="sauberkeit" id="sauberkeit" required> 
+                        <option value="Sehr Sauber">Sehr Sauber</option> 
+                        <option value="Sauber">Sauber</option> 
+                        <option value="Neutral">Neutral</option> 
+                        <option value="Leicht schmutzig">Leicht schmutzig</option> 
+                        <option value="Sehr schmutzig">Sehr schmutzig</option> 
                     </select> 
 
                     <label for="mechanik"><b>*Mechanikstatus</b></label> 
                     <input type="text" name="mechanik" maxlength="1000" required> 
                 </div> 
                 <br>
-                <button type="submit">Protokoll erzeugen</button></div> 
+                <button type="submit">Protokoll erzeugen</button></div>
+                <?php 
+                        datenSpeichern(); 
+                ?>  
             </form> 
             </div> 
         </center> 
