@@ -202,7 +202,6 @@ CREATE TABLE `mietvertraege` (
   `rueckgabestation` int(11) NOT NULL,
   `vertragID` int(11) NOT NULL,
   `kundeID` int(11) NOT NULL,
-  PRIMARY KEY (`mietvertragID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -297,7 +296,8 @@ CREATE TABLE `ruecknahmeprotokolle` (
   `sauberkeit` enum('sehr schmutzig','leicht schmutzig','neutral','sauber','sehr sauber') NOT NULL,
   `mechanik` varchar(45) DEFAULT NULL,
   `kilometerstand` float NOT NULL,
-  `mietvertragID` int(11) NOT NULL
+  `mietvertragID` int(11) NOT NULL,
+  PRIMARY KEY (`ruecknahmeprotokollID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -434,7 +434,6 @@ ALTER TABLE `reservierungen`
 -- Indizes für die Tabelle `ruecknahmeprotokolle`
 --
 ALTER TABLE `ruecknahmeprotokolle`
-  ADD PRIMARY KEY (`ruecknahmeprotokollID`),
   ADD UNIQUE KEY `ruecknahmeprotokolle_mietvertragID` (`mietvertragID`),
   ADD KEY `ruecknahmeprotokolle_ersteller` (`ersteller`);
 
