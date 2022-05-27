@@ -9,9 +9,19 @@
         <center>
         <div id="capture">
         <style>
-            * {
-            font-family: Arial, Helvetica, sans-serif;
-            }
+            @font-face {
+    font-family: custom;
+    src: url("../src/fonts/Calibri Regular.ttf");
+  }
+
+* {
+    font-family: custom; 
+}
+
+p {
+    font-size: 1.02em;
+}
+
 
 
 header, main, footer, #all {
@@ -68,11 +78,6 @@ footer > div {
 
 #invoice-information {
     width: 100%;
-    border-collapse: collapse;
-}
-
-td, th {
-    border: 1px solid black;
 }
 
 p {
@@ -138,6 +143,7 @@ p {
                             </tr>
                         </tbody>
                     </table>
+                    <hr>
                 </div>
             </div>
             
@@ -165,7 +171,5 @@ p {
     </div>
 </div>
 </center>
-
-    </body>
-    <button id="download">Download</button>
+</body>
 </html>
