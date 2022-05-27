@@ -1,9 +1,6 @@
 <?php
 require_once('tcpdf/tcpdf/tcpdf.php');
 
-$kundendaten = array("kundennr"=>2,"name"=>"Max Mustermann","straße"=>"Musterstraße 1","stadt"=>"12345 Stadt");
-$rechnungsdaten = array(array("rechnungsnr"=>1,"marke"=>"Ford","modell"=>"Mustang","kennzeichen"=>"WES-DE-27","mietdauer"=>20,"gesamtpreis"=>500));
-
 function create_pdf($kundendaten, $rechnungsdaten) {
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
     $pdf->setCreator(PDF_CREATOR);
@@ -139,6 +136,7 @@ Wir erlauben uns folgende Rechnungsstellung:
         pdf_area_separation($pdf, 7);
 
     $pdf->writeHTML($contact_information, true, false, true, false, '');
+    ob_end_clean();
     $pdf->Output('invoices'.date('Y-m-d').'.pdf', 'I');
 }
 

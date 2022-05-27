@@ -45,27 +45,43 @@
                         $connection = new mysqli("localhost","root","","autovermietung");
                             if($connection->connect_error) {
                                 die("Es konnte keine Verbindung zur Datenbank aufgebaut werden");
+                        }
+
+                        function sammelrechnungen() {
+                            global $connection;
+                            $rechnungsdaten = array();
+                            
+                            $kunde = mysqli_fetch_array($connection->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
+                            $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["stadt"]);
+                            
+                            //Alle Rechnungen, welche noch nicht bezahlt wurden und <= 
+                            $rechnungen = $connection->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
+                            if($rechnungen != NULL) {
+                                while($row = $rechnungen->fetch_array()) {
+                                    $rechnungnr = $row["rechnungNr"];
+                                    $gesamtpreis = $row["rechnungBetrag"];
+
+                                    $mietvertrag = mysqli_fetch_array($connection->query("SELECT * FROM mietvertraege WHERE mietvertragID=".$row["rechnungNr"]));
+                                    $mietdauer = $mietvertrag["mietdauerTage"];
+
+                                    $vertrag = mysqli_fetch_array($connection->query("SELECT * FROM vertraege WHERE vertragID=".$mietvertrag["mietvertragID"]));
+                                    $kfz = mysqli_fetch_array($connection->query("SELECT * FROM kfzs WHERE kfzID=".$vertrag["kfzID"]));
+
+                                    $marke = $kfz["marke"];
+                                    $modell = $kfz["modell"];
+                                    $kennzeichen = $kfz["kennzeichen"];
+                                    
+                                    array_push($rechnungsdaten,array("rechnungsnr"=>$rechnungnr,"marke"=>$marke,"modell"=>$modell,"kennzeichen"=>$kennzeichen,"mietdauer"=>$mietdauer,"gesamtpreis"=>$gesamtpreis));
+                                }
                             }
 
+                            create_pdf($kundendaten,$rechnungsdaten);
+                        }
+    
+                        sammelrechnungen();
+    
                         $result = $connection->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]);
-        
-                        //zahlungslimit Berechnung: nächster Wochenanfang/Monatsanfang/Quartalsanfang/Halbjahresanfang/Jahresanfang + zahlungszielTage
-                        //Verspätung in Tagen: bezahltAm - zahlungslimit
 
-                        //Ausgehändigte Rechnungen: Alle Rechnungen deren Rechnungsdatum <= Zahlungslimit UND noch nicht bezahlt
-
-                        //Quartalsweise
-                        //Ende erstes Quartal: 31. März
-                        //Ende zweites Quartal: 30. Juni
-                        //Ende drittes Quartal: 30. September
-                        //Ende viertes Quartal: 31. Dezember
-
-                        //Halbjährlich
-                        //Endes erstes Halbjahr: 30. Juni
-                        //Ende zweites Halbjahr: 31. Dezember
-
-                        //Jährlich
-                        //Ende des Jahres: 31. Dezember
                         if($result->num_rows > 0) {
                             while($row = $result->fetch_array()) {
                             $sammelrechnungen = mysqli_fetch_array($connection->query("SELECT DISTINCT sammelrechnungen FROM kunden WHERE kundeID=".$_SESSION['kunde']))["sammelrechnungen"];
@@ -74,6 +90,7 @@
                             $zahlungszielTage = mysqli_fetch_array($connection->query("SELECT DISTINCT zahlungszielTage FROM kunden WHERE kundeID=".$_SESSION['kunde']))["zahlungszielTage"];
                             $rechnungdatum = strtotime($row["rechnungDatum"]);
                             $zahlungslimit = ($zahlungszielTage*86400)+$rechnungdatum;
+                            $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400); 
 
                             switch ($sammelrechnungen) {
                                 case "keine":
@@ -149,8 +166,8 @@
                                     <td>'.$row["rechnungDatum"].'</td>
                                     <td>'.date('Y-m-d',$zahlungslimit).'</td>
                                     <td>'.$row["bezahltAm"].'</td>
-                                    <td>'.ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400).'</td>
-                                    <td><button type="button" onclick="">Download</button></td>
+                                    <td>'.$verspaetung.'</td>
+                                    <td><button type="button" onclick="<?php echo $a ?>">Download</button></td>
                                 </tr>';
 
                                 }
