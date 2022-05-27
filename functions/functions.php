@@ -27,7 +27,6 @@ function check_login($con){
 
 
 function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttachment=null){
-
     $mail=new PHPMailer(true);
     try {
         //settings
@@ -38,6 +37,7 @@ function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttac
         $mail->Username='sihem.ouldmohand@yahoo.com';
         $mail->Password='fytbevyafkbqzien';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        
         $mail->Port=587;
     
         $mail->SMTPAuth = true;
@@ -57,8 +57,8 @@ function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttac
         }
         
         $mail->send();
-        header("Location: ../Mailer/email_success.php");
-        die;
+
+
     } 
     catch(Exception $e) {
         echo 'Email wurde nicht gesendet';

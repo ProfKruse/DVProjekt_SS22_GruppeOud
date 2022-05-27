@@ -1,9 +1,16 @@
+<?php
+session_start();
+include("../database/db_inc.php");
+include("../functions/functions.php");
+$user_data = check_login($con);
+
+?>
+
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../src/styles/register.css">
+    <link rel="stylesheet" href="../src/styles/style_reservationSuccess.css">
     <title>Reservierung erfolgreich</title>
 </head>
 
@@ -16,8 +23,9 @@
                     <li><a href="">Reservieren</a></li>
                     <li><a href="">Reservierungen</a></li>
                     <li><a href="">Rechnungen</a></li>
-                    <li><a href="../login/login.php">Anmeldung</a></li>
-
+                    <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                    <li><a href="../login/logout.php">Logout</a></li>
+                    
                 </b>
             </ul>
         </nav>
@@ -26,18 +34,11 @@
     <main>
         <center>
             <div class="frame">
-                <div>
-                    <img src="https://beefree.io/wp-content/themes/bee2017/img/beepro/signup/bee-plane.gif" width="20%">
-                    <h3>Ihr Code wurde gesendet<br> <br> Melden Sie sich an und geben Sie ihr Code ein, <br> um Ihr Konto zu aktivieren.</h3>
-                    <div>
-                        <p>
-                            Wenn Sie die E-Mail nicht finden, <br> checken Sie bitte Ihren SPAM Ordner 🙂. <br>
-                        </p>
-                    </div>
-                </div>
-                <a href="../login/login.php"><button>Anmelden</button></a>
+                <h2>Danke!</h2>
+                <p>Ihr Konto wurde aktiviert!.</p>
+            </div>
+            <a href="../index.html"><button>Startseite</button></a>
         </center>
-
     </main>
     <!--Sonstige Links-->
     <aside>
@@ -49,5 +50,4 @@
             <b>Social</b>
         </footer>
 </body>
-
 </html>
