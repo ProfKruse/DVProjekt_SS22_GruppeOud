@@ -160,7 +160,7 @@
         implode("<br>", $errors);
         }
         else{
-            echo "Vielen Dank, Ihre Daten wurden gepeichert.";
+            echo "Vielen Dank";
         }
 ?>
 
