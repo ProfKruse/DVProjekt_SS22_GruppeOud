@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <center>
                 <div>
                     <p style= \"font-size: 20px\">Danke f&uumlr die Registrierung! <br> Sind Sie bereit f&uumlr Ihren ersten Trip?
-                    <br> Ihr Aktivierungscode: $codeResetPassword </b></p>
+                    <br> Ihr Aktivierungscode: $token </b></p>
                 </div>
                 <div>
             <img alt=\"Image\" src=\"https://media0.giphy.com/media/00Tkw1cnIsl2gdZHZ7/giphy.gif?cid=20eb4e9dikte6pkvfjiu7nht9hol0uy1j6voplctwx19xiq0&rid=giphy.gif&ct=s\" style=\"height: auto; width: 230px; max-width: 80%;\" title=\"Image\"/></div>
