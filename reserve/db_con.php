@@ -1,27 +1,26 @@
-<label for="vorname"><b>Vorname</b></label>
-                    <input type="text" name="vorname" placeholder="Vorname" value= 
+<?php
 
-                    <?php 
-                    $server = "localhost";
-                    $user = "root";
-                    $pass = "";
-                    $database = "test";
-                    // Suchparameter
-                    $eingabe = "1"; //$_GET["reservierungsnummer"]
+/* Host name of the MySQL server */
+$host = 'localhost';
 
-                    // Verbindungsaufnahme mit dem MySQL-Server
-                    $verbindung = mysqli_connect($server, $user, $pass);
-                    
-                    // Auswahl der gewünschten Datenbank
-                    mysqli_select_db($verbindung, $database);
-                    
-                    // Fetch Array mit gewünschtem Suchparameter
-                    $sql = "SELECT vorname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID = $eingabe";
-                    $abfrage = mysqli_query($verbindung, $sql);
-                    $zeile = mysqli_fetch_array($abfrage);
-                    echo $zeile["vorname"];
-                    
-                    // Verbindung wird beendet
-                    $return = mysqli_close($verbindung);
-                    ?> 
-                    readonly>
+/* MySQL account username */
+$user = 'root';
+
+/* MySQL account password */
+$passwd = '';
+
+/* The schema you want to use */
+$schema = 'test';
+
+/* Connection with MySQLi, procedural-style */
+$con = mysqli_connect($host, $user, $passwd, $schema);
+
+/* Check if the connection succeeded */
+if (!$con)
+{
+   echo 'Connection failed<br>';
+   echo 'Error number: ' . mysqli_connect_errno() . '<br>';
+   echo 'Error message: ' . mysqli_connect_error() . '<br>';
+   die();
+}
+
