@@ -83,7 +83,7 @@ CREATE TABLE `kunden` (
   `pseudo` varchar(45) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `validatedAccount` Boolean DEFAULT NULL,
-  `codeResetPassword` varchar(45) DEFAULT NULL,
+  `token` varchar(45) DEFAULT NULL,
   `strasse` varchar(45) DEFAULT NULL,
   `hausNr` varchar(4) DEFAULT NULL,
   `plz` int DEFAULT NULL,
