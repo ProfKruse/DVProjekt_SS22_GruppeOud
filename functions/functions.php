@@ -1,10 +1,10 @@
 <?php
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
-    require '../Helper/PHPMailer/src/Exception.php';
+    require '../../../php/PHPMailer/src/Exception.php';
     /* PHPMailer-Klasse */
-    require '../Helper/PHPMailer/src/PHPMailer.php';
+    require '../../../php/PHPMailer/src/PHPMailer.php';
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
-    require '../Helper/PHPMailer/src/SMTP.php';
+    require '../../../php/PHPMailer/src/SMTP.php';
     
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
