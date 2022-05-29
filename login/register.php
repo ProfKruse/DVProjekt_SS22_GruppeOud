@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $token = rand(10000, 99999);
         $stmt = "insert into kunden (vorname, nachname, pseudo, password, strasse, hausNr, plz,ort, land, iban, bic, telefonNr, emailAdresse,token) 
-            values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$ort','$land','$iban','$bic','$telefonNr','$emailAdresse','$token')";
+values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$ort','$land','$iban','$bic','$telefonNr','$emailAdresse','$token')";
         mysqli_query($con, $stmt);
 
         $recipient = $emailAdresse;
@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         send_mail($recipient, $subject, $message);
 
-        header("Location: login.php");
+        header("Location: ../Mailer/email_success.php");
         die;
     }
 }
