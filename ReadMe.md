@@ -31,7 +31,7 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 
 #### Auftrag
 - [Lastenheft](https://github.com/som-ould/rentalCar/blob/develop/Projektauftrag/20220403_Lastenheft_DVProjektWinfo_SS2022_Autovermietung.pdf)
-- [Projekt Auftrag](https://github.com/som-ould/rentalCar/wiki/Projektauftrag)
+- [Projektauftrag](https://github.com/som-ould/rentalCar/wiki/Projektauftrag)
 
 #### Protokole
 - [Logbuch](https://docs.google.com/document/d/1gyoO3umH7sQYfjQJlo43idK8eAwMnH-QW_iQgBw24R0/edit#)
