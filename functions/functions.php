@@ -34,15 +34,15 @@ function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttac
         $mail->isSMTP();
         $mail->Host='smtp.mail.yahoo.com';
         
-        $mail->Username='sihem.ouldmohand@yahoo.com';
-        $mail->Password='fytbevyafkbqzien';
+        $mail->Username='gamma_autovermietung@yahoo.com';
+        $mail->Password='njnzwgvpkcjmnsji';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         
         $mail->Port=587;
     
         $mail->SMTPAuth = true;
     
-        $mail->setFrom('sihem.ouldmohand@yahoo.com', 'Team Gamma');
+        $mail->setFrom('gamma_autovermietung@yahoo.com', 'Team Gamma');
     
         //recipient
         $mail->addAddress($recipient, '');
