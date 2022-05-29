@@ -58,30 +58,30 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 Kontakt:
 =========
 
-Anne Lötter 
-Backend Entwicklerin
-Anne.loettert@studmail.w-hs.de
+- Anne Lötter 
+<br>--Backend Entwicklerin
+<br>Anne.loettert@studmail.w-hs.de
 
-Bastian Oymanns 
-Backend Entwickler
-Bastian.oymanns@studmail.w-hs.de
+- Bastian Oymanns 
+<br>Backend Entwickler
+<br>Bastian.oymanns@studmail.w-hs.de
 
-Julian Echerskorn 
-Backend Entwickler
-Julian.Eckerskorn@studmail.w-hs.de
+- Julian Echerskorn 
+<br>Backend Entwickler
+<br>Julian.Eckerskorn@studmail.w-hs.de
 
-Pascal Ewald 
-Front- und Backend Entwickler, Datenbank Beauftragter
-pascal.ewald@studmail.w-hs.com
+- Pascal Ewald 
+<br>Front- und Backend Entwickler, Datenbank Beauftragter
+<br>pascal.ewald@studmail.w-hs.com
 
-Sihem Ould Mohand 
-Projektleiterin, Backend Entwicklerin und Scrum Master
-sihem.mohand@studmail.w-hs.de
+- Sihem Ould Mohand 
+<br>Projektleiterin, Backend Entwicklerin und Scrum Master
+<br>sihem.mohand@studmail.w-hs.de
 
-Tim Middeke 
-Backend Entwickler
-Tim.middeke@studmail.w-hs.de
+- Tim Middeke 
+<br>Backend Entwickler
+<br>Tim.middeke@studmail.w-hs.de
 
-Christian Kruse 
-Produkt Owner
-Christian.Kruse@w-hs.de
+- Christian Kruse 
+<br>Produkt Owner
+<br>Christian.Kruse@w-hs.de
