@@ -1,10 +1,6 @@
 Gamma Autovermietung
 ====================
 
-
-Contents
-========
-
  * [Einleitung](#einleitung)
  * [Installation](#installation)
  * [Dokumentation](#dokumentation)
