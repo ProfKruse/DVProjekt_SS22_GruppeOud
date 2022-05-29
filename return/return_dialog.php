@@ -51,9 +51,9 @@
                     }
                     mysqli_free_result( $db_erg );
                     mysqli_close($con);
-                }
             }
-            ?>
+    }
+    ?>
 <html>
     <head>
         <meta charset="UTF-8">
