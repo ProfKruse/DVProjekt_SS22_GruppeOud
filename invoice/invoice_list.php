@@ -75,7 +75,7 @@
                                 }
                             }
 
-                            create_pdf($kundendaten,$rechnungsdaten);
+                            echo gettype(create_pdf($kundendaten,$rechnungsdaten));
                         }
     
                         sammelrechnungen();

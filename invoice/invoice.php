@@ -1,5 +1,10 @@
 <?php
 require_once('tcpdf/tcpdf/tcpdf.php');
+require_once('functions.php');
+
+$kundendaten = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");
+$rechnungsdaten = array(array("rechnungsnr"=>2,"marke"=>"Porsche","modell"=>"Carrera GT","kennzeichen"=>"WES-DE-82","mietdauer"=>30,"gesamtpreis"=>2500));
+create_pdf($kundendaten,$rechnungsdaten);
 
 function create_pdf($kundendaten, $rechnungsdaten) {
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
@@ -137,7 +142,20 @@ Wir erlauben uns folgende Rechnungsstellung:
 
     $pdf->writeHTML($contact_information, true, false, true, false, '');
     ob_end_clean();
-    $pdf->Output('invoices'.date('Y-m-d').'.pdf', 'I');
+    $fileatt = $pdf->Output('invoice'.date('Y-m-d').'.pdf', 'E');
+    $data = chunk_split($fileatt);
+
+    send_mail('pascal_ewald@web.de','Testen','test');
+
+    //$connection = new mysqli("localhost","root","","autovermietung");
+    //if($connection->connect_error) {
+        //die("Es konnte keine Verbindung zur Datenbank aufgebaut werden");
+    //}
+
+    //$connection->query("UPDATE rechnungen SET rechnungPDF=$fileContent WHERE kundeID=3");
+
+    //$connection->close();
+    //$data = chunk_split($file);
 }
 
 function pdf_area_separation($pdf_file, $separation_lines) {
