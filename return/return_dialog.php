@@ -4,7 +4,7 @@
         function mietvertragsAnzeige(){ 
             include("db_inc.php"); 
             if (isset($_POST['mietvertagid'])) { 
-                $_SESSION['mietvertragID']  = $_POST["mietvertagid"]; 
+                $_SESSION['mietvertragID'] = $_POST["mietvertagid"]; 
                 $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $_SESSION['mietvertragID']; 
                 $db_erg = mysqli_query( $con, $statement ); 
                 if (!$db_erg ) 
@@ -48,7 +48,8 @@
                     } 
                     if($count ==  0) 
                     { 
-                        echo "<br><br><br><br><br>  <p>Die eingegebene ID existiert nicht in der DB</p>";     
+                        echo "<p>Die eingegebene ID existiert nicht in der DB</p>";
+                        $_SESSION['mietvertragID'] = null;
                     } 
                     mysqli_free_result( $db_erg ); 
                     mysqli_close($con); 
@@ -58,11 +59,10 @@
         function datenSpeichern()
         {  
             include("db_inc.php");
-           
-            if (isset($_POST['tank'])) 
-            {
-                $tank = trim($_POST['tank']);
-                if (isset($_POST['kilometerstand'])) 
+                if (isset($_POST['tank'])) 
+                {
+                    $tank = trim($_POST['tank']);
+                    if (isset($_POST['kilometerstand'])) 
                 {
                     $kilometerstand = trim($_POST['kilometerstand']);
                     if (isset($_POST['sauberkeit'])) 
@@ -71,19 +71,24 @@
                         if (isset($_POST['mechanik'])) 
                         {
                             $mechanik = trim($_POST['mechanik']);
-                            #$timestamp = time();
-                            #$erstellDatum = date("Y-m-d", $timestamp);
-                            
+                            if (isset($_SESSION['mietvertragID'])) 
+                            {
                                 $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand',". $_SESSION['mietvertragID'].")"; 
                                 $ergebnis = $con->query($statement);
-                            
-                            mysqli_close($con);
+                                
+                                mysqli_close($con); 
+                            }
+                            else
+                            {
+                                echo "<p>Die eingegebene ID existiert nicht in der DB, bitte geben Sie eine korrekte ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
+                            }
                         }
                     }                       
                 }
                 session_destroy();                
             }
-        }
+
+    }
     ?> 
 <html> 
     <head> 
@@ -148,7 +153,7 @@
                 <br>
                 <button type="submit">Protokoll erzeugen</button></div>
                 <?php 
-                        datenSpeichern(); 
+                    datenSpeichern(); 
                 ?>  
             </form> 
             </div> 
