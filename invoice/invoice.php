@@ -104,8 +104,8 @@ Wir erlauben uns folgende Rechnungsstellung:
         }
     
         $total_amount .=  $nettobetrag.'€
-        zzgl. 19% MwSt: '.$nettobetrag*0.19.'€
-        <b>Gesamtbetrag:'.$nettobetrag+($nettobetrag*0.19).'€</b>
+        zzgl. 19% MwSt: '.($nettobetrag*0.19).'€
+        <b>Gesamtbetrag:'.($nettobetrag+($nettobetrag*0.19)).'€</b>
         </pre>
         <hr>
         <br>';
@@ -142,20 +142,9 @@ Wir erlauben uns folgende Rechnungsstellung:
 
     $pdf->writeHTML($contact_information, true, false, true, false, '');
     ob_end_clean();
-    $fileatt = $pdf->Output('invoice'.date('Y-m-d').'.pdf', 'E');
-    $data = chunk_split($fileatt);
+    $fileatt = $pdf->Output(__DIR__ . '/invoices/invoice_'.$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', 'F');
 
-    send_mail('pascal_ewald@web.de','Testen','test');
-
-    //$connection = new mysqli("localhost","root","","autovermietung");
-    //if($connection->connect_error) {
-        //die("Es konnte keine Verbindung zur Datenbank aufgebaut werden");
-    //}
-
-    //$connection->query("UPDATE rechnungen SET rechnungPDF=$fileContent WHERE kundeID=3");
-
-    //$connection->close();
-    //$data = chunk_split($file);
+    send_mail('pascal_ewald@web.de','Rechnung','Ihre Rechnung zum', 'a');
 }
 
 function pdf_area_separation($pdf_file, $separation_lines) {

@@ -1,10 +1,10 @@
 <?php
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
-    require_once('..\..\..\php\PHPMailer\src\Exception.php');
+    require '../../../php/PHPMailer/src/Exception.php';
     /* PHPMailer-Klasse */
-    require_once('..\..\..\php\PHPMailer\src\PHPMailer.php');
+    require '../../../php/PHPMailer/src/PHPMailer.php';
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
-    require_once('..\..\..\php\PHPMailer\src\SMTP.php');
+    require '../../../php/PHPMailer/src/SMTP.php';
     
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -24,6 +24,8 @@ function check_login($con){
     header("Location: ../login/login.php");
     die;
 }
+
+send_mail('pascal_ewald@web.de','a','test');
 
 
 function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttachment=null){
