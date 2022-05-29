@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         </html>';
     
         send_mail($recipient, $subject, $message);
-        header("Location: ../login/login.php");
+        header("Location: ../Mailer/email_success_reset_password.php");
         die;
     }
 }
