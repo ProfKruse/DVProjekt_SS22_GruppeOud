@@ -135,7 +135,7 @@ CREATE TABLE `kunden` (
 -- Daten für Tabelle `kunden`
 --
 
-INSERT INTO `kunden` ( `vorname`, `nachname`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `pseudo`, `password`, `validatedAccount`, `codeResetPassword`,`AnzVersuche`) VALUES
+INSERT INTO `kunden` ( `vorname`, `nachname`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `pseudo`, `password`, `validatedAccount`, `token`,`AnzVersuche`) VALUES
 ( 'Anne', 'Kappel', 'Bleibtreustraße', 34, 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'AnneKappel@einrot.com', 100, 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL,0),
 ( 'Sihem', 'Osterman', 'Neue Roßstraße', 80, 55545, 'Frankfurt', 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'SihemOstermann@cuvox.de', 200, 'SihemOstermann', '$2y$10$N3lMm01agYLv71ClWzDxdOaufBbbERXvJG1VeqB5uIAyF.tK.8iCy' , 1, NULL,0),
 ( 'Annabell', 'Bader', 'Joachimstaler Straße', 50, 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'AnnabellBader@einrot.com',500, 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2' , 1, NULL,0),
