@@ -1,3 +1,4 @@
+![Github commits](https://img.shields.io/github/commit-activity/w/som-ould/rentalCar)
 Gamma Autovermietung
 ====================
 
