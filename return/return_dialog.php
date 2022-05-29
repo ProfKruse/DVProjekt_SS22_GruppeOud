@@ -2,7 +2,7 @@
     <?php
         session_start();
         function mietvertragsAnzeige(){ 
-            include("db_inc.php"); 
+            include("Database/db_inc.php"); 
             if (isset($_POST['mietvertagid'])) { 
                 $_SESSION['mietvertragID'] = $_POST["mietvertagid"]; 
                 $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $_SESSION['mietvertragID']; 
@@ -56,37 +56,68 @@
                 } 
             }
 
-        function datenSpeichern()
+        function sendeRuecknahmeprotokoll()
         {  
-            include("db_inc.php");
-                if (isset($_POST['tank'])) 
+            include("Database/db_inc.php");
+            include("functions/function.php");
+            require('pdfcreator/fpdf.php');
+            $email = "";
+            if (isset($_POST['tank'])) 
+            {
+                $tank = trim($_POST['tank']);
+                if (isset($_POST['kilometerstand'])) 
+            {
+                $kilometerstand = trim($_POST['kilometerstand']);
+                if (isset($_POST['sauberkeit'])) 
                 {
-                    $tank = trim($_POST['tank']);
-                    if (isset($_POST['kilometerstand'])) 
-                {
-                    $kilometerstand = trim($_POST['kilometerstand']);
-                    if (isset($_POST['sauberkeit'])) 
+                    $sauberkeit = trim($_POST['sauberkeit']);
+                    if (isset($_POST['mechanik'])) 
                     {
-                        $sauberkeit = trim($_POST['sauberkeit']);
-                        if (isset($_POST['mechanik'])) 
+                        $mechanik = trim($_POST['mechanik']);
+                        if (isset($_SESSION['mietvertragID'])) 
                         {
-                            $mechanik = trim($_POST['mechanik']);
-                            if (isset($_SESSION['mietvertragID'])) 
-                            {
-                                $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand',". $_SESSION['mietvertragID'].")"; 
-                                $ergebnis = $con->query($statement);
-                                
-                                mysqli_close($con); 
-                            }
-                            else
-                            {
-                                echo "<p>Die eingegebene ID existiert nicht in der DB, bitte geben Sie eine korrekte ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
-                            }
+                            $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand',". $_SESSION['mietvertragID'].")"; 
+                            $ergebnis = $con->query($statement);
+                            //$statement = "UPDATE kfzs SET kilometerStand = " . $kilometerstand "WHERE ;"; 
+                            //$ergebnis = $con->query($statement);
+                            $email = "tm.middeke@gmx.de";#$con->query("SELECT emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['mietvertragID']);                          
+                            mysqli_close($con);
+                            
+                                $subject = 'Ruecknahmeprotokoll';
+                                $message = '<!DOCTYPE html>
+                                <html>
+                                <body>
+                                <p>Sehr geehrter Kunde,</p>
+                                <p>anbei erhaelst du dein Ruecknahmeprotokoll. ;)</p>
+                                <br>
+                                <p>Mit lieben Gruessen</p>
+                                <p>Dein Pascal</p>
+                                </body>
+                                </html>'; 
+                                $pdf = new FPDF();
+                                $pdf->AddPage();
+                                $pdf->SetFont('Arial','B',16);
+                                $pdf->Cell(40,10,'Ruecknahmeprotokoll:',1,1);
+                                $pdf->SetFont('Arial','B',12);
+                                $pdf->Cell(40,10,'Der Tank war noch zu:' . $tank . 'gefuellt.',1,1);
+                                $pdf->Cell(40,10,'Das Auto war ' . $sauberkeit . '.',1,1);
+                                $pdf->Cell(40,10,'Die Mechanik war ' . $mechanik . '.',1,1);
+                                $pdf->Cell(40,10,'Du bist ' . $kilometerstand . 'km gefahren.',1,1);
+                                $pdf->Cell(40,10,'Deine Mietvertragsnummer ist: ' . $_SESSION['mietvertragID'] . '.',1,1);
+                                $doc = $pdf->Output('S');
+                                send_mail($email, $subject, $message,$doc,"Ruecknahmeprotokoll.pdf");
+                                die;
+                             
                         }
-                    }                       
-                }
-                session_destroy();                
+                        else
+                        {
+                            echo "<p>Die eingegebene ID existiert nicht in der DB, bitte geben Sie eine korrekte ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
+                        }
+                    }
+                }                       
             }
+            session_destroy();                
+        }
 
     }
     ?> 
@@ -140,11 +171,11 @@
 
                     <label for="sauberkeit"><b>*Sauberkeit</b></label> 
                     <select name="sauberkeit" id="sauberkeit" required> 
-                        <option value="Sehr Sauber">Sehr Sauber</option> 
-                        <option value="Sauber">Sauber</option> 
-                        <option value="Neutral">Neutral</option> 
-                        <option value="Leicht schmutzig">Leicht schmutzig</option> 
-                        <option value="Sehr schmutzig">Sehr schmutzig</option> 
+                        <option value="sehr Sauber">Sehr Sauber</option> 
+                        <option value="sauber">Sauber</option> 
+                        <option value="neutral">Neutral</option> 
+                        <option value="leicht schmutzig">Leicht schmutzig</option> 
+                        <option value="sehr schmutzig">Sehr schmutzig</option> 
                     </select> 
 
                     <label for="mechanik"><b>*Mechanikstatus</b></label> 
@@ -153,7 +184,7 @@
                 <br>
                 <button type="submit">Protokoll erzeugen</button></div>
                 <?php 
-                    datenSpeichern(); 
+                    sendeRuecknahmeprotokoll(); 
                 ?>  
             </form> 
             </div> 
