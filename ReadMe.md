@@ -48,7 +48,8 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 
 #### Design
 
-- [BPMN-, Sequenz- und Anwendungsfalldiagramme](https://github.com/som-ould/rentalCar/wiki/BPMN)
+- [BPMN](https://github.com/som-ould/rentalCar/wiki/BPMN)
+- [Sequenz- und Anwendungsfalldiagramme](https://github.com/som-ould/rentalCar/wiki/UML)
 - [Mockup](https://claritee.io/public-view/nDkaooP70sWy2DDGCRoJow%253d%253d/tree)
 
 #### Webanwendung
