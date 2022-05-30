@@ -7,30 +7,71 @@
             {
                 $mietstationID = $_POST["mietstationID"];
                 $tarifID = $_POST["tarifID"];
+                //Falls ein höherer Tarif gewählt werden muss
+                $tarifID_neu = $tarifID;
 
-                //Statements müssen noch bearbeitet werden
-                $statement = "SELECT vorname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $mietstationID;
-                $mietstationID = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
-                $statement = "SELECT nachname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $tarifID;
-                $mietstationName = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
-                $statement = "SELECT tarifID FROM kfztypen WHERE tarifID =" . $tarifID;
-                $tarifID = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
-                $statement = "SELECT marke FROM kfztypen JOIN kfzs ON kfzs.kfzTypID = kfztypen.kfzTypID WHERE tarifID =" . $tarifID;
-                $marke = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
-                //$statement = "SELECT nachname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $tarifID;
-                $modell = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
-                //$statement = "SELECT nachname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $tarifID;
-                $kfzTyp = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
-                //$statement = "SELECT nachname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $tarifID;
-                $kennzeichen = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
-               
+                //<!--SQL Abfragen für die einzelnen geforderten Felder - Abbruch bei Fehlern-->
+                $statement = "SELECT name FROM mietstationen WHERE mietstationID=" . $mietstationID;
+                $db_erg = mysqli_query( $con, $statement );
+                if(!$db_erg) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $mietstationName = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
+                }
+                $statement = "SELECT marke FROM kfzs JOIN mietstationen_mietwagenbestaende ON kfzs.kfzID = mietstationen_mietwagenbestaende.kfzID JOIN kfztypen ON kfzs.kfzTypID = kfztypen.kfzTypID WHERE (mietstationID =". $mietstationID .") AND (tarifID =" . $tarifID .")";
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $marke = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                }
+                //Was ist der maximale Tarif??? hier z.B. 10
+                while($marke == NULL && $tarifID_neu < 10)
+                {
+                    $tarifID_neu++;
+                    $statement = "SELECT marke FROM kfzs JOIN mietstationen_mietwagenbestaende ON kfzs.kfzID = mietstationen_mietwagenbestaende.kfzID JOIN kfztypen ON kfzs.kfzTypID = kfztypen.kfzTypID WHERE (mietstationID =". $mietstationID .") AND (tarifID =" . $tarifID_neu .")";
+                    $db_erg = mysqli_query( $con, $statement );                
+                    $marke = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                }
+                $statement = "SELECT modell FROM kfzs JOIN mietstationen_mietwagenbestaende ON kfzs.kfzID = mietstationen_mietwagenbestaende.kfzID JOIN kfztypen ON kfzs.kfzTypID = kfztypen.kfzTypID WHERE (mietstationID =". $mietstationID .") AND (tarifID =" . $tarifID_neu .")";
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $modell = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                }
+                $statement = "SELECT typBezeichnung FROM kfztypen JOIN kfzs ON kfztypen.kfzTypID = kfzs.kfzTypID JOIN mietstationen_mietwagenbestaende ON mietstationen_mietwagenbestaende.kfzID = kfzs.kfzID WHERE (mietstationID =". $mietstationID .") AND (tarifID =" . $tarifID_neu .")";
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $kfzTyp = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                }
+                $statement = "SELECT kennzeichen FROM kfzs JOIN mietstationen_mietwagenbestaende ON kfzs.kfzID = mietstationen_mietwagenbestaende.kfzID JOIN kfztypen ON kfzs.kfzTypID = kfztypen.kfzTypID WHERE (mietstationID =". $mietstationID .") AND (tarifID =" . $tarifID_neu .")";
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $kennzeichen = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                }        
+                
+                if($marke != NULL)
+                {
                     echo"<center>
                     <table class='mietdaten'>
                         <thead>
@@ -46,18 +87,28 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{$mietstationID['vorname']}</td>
-                                <td>{$mietstationName['nachname']}</td>
-                                <td>{$tarifID['tarifID']}</td>
+                                <td>{$mietstationID}</td>
+                                <td>{$mietstationName['name']}</td>
+                                <td>{$tarifID_neu}</td>
                                 <td>{$marke['marke']}</td>
-                                <td>{$modell['nachname']}</td>
-                                <td>{$kfzTyp['nachname']}</td>
-                                <td>{$kennzeichen['nachname']}</td>
+                                <td>{$modell['modell']}</td>
+                                <td>{$kfzTyp['typBezeichnung']}</td>
+                                <td>{$kennzeichen['kennzeichen']}</td>
                             </tr> 
                         </tbody>
                     </table>
                     </center>";
+                    if($tarifID != $tarifID_neu)
+                    {
+                        echo "<span class=form_font_error>Fahrzeug mit Tarifnummer $tarifID sind nicht verfügbar. Nächsthöhere verfügbare Tarifnummer: $tarifID_neu</span>";
+                    }
                     
+                }
+                //<!--Roter Text bei Eingabe einer ungültigen Reservierungsnummer-->
+                else
+                {
+                    echo"<span class=form_font_error>Keine Fahrzeuge mit gewünschten Tarif (oder höher) gefunden!</span>";
+                }
                     mysqli_close($con);
                 }
             }
@@ -84,7 +135,7 @@
         </header>
         <!--Reservierungseingaben-->
         <main>
-            <h1>Reservierungsdaten anzeigen</h1>
+            <h1>Fahrzeug Verfügbarkeit anzeigen</h1>
             <center>
             <div class="frame">
             <form action="kfz_check.php" method="POST">
@@ -95,7 +146,7 @@
                 </div>
                 <div class="group">
                     <label for="tarifID"><b>*Tarif ID</b></label>
-                    <input type="number" name="tarifID" id="tarifID" maxlength=11 required >
+                    <input type="number" name="tarifID" id="tarifID" max="10" required > <!-- Max Value für Tarif z.B. 10 -->
                 </div>
                 <br><br><br><br><br>
                 <div>
