@@ -8,24 +8,73 @@
                 $reservierungID = $_POST["reservierungID"];
 
                 $statement = "SELECT vorname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $reservierungID;
-                $vorname = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $vorname = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
+                }
 
                 $statement = "SELECT nachname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $reservierungID;
-                $nachname = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
-
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $nachname = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
+                }
+                
                 $statement = "SELECT typBezeichnung FROM kfztypen JOIN reservierungen ON kfztypen.kfzTypID = reservierungen.kfzTypID WHERE reservierungID =" . $reservierungID;
-                $kfztyp = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $kfztyp = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
+                }
 
                 $statement = "SELECT status FROM reservierungen WHERE reservierungID =" . $reservierungID;
-                $status = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $status = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
+                }
 
                 $statement = "SELECT name FROM mietstationen JOIN reservierungen ON mietstationen.mietstationID = reservierungen.mietstationID WHERE reservierungID =" . $reservierungID;
-                $abholstation = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $abholstation = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
+                }
 
                 $statement = "SELECT datum FROM reservierungen WHERE reservierungID =" . $reservierungID;
-                $datum = mysqli_fetch_array( (mysqli_query( $con, $statement )), MYSQLI_ASSOC);
+                $db_erg = mysqli_query( $con, $statement );
+                if (!$db_erg ) 
+                { 
+                    die('Fehler in der SQL Anfrage'); 
+                }
+                else
+                {
+                    $datum = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
+                }
 
-               
+                if($vorname != NULL)
+                {
                     echo"<center>
                     <table class='mietdaten'>
                         <thead>
@@ -50,6 +99,35 @@
                         </tbody>
                     </table>
                     </center>";
+                }
+                else
+                {
+                    echo"<center>
+                    <table class='mietdaten'>
+                        <thead>
+                            <tr>
+                                <th>Vorname</th>
+                                <th>Nachname</th>
+                                <th>Kfz-Typ</th>
+                                <th>Status</th>
+                                <th>Abholstation</th>
+                                <th>Datum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Kein Eintrag gefunden!</td>
+                                <td>Kein Eintrag gefunden!</td>
+                                <td>Kein Eintrag gefunden!</td>
+                                <td>Kein Eintrag gefunden!</td>    
+                                <td>Kein Eintrag gefunden!</td>
+                                <td>Kein Eintrag gefunden!</td>
+                            </tr> 
+                        </tbody>
+                    </table>
+                    </center>";
+                }
+                    
                     
                     mysqli_close($con);
                 }

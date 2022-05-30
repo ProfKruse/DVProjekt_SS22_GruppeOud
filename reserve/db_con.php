@@ -10,7 +10,7 @@ $user = 'root';
 $passwd = '';
 
 /* The schema you want to use */
-$schema = 'test';
+$schema = 'autovermietung';
 
 /* Connection with MySQLi, procedural-style */
 $con = mysqli_connect($host, $user, $passwd, $schema);
