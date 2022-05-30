@@ -102,30 +102,7 @@
                 }
                 else
                 {
-                    echo"<center>
-                    <table class='mietdaten'>
-                        <thead>
-                            <tr>
-                                <th>Vorname</th>
-                                <th>Nachname</th>
-                                <th>Kfz-Typ</th>
-                                <th>Status</th>
-                                <th>Abholstation</th>
-                                <th>Datum</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Kein Eintrag gefunden!</td>
-                                <td>Kein Eintrag gefunden!</td>
-                                <td>Kein Eintrag gefunden!</td>
-                                <td>Kein Eintrag gefunden!</td>    
-                                <td>Kein Eintrag gefunden!</td>
-                                <td>Kein Eintrag gefunden!</td>
-                            </tr> 
-                        </tbody>
-                    </table>
-                    </center>";
+                    echo"<span class=form_font_error>Keine Datenbankeinträge gefunden!</span>";
                 }
                     mysqli_close($con);
                 }

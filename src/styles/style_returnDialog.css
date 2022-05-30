@@ -1,5 +1,10 @@
 @import "global.css";
 
+.form_font_error {
+    font-weight: bold;
+    color:red
+} 
+
 textarea {
     width: calc(2*var(--formInputWidth));
     resize: none;
