@@ -4,13 +4,19 @@
 }
 
 @font-face {
-    font-family: custom;
+    font-family: calibri-regular;
     src: url("../fonts/Calibri Regular.ttf");
-  }
+}
+
+@font-face {
+    font-family: uni-sans-thin;
+    src: url('../fonts/Uni Sans Thin.otf');
+}
 
 * {
-    font-family: custom; 
+    font-family: calibri-regular; 
     color: #212568;
+    margin: 0px;
 }
 
 body {
@@ -50,7 +56,6 @@ ul {
     overflow: hidden;
     display: flex;
     justify-content: center;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   }
   
   li {
