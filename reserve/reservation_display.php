@@ -127,8 +127,6 @@
                     </table>
                     </center>";
                 }
-                    
-                    
                     mysqli_close($con);
                 }
             }
