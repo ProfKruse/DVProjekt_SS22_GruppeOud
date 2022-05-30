@@ -1,5 +1,5 @@
 <?php
-require_once('tcpdf/tcpdf/tcpdf.php');
+require_once('tcpdf/tcpdf.php');
 require_once('functions.php');
 
 $kundendaten = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");
@@ -142,10 +142,11 @@ Wir erlauben uns folgende Rechnungsstellung:
 
     $pdf->writeHTML($contact_information, true, false, true, false, '');
     ob_end_clean();
-    //$filename = __DIR__ . '/invoices/invoice_'.$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf';
-    //$fileatt = $pdf->Output($filename, 'F');
+    $pdfString = $pdf->Output('rechnung'.$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', 'S');
 
-    send_mail('pascal_ewald@web.de','Rechnung','Ihre Rechnung zum', __DIR__ . '\invoice_3_2022-05-30.pdf');
+    send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
+    'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre Rechnung entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+    $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
 }
 
 function pdf_area_separation($pdf_file, $separation_lines) {
