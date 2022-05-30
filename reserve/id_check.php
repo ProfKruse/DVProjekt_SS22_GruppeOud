@@ -37,7 +37,7 @@
                     }
                     if($count ==  0)
                     {
-                        echo "<br><br><br><br><br>  <p>Die eingegebene ID existiert nicht in der DB</p>";    
+                        echo "<br><p>Die eingegebene ID existiert nicht in der Datenbank</p>";    
                     }
                     mysqli_free_result( $db_erg );
                     mysqli_close($con);
@@ -81,6 +81,7 @@
                     <button type="submit" name='submit'>Abfragen</button>
                 </div>
             </form>
+            <br><br><br><br><br>
             <?php
                 mietvertragsAnzeige();
             ?>
