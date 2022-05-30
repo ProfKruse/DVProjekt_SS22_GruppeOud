@@ -32,12 +32,6 @@
 
                     </div>
 
-                
-
-                
-                
-                  
-
                     
                 </form>
                 <button type="submit">PDF erstellen</button>

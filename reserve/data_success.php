@@ -55,17 +55,11 @@
                     </div>
 
                 <!-------------------------------------------------------------->
-
-                
-                
-                  
-
-                    
                 </form>
-                <button type="submit">Send</button>
+                <button type="submit">PDF erstellen</button>
             </div>
             </center>
-            
+            <br>
         </main>
         <!--Sonstige Links-->
 
