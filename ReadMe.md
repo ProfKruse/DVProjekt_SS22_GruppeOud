@@ -69,7 +69,7 @@ Kontakt:
 
 - Pascal Ewald 
 <br>Front- und Backend Entwickler, Datenbank Beauftragter
-<br>pascal.ewald@studmail.w-hs.com
+<br>pascal.ewald@studmail.w-hs.de
 
 - Sihem Ould Mohand 
 <br>Projektleiterin, Backend Entwicklerin und Scrum Master
