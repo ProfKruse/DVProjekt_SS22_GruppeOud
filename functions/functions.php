@@ -53,7 +53,7 @@ function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttac
         $mail->Body= $message;
         
         if($pathAttachment != Null and $nameAttachment !=null){
-            $mail->addAttachment($pathAttachment, $nameAttachment);
+            $mail->addStringAttachment($pathAttachment, $nameAttachment);
         }
         
         $mail->send();
