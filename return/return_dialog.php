@@ -50,7 +50,9 @@
                     { 
                         echo "<p>Die eingegebene ID existiert nicht in der DB</p>";
                         $_SESSION['mietvertragID'] = null;
-                    } 
+                    }
+                    
+ 
                     mysqli_free_result( $db_erg ); 
                     mysqli_close($con); 
                 } 
@@ -76,42 +78,49 @@
                         $mechanik = trim($_POST['mechanik']);
                         if (isset($_SESSION['mietvertragID'])) 
                         {
-                            $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand',". $_SESSION['mietvertragID'].")"; 
-                            $ergebnis = $con->query($statement);
+                            try {
+                                $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand',". $_SESSION['mietvertragID'].")"; 
+                                $ergebnis = $con->query($statement);
+                            } catch (mysqli_sql_exception $e) {
+                                if ($e->getCode() == 1062) {
+                                    // Duplicate user
+                                } else {
+                                    throw $e;// in case it's any other error
+                                }
+                            
+                            } 
                             //$statement = "UPDATE kfzs SET kilometerStand = " . $kilometerstand "WHERE ;"; 
                             //$ergebnis = $con->query($statement);
                             $email = "tm.middeke@gmx.de";#$con->query("SELECT emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['mietvertragID']);                          
                             mysqli_close($con);
-                            
-                                $subject = 'Ruecknahmeprotokoll';
-                                $message = '<!DOCTYPE html>
-                                <html>
-                                <body>
-                                <p>Sehr geehrter Kunde,</p>
-                                <p>anbei erhaelst du dein Ruecknahmeprotokoll. ;)</p>
-                                <br>
-                                <p>Mit lieben Gruessen</p>
-                                <p>Dein Pascal</p>
-                                </body>
-                                </html>'; 
-                                $pdf = new FPDF();
-                                $pdf->AddPage();
-                                $pdf->SetFont('Arial','B',16);
-                                $pdf->Cell(40,10,'Ruecknahmeprotokoll:',1,1);
-                                $pdf->SetFont('Arial','B',12);
-                                $pdf->Cell(40,10,'Der Tank war noch zu:' . $tank . 'gefuellt.',1,1);
-                                $pdf->Cell(40,10,'Das Auto war ' . $sauberkeit . '.',1,1);
-                                $pdf->Cell(40,10,'Die Mechanik war ' . $mechanik . '.',1,1);
-                                $pdf->Cell(40,10,'Du bist ' . $kilometerstand . 'km gefahren.',1,1);
-                                $pdf->Cell(40,10,'Deine Mietvertragsnummer ist: ' . $_SESSION['mietvertragID'] . '.',1,1);
-                                $doc = $pdf->Output('S');
-                                send_mail($email, $subject, $message,$doc,"Ruecknahmeprotokoll.pdf");
-                                die;
-                             
+                            $subject = 'Ruecknahmeprotokoll';
+                            $message = '<!DOCTYPE html>
+                            <html>
+                            <body>
+                            <p>Sehr geehrter Kunde,</p>
+                            <p>anbei erhaelst du dein Ruecknahmeprotokoll. ;)</p>
+                            <br>
+                            <p>Mit lieben Gruessen</p>
+                            <p>Dein Pascal</p>
+                            </body>
+                            </html>';
+                            $pdf = new FPDF();
+                            $pdf->AddPage();
+                            $pdf->SetFont('Arial','B',16);
+                            $pdf->Cell(0,10,'Ruecknahmeprotokoll:',0,1);
+                            $pdf->SetFont('Arial','B',12);
+                            $pdf->Cell(0,10,'Der Tank war noch zu: ' . $tank . '% gefuellt.',1,1);
+                            $pdf->Cell(0,10,'Das Auto war ' . $sauberkeit . '.',1,1);
+                            $pdf->Cell(0,10,'Die Mechanik war ' . $mechanik . '.',1,1);
+                            $pdf->Cell(0,10,'Du bist ' . $kilometerstand . 'km gefahren.',1,1);
+                            $pdf->Cell(0,10,'Deine Mietvertragsnummer ist: ' . $_SESSION['mietvertragID'] . '.',1,1);
+                            $doc = $pdf->Output('S');
+                            send_mail($email, $subject, $message,$doc,"Ruecknahmeprotokoll.pdf");
+                            die;                             
                         }
                         else
                         {
-                            echo "<p>Die eingegebene ID existiert nicht in der DB, bitte geben Sie eine korrekte ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
+                            echo "<p>Die eingegebene ID existiert nicht in der DB oder es wurde bereits ein Ruecknahmeprotokoll erzeugt, bitte geben Sie eine korrekte ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
                         }
                     }
                 }                       

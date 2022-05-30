@@ -10,39 +10,43 @@
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
 
-function send_mail($recipient,$subject, $message,$pdfAttachment=null,$nameAttachment=null){
-    $mail=new PHPMailer(true);
-    try {
-        //settings
-
-        $mail->isSMTP();
-        $mail->Host='smtp.mail.yahoo.com';
+    function send_mail($recipient,$subject, $message,$pdfAttachment=null,$nameAttachment=null){
+        $mail=new PHPMailer(true);
+        try {
+            //settings
+    
+            $mail->isSMTP();
+            $mail->Host='smtp.mail.yahoo.com';
+            
+            $mail->Username='gamma_autovermietung@yahoo.com';
+            $mail->Password='njnzwgvpkcjmnsji';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            
+            $mail->Port=587;
         
-        $mail->Username='sihem.ouldmohand@yahoo.com';
-        $mail->Password='fytbevyafkbqzien';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->SMTPAuth = true;
         
-        $mail->Port=587;
+            $mail->setFrom('gamma_autovermietung@yahoo.com', 'Team Gamma');
+        
+            //recipient
+            $mail->addAddress($recipient, '');
+        
+            //content
+            $mail->isHTML(true); 
+            $mail->Subject = $subject;
+            $mail->Body= $message;
+            
+            if($pdfAttachment != Null and $nameAttachment !=null){
+                $mail->AddStringAttachment($pdfAttachment, $nameAttachment,'base64');
+            }
+            
+            $mail->send();
     
-        $mail->SMTPAuth = true;
     
-        $mail->setFrom('sihem.ouldmohand@yahoo.com', 'Team Gamma');
-    
-        //recipient
-        $mail->addAddress($recipient, '');
-    
-        //content
-        $mail->isHTML(true); 
-        $mail->Subject = $subject;
-        $mail->Body= $message;
-        if($pdfAttachment != Null and $nameAttachment !=null){
-            $mail->AddStringAttachment($pdfAttachment, $nameAttachment,'base64');
+        } 
+        catch(Exception $e) {
+            echo 'Email wurde nicht gesendet';
+            echo 'Mailer Error: '.$mail->ErrorInfo;
         }
-        $mail->send();
-    } 
-    catch(Exception $e) {
-        echo 'Email wurde nicht gesendet';
-        echo 'Mailer Error: '.$mail->ErrorInfo;
     }
-}
 ?>
