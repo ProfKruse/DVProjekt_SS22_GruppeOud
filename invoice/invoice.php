@@ -142,10 +142,10 @@ Wir erlauben uns folgende Rechnungsstellung:
 
     $pdf->writeHTML($contact_information, true, false, true, false, '');
     ob_end_clean();
-    $filename = __DIR__ . '/invoices/invoice_'.$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf';
-    $fileatt = $pdf->Output($filename, 'F');
+    //$filename = __DIR__ . '/invoices/invoice_'.$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf';
+    //$fileatt = $pdf->Output($filename, 'F');
 
-    //send_mail('pascal_ewald@web.de','Rechnung','Ihre Rechnung zum', $filename);
+    send_mail('pascal_ewald@web.de','Rechnung','Ihre Rechnung zum', __DIR__ . '\invoice_3_2022-05-30.pdf');
 }
 
 function pdf_area_separation($pdf_file, $separation_lines) {

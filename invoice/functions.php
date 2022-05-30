@@ -25,13 +25,17 @@ function check_login($con){
     die;
 }
 
-send_mail('pascal_ewald@web.de','test','a');
-
 function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttachment=null){
     $mail=new PHPMailer(true);
     try {
         //settings
 
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true)
+        );
         $mail->isSMTP();
         $mail->Host='smtp.mail.yahoo.com';
         
@@ -40,7 +44,7 @@ function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttac
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         
         $mail->Port=587;
-        
+    
         $mail->SMTPAuth = true;
     
         $mail->setFrom('gamma_autovermietung@yahoo.com', 'Team Gamma');
@@ -54,7 +58,7 @@ function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttac
         $mail->Body= $message;
         
         if($pathAttachment != Null and $nameAttachment !=null){
-            $mail->addAttachment($pathAttachment, $nameAttachment);
+            $mail->addStringAttachment($pathAttachment, $nameAttachment);
         }
         
         $mail->send();
