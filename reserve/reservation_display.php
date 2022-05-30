@@ -2,11 +2,13 @@
     <?php
         function reservierungsdatenAnzeigen()
         {
+            //Datei für die Verbindung zur Datenbank
             include("db_con.php");
             if (isset($_POST['reservierungID'])) 
             {
                 $reservierungID = $_POST["reservierungID"];
 
+                //<!--SQL Abfragen für die einzelnen geforderten Felder - Abbruch bei Fehlern-->
                 $statement = "SELECT vorname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $reservierungID;
                 $db_erg = mysqli_query( $con, $statement );
                 if (!$db_erg ) 
@@ -72,7 +74,7 @@
                 {
                     $datum = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC);
                 }
-
+                //<!--Ausgabe der Tabelle mit gewünschten Daten falls kein Fehler vorliegt-->
                 if($vorname != NULL)
                 {
                     echo"<center>
@@ -100,6 +102,7 @@
                     </table>
                     </center>";
                 }
+                //<!--Roter Text bei Eingabe einer ungültigen Reservierungsnummer-->
                 else
                 {
                     echo"<span class=form_font_error>Keine Datenbankeinträge gefunden!</span>";
