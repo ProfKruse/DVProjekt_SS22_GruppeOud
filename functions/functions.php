@@ -69,7 +69,6 @@
     }
 
     function mietvertragsAnzeige($mietvertragsdaten,$con){
-        #session_start(); 
         if (isset($mietvertragsdaten['mietvertragid'])) { 
             $_SESSION['mietvertragid'] = $mietvertragsdaten["mietvertragid"];  
             $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $_SESSION['mietvertragid']; 
@@ -77,7 +76,7 @@
             if (!$db_erg ) 
             { 
                 die('Fehler in der SQL Anfrage'); 
-            } 
+            }
             $count =  0;                 
             while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC)) 
             { 
@@ -112,13 +111,15 @@
                     </tbody> 
                 </table> 
                 </center>";
-                $_SESSION['kundenid'] = $zeile['kundeID'];  
+                $_SESSION['kundenid'] = $zeile['kundeID'];
+                $_SESSION['vertragid'] = $zeile['vertragID'];    
             } 
             if($count ==  0) 
             { 
                 echo "<p>Die eingegebene ID existiert nicht in der DB</p>";
                 $_SESSION['mietvertragID'] = null;
                 $_SESSION['kundenid'] = null;
+                $_SESSION['vertragid'] = null;
             }
             mysqli_free_result( $db_erg ); 
             mysqli_close($con); 
@@ -148,18 +149,23 @@
                             } catch (mysqli_sql_exception $e) {
                                 if ($e->getCode() == 1062) {
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
-                                    // Duplicate user
                                 } else {
-                                    throw $e;// in case it's any other error
+                                    throw $e;
                                 }
                             
-                            } 
-                            //$statement = "UPDATE kfzs SET kilometerStand = " . $kilometerstand "WHERE ;"; 
-                            //$ergebnis = $con->query($statement);
-                            
-                            $ergebnis = mysqli_query($con, "SELECT emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['kundenid']);
-                            while($dsatz = mysqli_fetch_assoc($ergebnis)){
-                                $email = $dsatz["emailAdresse"];
+                            }
+                            $kfzIDAbfrage =  "SELECT kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
+                            $kfzIDs = mysqli_query($con,$kfzIDAbfrage);
+                            while($tupel = mysqli_fetch_assoc($kfzIDs)){
+                                $kfzID = $tupel["kfzID"];
+                            }
+                            $kfzUpdate = "UPDATE kfzs SET kilometerStand = " . $kilometerstand . " WHERE kfzID= " . $kfzID . ";";
+                            mysqli_query($con, $kfzUpdate);
+
+                            $emailAbfrage = "SELECT emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
+                            $emailAdressen = mysqli_query($con,$emailAbfrage);
+                            while($tupel = mysqli_fetch_assoc($emailAdressen)){
+                                $email = $tupel["emailAdresse"];
                             }                          
                             mysqli_close($con);
                             $subject = 'Ruecknahmeprotokoll';
@@ -185,6 +191,7 @@
                             $pdf->Cell(0,10,'Deine Mietvertragsnummer ist: ' . $mietvertragsid . '.',1,1);
                             $doc = $pdf->Output('S');
                             send_mail($email, $subject, $message,$doc,"Ruecknahmeprotokoll.pdf");
+                            echo "Die Rechnung wurde erfolgreich als E-Mail versendet";
                             die;                             
                         }
                         else

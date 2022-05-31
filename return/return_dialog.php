@@ -52,7 +52,7 @@
                     <input type="number" name="tank" min="0" max="100" required> 
 
                     <label for="kilometerstand"><b>*Kilometerstand</b></label> 
-                    <input type="number" name="kilometerstand" min="0" required> 
+                    <input type="number" name="kilometerstand" min="0" max="100000000"required> 
 
                     <label for="sauberkeit"><b>*Sauberkeit</b></label> 
                     <select name="sauberkeit" id="sauberkeit" required> 
@@ -70,7 +70,6 @@
                 <button type="submit">Protokoll erzeugen</button></div>
                 <?php
                     sendeRuecknahmeprotokoll($_POST,$con,$_SESSION['mietvertragid']);
-                    #session_destroy(); 
                 ?>  
             </form> 
             </div> 
