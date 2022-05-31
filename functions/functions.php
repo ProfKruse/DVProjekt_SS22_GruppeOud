@@ -146,33 +146,32 @@
                             try {
                                 $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragsid')"; 
                                 $ergebnis = $con->query($statement);
+                                $kfzIDAbfrage =  "SELECT kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
+                                $kfzIDs = mysqli_query($con,$kfzIDAbfrage);
+                                while($tupel = mysqli_fetch_assoc($kfzIDs)){
+                                    $kfzID = $tupel["kfzID"];
+                                }
+                                $kfzUpdate = "UPDATE kfzs SET kilometerStand = " . $kilometerstand . " WHERE kfzID= " . $kfzID . ";";
+                                mysqli_query($con, $kfzUpdate);
+
+                                $emailAbfrage = "SELECT emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
+                                $emailAdressen = mysqli_query($con,$emailAbfrage);
+                                while($tupel = mysqli_fetch_assoc($emailAdressen)){
+                                $email = $tupel["emailAdresse"];
+                                }
+                                $kundendatenAbfrage = "SELECT kundeID, vorname, nachname, strasse, hausNr, ort, emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
+                                $kundendaten = mysqli_query($con,$kundendatenAbfrage);
+                                while($tupel = mysqli_fetch_assoc($kundendaten)){
+                                   $kunde = $tupel;
+                                } 
+                                mysqli_close($con);
                             } catch (mysqli_sql_exception $e) {
                                 if ($e->getCode() == 1062) {
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
                                 } else {
                                     throw $e;
                                 }
-                            
-                            }
-                            $kfzIDAbfrage =  "SELECT kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
-                            $kfzIDs = mysqli_query($con,$kfzIDAbfrage);
-                            while($tupel = mysqli_fetch_assoc($kfzIDs)){
-                                $kfzID = $tupel["kfzID"];
-                            }
-                            $kfzUpdate = "UPDATE kfzs SET kilometerStand = " . $kilometerstand . " WHERE kfzID= " . $kfzID . ";";
-                            mysqli_query($con, $kfzUpdate);
-
-                            $emailAbfrage = "SELECT emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
-                            $emailAdressen = mysqli_query($con,$emailAbfrage);
-                            while($tupel = mysqli_fetch_assoc($emailAdressen)){
-                                $email = $tupel["emailAdresse"];
-                            }
-                            $kundendatenAbfrage = "SELECT kundeID, vorname, nachname, strasse, hausNr, ort FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
-                            $kundendaten = mysqli_query($con,$kundendatenAbfrage);
-                            while($tupel = mysqli_fetch_assoc($kundendaten)){
-                                $kunde = $tupel;
-                            } 
-                            mysqli_close($con);
+                            }                            
                             createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragsid);
                             header("Location: ../return/return_dialog.php");                        
                         }
@@ -190,8 +189,8 @@
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
         $pdf->setCreator(PDF_CREATOR);
         $pdf->setAuthor('Rentalcar GmbH');
-        $pdf->setTitle('Rechnung');
-        $pdf->setSubject('Rechnungen');
+        $pdf->setTitle('Ruecknahmeprotokoll');
+        $pdf->setSubject('Ruecknahmeprotokoll');
     
         // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -243,9 +242,9 @@
             $style.'
             <b>Ruecknahmeprotokoll</b>
             <pre>
-    Sehr geehrter Herr/Frau '.$kundendaten["nachname"].'
-    Vielen Dank für deine Rueckgabe.
-    Du hattest folgende Nutzungsdaten:
+            Sehr geehrter Herr/Frau '.$kundendaten["nachname"].'
+            Vielen Dank für deine Rueckgabe.
+            Du hattest folgende Nutzungsdaten:
             </pre>
             <table>
                 <tr style="background-color: rgb(228, 228, 228);">
@@ -313,7 +312,7 @@
         </body>
         </html>';
 
-        send_mail('tm.middeke@gmx.de',$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
+        send_mail($kundendaten['emailAdresse'],$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
     }
     
     function pdf_area_separation($pdf_file, $separation_lines) {
