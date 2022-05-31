@@ -28,13 +28,15 @@
                 <div class="group">
                     <?php
                         if(!isset($_SESSION)) { session_start(); } 
-                        require_once('../Database/db_inc.php');
+                        require_once("../Database/db_inc.php");
                         
                         $options = "";
                         $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
 
-                        foreach($arr as $id)
-                            $options .= "<option value='$id'> $id </option>";       
+                        foreach($arr as $id) {
+                            $bezeichnung = databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID=".$id);
+                            $options .= "<option value='".$id."'>".$bezeichnung[0]."</option>";    
+                        }   
 
                         $stationen = "<label for='kfztyp'><b>*Kfz-Typ</b></label>"."<select name='kfztyp'>".$options."</select>";
                         echo $stationen;
@@ -47,16 +49,25 @@
 
                 <div class="group">
                     <?php
-                        require_once(__DIR__ . '\global.php');
+                        require_once("../Database/db_inc.php");
 
-                        $options = "";
-                        $arr = databaseSelectQuery("mietstationID","mietstationen", "");
+                        $options_abholen = "";
+                        $options_abgabe = "";
+                        $abholstation = databaseSelectQuery("mietstationID","mietstationen", "WHERE mietstationTyp='Abholstation'");
+                        $abgabestation = databaseSelectQuery("mietstationID","mietstationen", "WHERE mietstationTyp='Abgabestation'");
 
-                        foreach($arr as $id)
-                            $options .= "<option value='$id'> $id </option>";
-    
-                        $stationen = "<label for='abholstation'><b>*Abholstation</b></label>"."<select name='abholstation'>".$options."</select>".
-                        "<label for='abgabestation'><b>*Abgabestation</b></label>"."<select name='abgabestation'>".$options."</select>";
+                        foreach($abholstation as $id) {
+                            $bezeichnung = databaseSelectQuery("beschreibung","mietstationen","WHERE mietstationID=".$id);
+                            $options_abholen .= "<option value='".$id."'>".$bezeichnung[0]."</option>";
+                        }
+
+                        foreach($abgabestation as $id) {
+                            $bezeichnung = databaseSelectQuery("beschreibung","mietstationen","WHERE mietstationID=".$id);
+                            $options_abgabe .= "<option value='".$id."'>".$bezeichnung[0]."</option>";
+                        }
+
+                        $stationen = "<label for='abholstation'><b>*Abholstation</b></label>"."<select name='abholstation'>".$options_abholen."</select>".
+                        "<label for='abgabestation'><b>*Abgabestation</b></label>"."<select name='abgabestation'>".$options_abgabe."</select>";
                         echo $stationen;
                     ?>
                 </div>

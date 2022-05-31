@@ -26,10 +26,11 @@
                     <h1 id="fehlermeldung">Prüfung fehlgeschlagen</h1>
                     <?php
                         if(!isset($_SESSION)) { session_start(); } 
-                        include_once("../Database/db_inc.php");
+                        require_once("../Database/db_inc.php");
                         $buttons;
                         
                         $kfzids = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende", "WHERE mietstationID = ".$_SESSION['abholstation']);
+                        $altkfzid = NULL;
                         if(count($kfzids) > 0) {
                             $kfztypids = databaseSelectQuery("kfzTypID","kfzs","WHERE kfzID IN (".implode(',',$kfzids).")");
                             $altkfzid = $kfztypids[0];

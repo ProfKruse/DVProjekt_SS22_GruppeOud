@@ -29,13 +29,12 @@ function databaseSelectQuery($spalte, $tabelle, $bedingung) {
     $result = $con->query("SELECT $spalte FROM $tabelle $bedingung");
     $array = array();
     
-    if($result->num_rows > 0) {
+    if($result != null) {
         while($row = $result->fetch_assoc()) {
             array_push($array, $row[$spalte]);
         }
+        $result->free_result();
     }
-    $result->free_result();
-
     return $array;
 }
 
@@ -52,7 +51,7 @@ function getUserData() {
     $result = $con->query("SELECT * FROM kunden WHERE pseudo='".$_SESSION['pseudo']."'");
 
     $data = array();
-    if($result->num_rows > 0) {
+    if($result != null > 0) {
         while($row = $result->fetch_assoc()) {
             $data["kundeID"] = $row["kundeID"];
             $data["vorname"] = $row["vorname"];

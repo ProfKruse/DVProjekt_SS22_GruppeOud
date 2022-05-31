@@ -25,7 +25,7 @@
             <center>
             <div class="frame">
                 <?php
-                    include("../Database/db_inc.php");
+                    require_once("../Database/db_inc.php");
                     
                     $user_data = getUserData();
 
