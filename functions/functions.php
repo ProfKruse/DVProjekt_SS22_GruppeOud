@@ -1,13 +1,12 @@
 <?php
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
-    require '../../../php/PHPMailer/src/Exception.php';
+    require '../library/PHPMailer/src/Exception.php';
     /* PHPMailer-Klasse */
-    require '../../../php/PHPMailer/src/PHPMailer.php';
+    require '../library/PHPMailer/src/PHPMailer.php';
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
-    require '../../../php/PHPMailer/src/SMTP.php';
+    require '../library/PHPMailer/src/SMTP.php';
     
     use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
 
 function check_login($con){
@@ -26,10 +25,10 @@ function check_login($con){
 }
 
 
-function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttachment=null){
+function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAttachment=null){
     $mail=new PHPMailer(true);
     try {
-        //settings
+        
 
         $mail->isSMTP();
         $mail->Host='smtp.mail.yahoo.com';
@@ -52,8 +51,8 @@ function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttac
         $mail->Subject = $subject;
         $mail->Body= $message;
         
-        if($pathAttachment != Null and $nameAttachment !=null){
-            $mail->addStringAttachment($pathAttachment, $nameAttachment);
+        if($stringAttachment != Null and $nameAttachment !=null){
+            $mail->addStringAttachment($stringAttachment, $nameAttachment);
         }
         
         $mail->send();

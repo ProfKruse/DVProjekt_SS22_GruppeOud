@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $hash = password_hash($new_password, PASSWORD_DEFAULT);
     $query = "update kunden set password = '$hash' where emailAdresse = '{$_SESSION["email"]}' ";
     $result = mysqli_query($con, $query);
+    header("Location: login.php");
+    die;
 }
 ?>
 
