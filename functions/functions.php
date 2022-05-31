@@ -6,7 +6,7 @@
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
     require '../library/PHPMailer/src/SMTP.php';
 
-    require '../library/pdfcreator/fpdf.php';
+    require '../library/TCPDF/tcpdf.php';
     
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\SMTP;
@@ -28,7 +28,7 @@
     }
     
     
-    function send_mail($recipient,$subject, $message,$pathAttachment=null,$nameAttachment=null){
+    function send_mail($recipient,$subject, $message,$stringAttachement=null,$nameAttachment=null){
         $mail=new PHPMailer(true);
         try {
             //settings
@@ -54,8 +54,8 @@
             $mail->Subject = $subject;
             $mail->Body= $message;
             
-            if($pathAttachment != Null and $nameAttachment !=null){
-                $mail->addStringAttachment($pathAttachment, $nameAttachment);
+            if($stringAttachement != Null and $nameAttachment !=null){
+                $mail->addStringAttachment($stringAttachement, $nameAttachment);
             }
             
             $mail->send();
@@ -166,33 +166,15 @@
                             $emailAdressen = mysqli_query($con,$emailAbfrage);
                             while($tupel = mysqli_fetch_assoc($emailAdressen)){
                                 $email = $tupel["emailAdresse"];
-                            }                          
+                            }
+                            $kundendatenAbfrage = "SELECT kundeID, vorname, nachname, strasse, hausNr, ort FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
+                            $kundendaten = mysqli_query($con,$kundendatenAbfrage);
+                            while($tupel = mysqli_fetch_assoc($kundendaten)){
+                                $kunde = $tupel;
+                            } 
                             mysqli_close($con);
-                            $subject = 'Ruecknahmeprotokoll';
-                            $message = '<!DOCTYPE html>
-                            <html>
-                            <body>
-                            <p>Sehr geehrter Kunde,</p>
-                            <p>anbei erhaelst du dein Ruecknahmeprotokoll. ;)</p>
-                            <br>
-                            <p>Mit lieben Gruessen</p>
-                            <p>Dein Pascal</p>
-                            </body>
-                            </html>';
-                            $pdf = new FPDF();
-                            $pdf->AddPage();
-                            $pdf->SetFont('Arial','B',16);
-                            $pdf->Cell(0,10,'Ruecknahmeprotokoll:',0,1);
-                            $pdf->SetFont('Arial','B',12);
-                            $pdf->Cell(0,10,'Der Tank war noch zu: ' . $tank . '% gefuellt.',1,1);
-                            $pdf->Cell(0,10,'Das Auto war ' . $sauberkeit . '.',1,1);
-                            $pdf->Cell(0,10,'Die Mechanik war ' . $mechanik . '.',1,1);
-                            $pdf->Cell(0,10,'Du bist ' . $kilometerstand . 'km gefahren.',1,1);
-                            $pdf->Cell(0,10,'Deine Mietvertragsnummer ist: ' . $mietvertragsid . '.',1,1);
-                            $doc = $pdf->Output('S');
-                            send_mail($email, $subject, $message,$doc,"Ruecknahmeprotokoll.pdf");
-                            echo "Die Rechnung wurde erfolgreich als E-Mail versendet";
-                            die;                             
+                            createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragsid);
+                            header("Location: ../return/return_dialog.php");                        
                         }
                         else
                         {
@@ -203,4 +185,141 @@
             }              
         }
     }
+
+    function createRuecknahme_pdf($kundendaten, $nutzungsdaten,$mietvertragsid) {
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
+        $pdf->setCreator(PDF_CREATOR);
+        $pdf->setAuthor('Rentalcar GmbH');
+        $pdf->setTitle('Rechnung');
+        $pdf->setSubject('Rechnungen');
+    
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+    
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+    
+        $pdf->AddPage();
+    
+        $style = <<<EOF
+            <style>
+                * {
+                    line-height: 100%;
+                    font-family: Monospace;
+                }
+            </style>
+            EOF;
+    
+        $sender_receiver_information = 
+            $style.'
+            <h1 style="font-family: Arial;">Rentalcar</h1>
+            <table>
+                <tr>
+                    <td>'.$kundendaten["vorname"]. " " . $kundendaten["nachname"].'</td>
+                    <td style="text-align:right;">Ruecknahmedatum: '.date("d.m.Y").'</td>
+                </tr>
+                <tr>
+                    <td>'.$kundendaten["strasse"]. " " . $kundendaten["hausNr"]. '</td>
+                    <td style="text-align:right;">Kundennr.:'.$kundendaten["kundeID"].'</td>
+                </tr>
+                <tr>
+                    <td>'.$kundendaten["ort"].'</td>
+                </tr>
+            <table>
+            <br>';
+    
+        $invoices_data = 
+            $style.'
+            <b>Ruecknahmeprotokoll</b>
+            <pre>
+    Sehr geehrter Herr/Frau '.$kundendaten["nachname"].'
+    Vielen Dank für deine Rueckgabe.
+    Du hattest folgende Nutzungsdaten:
+            </pre>
+            <table>
+                <tr style="background-color: rgb(228, 228, 228);">
+                    <th>Nr.</th>
+                    <th>Tank</th>
+                    <th>Sauberkeit</th>
+                    <th>Mechanik</th>
+                    <th>KM-Stand</th>
+                </tr>
+                <tr style="background-color: rgb(228, 228, 228);">
+                    <th>'.$mietvertragsid.'</th>
+                    <th>'.$nutzungsdaten['tank'].'</th>
+                    <th>'.$nutzungsdaten['sauberkeit'].'</th>
+                    <th>'.$nutzungsdaten['mechanik'].'</th>
+                    <th>'.$nutzungsdaten['kilometerstand'].'</th>
+                </tr>                  
+            </table>
+            <br>
+            <hr>';
+    
+    
+        $contact_information = <<<EOF
+            $style
+            <table>
+                <tr>
+                    <td>Rentalcar GmbH</td>
+                    <td>Telefon: +49 1234 5678</td>
+                </tr>
+                <tr>
+                    <td>Straße 1</td>
+                    <td>E-Mail: contact@rentalcar.com</td>
+                </tr>
+                <tr>
+                    <td>12345 Ort</td>
+                    <td>Web: www.rentalcar.com</td>
+                </tr>
+            </table>
+            EOF;
+    
+        $pdf->writeHTML($sender_receiver_information, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 5);
+    
+        $pdf->writeHTML($invoices_data, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 15);
+    
+        $pdf->writeHTML($total_amount, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 7);
+    
+        $pdf->writeHTML($contact_information, true, false, true, false, '');
+        ob_end_clean();
+        $pdfString = $pdf->Output('rechnung'.$kundendaten["kundeID"]."_".date('Y-m-d').'.pdf', 'S');
+        
+        $subject = 'Ruecknahmeprotokoll';
+        $message = '<!DOCTYPE html>
+        <html>
+        <body>
+        <p>Sehr geehrter Kunde,</p>
+        <p>anbei erhaelst du dein Ruecknahmeprotokoll. ;)</p>
+        <br>
+        <p>Mit lieben Gruessen</p>
+        <p>Dein Pascal</p>
+        </body>
+        </html>';
+
+        send_mail('tm.middeke@gmx.de',$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
+    }
+    
+    function pdf_area_separation($pdf_file, $separation_lines) {
+        for ($i=0; $i<$separation_lines; $i++) {
+            $pdf_file->Ln();
+        }
+    }
+    
 ?>
