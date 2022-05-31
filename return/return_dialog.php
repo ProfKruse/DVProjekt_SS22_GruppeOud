@@ -44,7 +44,7 @@
             <?php 
                 mietvertragsAnzeige($_POST,$con);
                 if(isset($_POST['mietvertragid']))
-                    $_SESSION['mietvertragid'] = $_POST['mietvertragid']; 
+                    $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
             ?> 
             <form action="return_dialog.php" method="POST"> 
                 <div class="group">                   
@@ -56,7 +56,7 @@
 
                     <label for="sauberkeit"><b>*Sauberkeit</b></label> 
                     <select name="sauberkeit" id="sauberkeit" required> 
-                        <option value="sehr Sauber">Sehr Sauber</option> 
+                        <option value="sehr sauber">Sehr Sauber</option> 
                         <option value="sauber">Sauber</option> 
                         <option value="neutral">Neutral</option> 
                         <option value="leicht schmutzig">Leicht schmutzig</option> 
