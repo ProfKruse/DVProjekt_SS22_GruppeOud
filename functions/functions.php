@@ -29,6 +29,13 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
     $mail=new PHPMailer(true);
     try {
         
+        //Debug Sendmail Pascal
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+            'verify_peer' => false,
+            'verify_peer_name' => false,
+            'allow_self_signed' => true)
+        );
 
         $mail->isSMTP();
         $mail->Host='smtp.mail.yahoo.com';
