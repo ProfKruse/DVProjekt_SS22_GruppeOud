@@ -1,22 +1,16 @@
 <?php
-    session_start();
-    include_once(__DIR__ . "\global.php");
-    $_SESSION["kunde"] = 123;
+    if(!isset($_SESSION)) { session_start(); } 
+    include_once("../Database/db_inc.php");
+    $_SESSION["pseudo"] = "SvenKappel";
     $_SESSION["kfztyp"] = $_POST["kfztyp"];
     $_SESSION["mietstation"] = $_POST["abholstation"];
     $_SESSION["abholstation"] = $_POST["abholstation"];
     $_SESSION["abgabestation"] = $_POST["abgabestation"];
     $_SESSION["message"] = $_POST["message"];
-    $_SESSION["vorname"] = "Vorname";
-    $_SESSION["nachname"] = "Nachname";
-    $_SESSION["telefonnr"] = "1234567890";
-    $_SESSION["email"] = "vorname.nachname@gmail.com";
 
-    $kfzids = databaseSelectQuery("kfzID","kfzs","WHERE kfzTypID = ".$_SESSION['kfztyp']);
-    $verfugbare_autos = array();
-    if (count($kfzids) > 0) {
-        $verfugbare_autos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID = ".$_SESSION['abholstation']." AND kfzID IN (".implode(',',$kfzids).")");
-    }
+    $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
+    $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]);
 
-    count($verfugbare_autos) > 0 ?  header("Location:reservation_success.php") : header("Location:reservation_failure.php");   
+    $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
+    $anzahlUebrigeAutos > 0 ?  header("Location:reservation_success.php") : header("Location:reservation_failure.php");   
 ?>    

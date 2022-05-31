@@ -24,18 +24,23 @@
             <h1>Überprüfung</h1>
             <center>
             <div class="frame">
-                <?php session_start() ?>
+                <?php
+                    include("../Database/db_inc.php");
+                    
+                    $user_data = getUserData();
+
+                ?>
                 <form action="reservation_confirmation.php" method="POST">
                 <!-------------------------------------------------------------->
                     <div class="group">
                         <label for="vorname"><b>*Vorname</b></label>
-                        <input type="text" name="vorname" value="<?php echo $_SESSION['vorname'] ?>" required>
+                        <input type="text" name="vorname" value="<?php echo $user_data['vorname'] ?>" required>
 
                         <label for="nachname"><b>*Nachname</b></label>
-                        <input type="text" name="nachname" value="<?php echo $_SESSION['nachname'] ?>" required>
+                        <input type="text" name="nachname" value="<?php echo $user_data['nachname'] ?>" required>
 
                         <label for="telefonnr"><b>*Telefonnr.</b></label>
-                        <input type="text" name="telefonnr" value="<?php echo $_SESSION['telefonnr'] ?>" required>
+                        <input type="text" name="telefonnr" value="<?php echo $user_data['telefonNr'] ?>" required>
                     </div>
 
                 <!-------------------------------------------------------------->
@@ -48,7 +53,7 @@
                         <input type="text" name="abholstation" value="<?php echo $_SESSION['abholstation'] ?>" readonly required>     
                         
                         <label for="email"><b>*Email-Adresse</b></label>
-                        <input type="text" name="email" value="<?php echo $_SESSION['email'] ?>" required>
+                        <input type="text" name="email" value="<?php echo $user_data['emailAdresse'] ?>" required>
                     </div>
                     
                 <!-------------------------------------------------------------->

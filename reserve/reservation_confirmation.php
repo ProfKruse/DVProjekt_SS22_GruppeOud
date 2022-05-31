@@ -25,20 +25,25 @@
             <center>
                     <?php
                         session_start();
+                        include("../Database/db_inc.php");
 
-                        $connection = new mysqli("localhost","root","","autovermietung");
-                        if($connection->connect_error)
-                            die("Es konnte keine Verbindung zur Datenbank aufgebaut werden");
+                        $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
+                        $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]);
+                        $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
+                        $user_data = getUserData();
 
-                        $record = "INSERT INTO reservierungen VALUES ($_SESSION[kunde], $_SESSION[kfztyp], $_SESSION[mietstation], 'bestätigt', '".date('Y-m-d')."');";
-                        $result = $connection->query($record);
+                        if ($anzahlUebrigeAutos > 0 && $user_data != null) {
+                            $reservierungID = databaseSelectQuery("reservierungID","reservierungen","ORDER BY reservierungID DESC LIMIT 1;")[0]+1;
+                            $record = "INSERT INTO reservierungen (reservierungID, kundeID, kfzTypID, mietstationID, status, datum) VALUES ($reservierungID,".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", 'bestätigt', '".date('Y-m-d')."');";
+                            $result = $con->query($record);
+                            
+                            $confirmation = "Reservierung durchgeführt";
+                            $frametype = "successFrame";
+                            $confirmationtype = "erfolgsmeldung";
+                            $message = "<h2>Ihre Reservierung wurde erfolgreich durchgeführt! <br> Sie erhalten eine Bestätigung per E-Mail </h2>";
+                        }
                         
-                        $confirmation = "Reservierung durchgeführt";
-                        $frametype = "successFrame";
-                        $confirmationtype = "erfolgsmeldung";
-                        $message = "<h2>Ihre Reservierung wurde erfolgreich durchgeführt! <br> Sie erhalten eine Bestätigung per E-Mail </h2>";
-
-                        if($result == false) {
+                        else {
                             $confirmation = "Reservierungsfehler";
                             $frametype = "failureFrame";
                             $confirmationtype = "fehlermeldung";
@@ -48,8 +53,6 @@
                         echo "<div id='$frametype' class='frame'>";
                         echo "<h1 id='$confirmationtype'>$confirmation</h1>";
                         echo $message;
-
-                        $connection->close();
                     ?>
                 </div>
 

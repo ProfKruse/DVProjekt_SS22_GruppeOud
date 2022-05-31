@@ -27,8 +27,8 @@
                 <form action="reservation_processing.php" method="POST">
                 <div class="group">
                     <?php
-                        session_start();
-                        require_once(__DIR__ . '\global.php');
+                        if(!isset($_SESSION)) { session_start(); } 
+                        require_once('../Database/db_inc.php');
                         
                         $options = "";
                         $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
