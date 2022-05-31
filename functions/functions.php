@@ -165,15 +165,15 @@
                                    $kunde = $tupel;
                                 } 
                                 mysqli_close($con);
+                                createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragsid);
+                                header("Location: ../return/return_dialog.php");  
                             } catch (mysqli_sql_exception $e) {
                                 if ($e->getCode() == 1062) {
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
                                 } else {
-                                    throw $e;
+                                    throw $e;   
                                 }
-                            }                            
-                            createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragsid);
-                            header("Location: ../return/return_dialog.php");                        
+                            }                                                  
                         }
                         else
                         {
@@ -304,11 +304,11 @@
         $message = '<!DOCTYPE html>
         <html>
         <body>
-        <p>Sehr geehrter Kunde,</p>
+        <p>Sehr geehrter Herr/Frau '.$kundendaten["nachname"].',</p>
         <p>anbei erhaelst du dein Ruecknahmeprotokoll. ;)</p>
         <br>
         <p>Mit lieben Gruessen</p>
-        <p>Dein Pascal</p>
+        <p>Dein RentalCar-Team</p>
         </body>
         </html>';
 
