@@ -24,39 +24,41 @@
             <h1>KFZ spezifische Daten eintragen</h1>
             <center>
             <div class="frame">
-                <form action="" method="POST">
+                <form action="create_pdf.php" method="POST">
                 <!-------------------------------------------------------------->
                     <div class="group">
-                        <label for="Marke"><b>Marke</b></label>
-                        <input type="text" name="Marke" placeholder="xxx" required>
+                        <label for="marke"><b>Marke</b></label>
+                        <input type="text" name="marke" id="marke" placeholder="xxx" required>
 
-                        <label for="StandardRate"><b>Standard Rate</b></label>
-                        <input type="text" name="StandardRate" placeholder="xxx" required>
+                        <label for="standardRate"><b>Standard Rate</b></label>
+                        <input type="text" name="standardRate" id="standardRate" placeholder="xxx" required>
 
-                        <label for="Kilometerstand"><b>Kilometerstand</b></label>
-                        <input type="text" name="Kilometerstand" placeholder="xxx" required>
+                        <label for="kilometerstand"><b>Kilometerstand</b></label>
+                        <input type="text" name="kilometerstand" id="kilometerstand" placeholder="xxx" required>
 
-                        <label for="Ausstattung"><b>Ausstattung</b></label>
-                        <input type="text" name="Ausstattung" placeholder="xxx" required>
+                        <label for="ausstattung"><b>Ausstattung</b></label>
+                        <input type="text" name="ausstattung" id="ausstattung" placeholder="xxx" required>
                     </div>
 
                 <!-------------------------------------------------------------->
 
                     <div class="group">
-                        <label for="Modell"><b>Modell</b></label>
-                        <input type="text" name="Modell" placeholder="xxx" required>
+                        <label for="modell"><b>Modell</b></label>
+                        <input type="text" name="modell" id="modell" placeholder="xxx" required>
                     
-                        <label for="Zustand"><b>Zustand</b></label>
-                        <input type="text" name="Zustand" placeholder="xxx" required>
+                        <label for="zustand"><b>Zustand</b></label>
+                        <input type="text" name="zustand" id="zustand" placeholder="xxx" required>
 
                         
-                        <label for="Kennzeichen"><b>Kennzeichen</b></label>
-                        <input type="text" name="Kennzeichen" placeholder="xxx" required>
+                        <label for="kennzeichen"><b>Kennzeichen</b></label>
+                        <input type="text" name="kennzeichen" id="kennzeichen" placeholder="xxx" required>
                     </div>
 
                 <!-------------------------------------------------------------->
-                </form>
+                <div>
                 <button type="submit">PDF erstellen</button>
+                </div>
+            </form>
             </div>
             </center>
             <br>
