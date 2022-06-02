@@ -69,9 +69,8 @@
     }
 
     function mietvertragsAnzeige($mietvertragsdaten,$con){
-        if (isset($mietvertragsdaten['mietvertragid'])) { 
-            $_SESSION['mietvertragid'] = $mietvertragsdaten["mietvertragid"];  
-            $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $_SESSION['mietvertragid']; 
+        if (isset($mietvertragsdaten['mietvertragid'])) {   
+            $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsdaten["mietvertragid"]; 
             $db_erg = mysqli_query( $con, $statement ); 
             if (!$db_erg ) 
             { 
@@ -117,7 +116,6 @@
             if($count ==  0) 
             { 
                 echo "<p>Die eingegebene ID existiert nicht in der DB</p>";
-                $_SESSION['mietvertragID'] = null;
                 $_SESSION['kundenid'] = null;
                 $_SESSION['vertragid'] = null;
             }
@@ -126,7 +124,7 @@
         } 
     }
 
-    function sendeRuecknahmeprotokoll($nutzungsdaten,$con,$mietvertragsid)
+    function sendeRuecknahmeprotokoll($nutzungsdaten,$con,$mietvertragid)
         {  
             $email = "";
             if (isset($nutzungsdaten['tank'])) 
@@ -141,10 +139,10 @@
                     if (isset($nutzungsdaten['mechanik'])) 
                     {
                         $mechanik = trim($nutzungsdaten['mechanik']);
-                        if (isset($mietvertragsid)) 
+                        if (isset($mietvertragid)) 
                         {
                             try {
-                                $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragsid')"; 
+                                $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
                                 $ergebnis = $con->query($statement);
                                 $kfzIDAbfrage =  "SELECT kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
                                 $kfzIDs = mysqli_query($con,$kfzIDAbfrage);
@@ -159,25 +157,25 @@
                                 while($tupel = mysqli_fetch_assoc($emailAdressen)){
                                 $email = $tupel["emailAdresse"];
                                 }
-                                $kundendatenAbfrage = "SELECT kundeID, vorname, nachname, strasse, hausNr, ort, emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
+                                $kundendatenAbfrage = "SELECT * FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
                                 $kundendaten = mysqli_query($con,$kundendatenAbfrage);
                                 while($tupel = mysqli_fetch_assoc($kundendaten)){
                                    $kunde = $tupel;
                                 } 
                                 mysqli_close($con);
-                                createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragsid);
-                                header("Location: ../return/return_dialog.php");  
+                                createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragid);
+                                header("Location: ../return/return_dialog.php");
                             } catch (mysqli_sql_exception $e) {
                                 if ($e->getCode() == 1062) {
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
                                 } else {
-                                    throw $e;   
+                                    echo "<p>Fehler bei der Eingabe</p>";
                                 }
                             }                                                  
                         }
                         else
                         {
-                            echo "<p>Die eingegebene ID existiert nicht in der DB oder es wurde bereits ein Ruecknahmeprotokoll erzeugt, bitte geben Sie eine korrekte ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
+                            echo "<p>Die eingegebene ID existiert nicht in der DB oder es wurde bereits ein Ruecknahmeprotokoll erzeugt, bitte geben Sie eine korrekte ID ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
                         }
                     }
                 }                       

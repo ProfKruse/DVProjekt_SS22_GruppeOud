@@ -2,7 +2,7 @@
     <?php
         require("../Database/db_inc.php");
         require("../functions/functions.php");
-        session_start();        
+        session_start();       
     ?> 
 <html> 
     <head> 
@@ -41,14 +41,16 @@
                     <button type="submit" >Abfragen</button> 
                 </div> 
             </form> 
-            <?php 
-                mietvertragsAnzeige($_POST,$con);
+            <?php
                 if(isset($_POST['mietvertragid']))
+                {
+                    mietvertragsAnzeige($_POST,$con);
                     $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
+                }
             ?> 
             <form action="return_dialog.php" method="POST"> 
                 <div class="group">                   
-                    <label for="tank"><b>*Tank</b></label> 
+                    <label for="tank"><b>*Tank in Prozent</b></label> 
                     <input type="number" name="tank" min="0" max="100" required> 
 
                     <label for="kilometerstand"><b>*Kilometerstand</b></label> 
@@ -69,7 +71,10 @@
                 <br>
                 <button type="submit">Protokoll erzeugen</button></div>
                 <?php
-                    sendeRuecknahmeprotokoll($_POST,$con,$_SESSION['mietvertragid']);
+                    if(isset($_SESSION['mietvertragid']))
+                    {
+                        sendeRuecknahmeprotokoll($_POST,$con,$_SESSION['mietvertragid']);
+                    }
                 ?>  
             </form> 
             </div> 
