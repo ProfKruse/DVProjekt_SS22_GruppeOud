@@ -1,7 +1,10 @@
 <!DOCTYPE html> 
     <?php
+        //require fuer die Datenbankverbindung
         require("../Database/db_inc.php");
+        //require fuer die Funkionsaufrufe
         require("../functions/functions.php");
+        //Session start, zum setzen von Objekten
         session_start();       
     ?> 
 <html> 
@@ -42,12 +45,16 @@
                 </div> 
             </form> 
             <?php
+                //mietvertragsAnzeige soll nur aufgerufen werden, wenn die Mietvertragsnummer eingegeben wurde
                 if(isset($_POST['mietvertragid']))
                 {
+                    //Funktionsaufruf der mietvertragsAnzeige mit den Formulardaten und der Datenbankverbindung
                     mietvertragsAnzeige($_POST,$con);
+                    //speichern der Mietvertragsnummer
                     $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
                 }
-            ?> 
+            ?>
+            <!--Formular zur Abfrage KFZ-relevanter Nutzungsdaten-->
             <form action="return_dialog.php" method="POST"> 
                 <div class="group">                   
                     <label for="tank"><b>*Tank in Prozent</b></label> 
@@ -71,9 +78,14 @@
                 <br>
                 <button type="submit">Protokoll erzeugen</button></div>
                 <?php
+                    //sendeRuecknahmeprotokoll soll nur aufgerufen werden, wenn $_SESSION['mietvertragid'] gesetzt ist.
                     if(isset($_SESSION['mietvertragid']))
                     {
                         sendeRuecknahmeprotokoll($_POST,$con,$_SESSION['mietvertragid']);
+                    }
+                    //Erklaerung zur Verwendung der Seite und Hinweis wenn nur das untere Formular ausgefuellt und abgesendet werden soll, ohne vorherige Abfrage der Mietvertragsnummer
+                    else{
+                        echo "Bitte geben sie eine Mietvertragsnummer einund fragen Sie diese ab und geben Sie dann die KFZ-nutzungsrelevanten Daten.";
                     }
                 ?>  
             </form> 

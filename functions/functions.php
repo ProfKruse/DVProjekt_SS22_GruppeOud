@@ -5,7 +5,7 @@
     require '../library/PHPMailer/src/PHPMailer.php';
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
     require '../library/PHPMailer/src/SMTP.php';
-
+    /* TCPDF Einbindung, um eine PDF zu erzeugen*/
     require '../library/TCPDF/tcpdf.php';
     
     use PHPMailer\PHPMailer\PHPMailer;
@@ -68,18 +68,34 @@
         }
     }
 
+    /*
+      Parameter: $mietvertragsdaten: Uebergabe der Mietvertragsnummer als Array, wessen Daten angezeigt werden sollen
+                 $con: Uebergabe der Datenbankverbindung
+      Inhalt:    mietvertragsAnzeige() macht eine SQL Anfrage zu einer uebergebenen Mietvertragsnummer 
+                 und zeigt die in der Datenbank enthaltenen Informationen zu dieser in einer generierten Tabelle an.
+                 Es gibt eine Variable $ergebnisTupel, welche 'false' ist. Dieser wird bei der Anzeige jedes Tupels auf 'true' gesetzt.
+                 Außerdem wereden die "kundenid" und "vertragsid" für die spätere Verwendung in $_SESSION gespeichert.
+                 Wenn $ergebnistupel 'false' ist nach der Anzeige der Mietvertragsdaten, bedeutet das, dass es keinen Eintrag für diese Mietvertragsnummer gab,
+                 dies wird als Nachricht ausgegeben und die $_SESSION werden auf null gesetzt.
+                 Zum Schluss wird das Ergebnis freigegeben und die Datenbankverbindung beendet.
+                 
+    */
     function mietvertragsAnzeige($mietvertragsdaten,$con){
+        //Abfrage der Mietvertragsdaten, welche nur geschehen soll, wenn eine 'mietvertragid' uebergeben wurde
         if (isset($mietvertragsdaten['mietvertragid'])) {   
             $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsdaten["mietvertragid"]; 
-            $db_erg = mysqli_query( $con, $statement ); 
+            $db_erg = mysqli_query( $con, $statement );
+            //Fehlerbehandlung, falls die SQL-Anfrage falsch sein sollte 
             if (!$db_erg ) 
             { 
                 die('Fehler in der SQL Anfrage'); 
             }
-            $count =  0;                 
+            //Count welcher die Ergebnistupel zaehlt
+            $ergebnisTupel =  false;
+            //Anzeige der Tabelle aus dem Ergebnis der Abfrage fuer die Mietvertragsdaten                 
             while ($zeile = mysqli_fetch_array( $db_erg, MYSQLI_ASSOC)) 
             { 
-                $count = $count+1; 
+                $ergebnisTupel = true; 
                 echo"<center> 
                 <table class='mietdaten'> 
                     <thead> 
@@ -110,23 +126,44 @@
                     </tbody> 
                 </table> 
                 </center>";
+                //Speicherung der 'kundenid' und 'vertragid' fuer die spaetere Verwendung
                 $_SESSION['kundenid'] = $zeile['kundeID'];
                 $_SESSION['vertragid'] = $zeile['vertragID'];    
-            } 
-            if($count ==  0) 
+            }
+            //Ueberpruefen ob $ergebnisTupel true ist. Falls nicht, wird die Fehlermeldung ausgegeben und die 'kundenid' und 'vertragid' auf null gesetzt
+            if($ergebnisTupel ==  false) 
             { 
                 echo "<p>Die eingegebene ID existiert nicht in der DB</p>";
                 $_SESSION['kundenid'] = null;
                 $_SESSION['vertragid'] = null;
             }
+            //Ende der Datenbankverbindung
             mysqli_free_result( $db_erg ); 
             mysqli_close($con); 
         } 
     }
+    /*
+        Parameter: $nutzungsdaten: Uebergabe der KFZ-relevanten Nutzungsdaten als Array, 
+                   in dem alle dafuervorgesehenen Formulardaten enthalten sind.
+                   $con: Uebergabe der Datenbankverbindung
+                   $mietvertragid: Uebergabe der Mietvertragsnummer
+        Inhalt:    sendeRuecknahmeprotokoll() wird fuer das Versenden des Ruecknahmeprotkolls als Email genutzt.
+                   Dann wird ueberprueft ob alle nutzungsrelevanten Formulardaten uebergeben wurden.
+                   Daraufhin wird ueberprueft ob $mietvertragid gesetzt wurde. 
+                   Wenn dies nicht zutrifft, wird eine Fehlermeldung ausgegeben, dass es einen Fehler bei der Mietvertragsnummer gab.
+                   Wenn all dies Zutrifft, beginnt ein try-catch Block, welcher zuerst versucht ein neues Tupel in ruecknahmeprotokolle mit allen angegegeben Informationen einzufuegen.
+                   Daraufhin wird die kfzID ueber die 'vertragid' abgefragt. 
+                   Mithilfe der kfzID wird der Kilometerstand des Kfzs in der Tabelle 'kfzs' aktualisiert.
+                   Danach werden die Kundendaten abgefragt durch die $_SESSION['kundenid'], diese werden gespeichert und die Email wird entsprechend gesetzt.
+                   Die Datenbankverbindung wird beendet und die createRuecknahme_pdf() wird mit den Kundendaten '$kunde' und den Parametern $nutzungsdaten und $mietvertragid aufgerufen,
+                   welches das Ruecknahmeprotokoll als PDF erzeugt und an die Email Adresse aus den Kundendaten versendet. 
+                   mysqli_sql_exceptions werden abgefangen im catch-Block. Falls es sich um einen Fehler mit der Nummer 1062 handelt, 
+                   wird die Dopplungsfehlermeldung geworfen, andernfalls wird eine allgemeine Fehlermeldung ausgegeben.   
 
+    */
     function sendeRuecknahmeprotokoll($nutzungsdaten,$con,$mietvertragid)
         {  
-            $email = "";
+            //Abfrage ob alle Nutzungsdaten eingetragen wurden und trimmen dieser.
             if (isset($nutzungsdaten['tank'])) 
             {
                 $tank = trim($nutzungsdaten['tank']);
@@ -139,32 +176,35 @@
                     if (isset($nutzungsdaten['mechanik'])) 
                     {
                         $mechanik = trim($nutzungsdaten['mechanik']);
+                        //Abfrage ob die Mietvertragsnummer gesetzt ist.
                         if (isset($mietvertragid)) 
                         {
+                            //try-catch Block, welcher die benoetigten Datenbank-Ab- und Anfragen ausfuehrt und die Methode zur Ruecknahmeprotokollerstellung als PDF und dem Email-Versand aufruft
                             try {
+                                //Einfuegen des Ruecknahmeprotokolltupels in die Datenbank
                                 $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
                                 $ergebnis = $con->query($statement);
+                                //Abfrage der kfzID durch die vertragid
                                 $kfzIDAbfrage =  "SELECT kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
                                 $kfzIDs = mysqli_query($con,$kfzIDAbfrage);
                                 while($tupel = mysqli_fetch_assoc($kfzIDs)){
                                     $kfzID = $tupel["kfzID"];
                                 }
+                                //Aktualisierung des Kilometerstandes in der kfzs Datenbank
                                 $kfzUpdate = "UPDATE kfzs SET kilometerStand = " . $kilometerstand . " WHERE kfzID= " . $kfzID . ";";
                                 mysqli_query($con, $kfzUpdate);
-
-                                $emailAbfrage = "SELECT emailAdresse FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
-                                $emailAdressen = mysqli_query($con,$emailAbfrage);
-                                while($tupel = mysqli_fetch_assoc($emailAdressen)){
-                                $email = $tupel["emailAdresse"];
-                                }
+                                //Abfrage der kundendaten
                                 $kundendatenAbfrage = "SELECT * FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
                                 $kundendaten = mysqli_query($con,$kundendatenAbfrage);
                                 while($tupel = mysqli_fetch_assoc($kundendaten)){
-                                   $kunde = $tupel;
+                                    $kunde = $tupel;
                                 } 
+                                //Datenbankverbindungsende
                                 mysqli_close($con);
+                                //Ruecknahmeprotokollerzeugungsmethodenaufruf
                                 createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragid);
                                 header("Location: ../return/return_dialog.php");
+                            //Catch Block zum Fehlerauswurf
                             } catch (mysqli_sql_exception $e) {
                                 if ($e->getCode() == 1062) {
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
@@ -173,17 +213,24 @@
                                 }
                             }                                                  
                         }
+                        //Ausgabe, das die Mietvertragsnummer nicht gesetzt ist.
                         else
                         {
-                            echo "<p>Die eingegebene ID existiert nicht in der DB oder es wurde bereits ein Ruecknahmeprotokoll erzeugt, bitte geben Sie eine korrekte ID ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
+                            echo "<p>Die eingegebene ID existiert nicht in der DB, bitte geben Sie eine korrekte ID ein und geben Sie dann erneut die nutzungsrelevanten Daten ein.</p>";
                         }
                     }
                 }                       
             }              
         }
     }
-
-    function createRuecknahme_pdf($kundendaten, $nutzungsdaten,$mietvertragsid) {
+    /*
+        Parameter: $kundendaten: Kundendaten als Array
+                   $nutzungsdaten: Nutzungsdaten als Array
+                   $mietvertragid: Mietvertragsnummer
+        Inhalt:    createRuecknahme_pdf() ist zur Erzeugung des Ruecknahmeprotokolls und der Email und dem Aufruf zum versenden der Email
+    */
+    function createRuecknahme_pdf($kundendaten, $nutzungsdaten,$mietvertragid) {
+        //Erzeugung eines neuen PDF Files und setzen von Ersteller, Author, Titel und Thema
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
         $pdf->setCreator(PDF_CREATOR);
         $pdf->setAuthor('Rentalcar GmbH');
@@ -206,9 +253,9 @@
             require_once(dirname(__FILE__).'/lang/eng.php');
             $pdf->setLanguageArray($l);
         }
-    
+        //neue, bzw. erste Seite fuer die PDF
         $pdf->AddPage();
-    
+        //Style Vorgaben
         $style = <<<EOF
             <style>
                 * {
@@ -217,7 +264,7 @@
                 }
             </style>
             EOF;
-    
+        //Kundenanschrift, Datum und Kundennummer
         $sender_receiver_information = 
             $style.'
             <h1 style="font-family: Arial;">Rentalcar</h1>
@@ -235,7 +282,7 @@
                 </tr>
             <table>
             <br>';
-    
+        //Text zum Ruecknahmeprotokoll und Tabelle mit den nutzungsrelevanten Daten.
         $invoices_data = 
             $style.'
             <b>Ruecknahmeprotokoll</b>
@@ -253,7 +300,7 @@
                     <th>KM-Stand</th>
                 </tr>
                 <tr style="background-color: rgb(228, 228, 228);">
-                    <th>'.$mietvertragsid.'</th>
+                    <th>'.$mietvertragid.'</th>
                     <th>'.$nutzungsdaten['tank'].'</th>
                     <th>'.$nutzungsdaten['sauberkeit'].'</th>
                     <th>'.$nutzungsdaten['mechanik'].'</th>
@@ -263,7 +310,7 @@
             <br>
             <hr>';
     
-    
+        //Kontaktinformationen von Rental Car als Footer
         $contact_information = <<<EOF
             $style
             <table>
@@ -281,7 +328,7 @@
                 </tr>
             </table>
             EOF;
-    
+        //Schreiben der obigen Texte in die PDF  
         $pdf->writeHTML($sender_receiver_information, true, false, true, false, '');
     
             pdf_area_separation($pdf, 5);
@@ -296,8 +343,9 @@
     
         $pdf->writeHTML($contact_information, true, false, true, false, '');
         ob_end_clean();
+        //Speichern der PDF als String
         $pdfString = $pdf->Output('rechnung'.$kundendaten["kundeID"]."_".date('Y-m-d').'.pdf', 'S');
-        
+        //Email Versendungsinformationen
         $subject = 'Ruecknahmeprotokoll';
         $message = '<!DOCTYPE html>
         <html>
@@ -309,7 +357,7 @@
         <p>Dein RentalCar-Team</p>
         </body>
         </html>';
-
+        //Aufruf der Emailversendungsmethode
         send_mail($kundendaten['emailAdresse'],$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
     }
     
