@@ -83,7 +83,7 @@ CREATE TABLE `kunden` (
   `pseudo` varchar(45) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `validatedAccount` Boolean DEFAULT NULL,
-  `codeResetPassword` varchar(45) DEFAULT NULL,
+  `token` varchar(45) DEFAULT NULL,
   `strasse` varchar(45) DEFAULT NULL,
   `hausNr` varchar(4) DEFAULT NULL,
   `plz` int DEFAULT NULL,
@@ -93,8 +93,8 @@ CREATE TABLE `kunden` (
   `bic` varchar(45) DEFAULT NULL,
   `telefonNr` varchar(45) DEFAULT NULL,
   `emailAdresse` varchar(45) DEFAULT NULL,
+  `AnzVersuche` int DEFAULT (0),
   `kontostand` double DEFAULT NULL,
-  `Anzahl Versuche` int DEFAULT NULL,
   PRIMARY KEY (`kundeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -253,11 +253,6 @@ ALTER TABLE `kfztypen`
   ADD PRIMARY KEY (`kfzTypID`),
   ADD KEY `kfztypen_tarifID_idx` (`tarifID`);
 
---
--- Indizes für die Tabelle `kunden`
---
-ALTER TABLE `kunden`
-  ADD PRIMARY KEY (`kundeID`);
 
 --
 -- Indizes für die Tabelle `mietstationen`
