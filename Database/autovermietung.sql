@@ -303,7 +303,7 @@ CREATE TABLE `ruecknahmeprotokolle` (
   `tank` float NOT NULL,
   `sauberkeit` enum('sehr schmutzig','leicht schmutzig','neutral','sauber','sehr sauber') NOT NULL,
   `mechanik` varchar(45) DEFAULT NULL,
-  `kilometerstand` float NOT NULL,
+  `kilometerstand` int(11) NOT NULL,
   `mietvertragID` int(11) NOT NULL,
    PRIMARY KEY (`ruecknahmeprotokollID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
