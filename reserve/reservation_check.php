@@ -33,12 +33,7 @@ session_start();
             <h1>Überprüfung</h1>
             <center>
             <div class="frame">
-                <?php
-                    require_once("../database/db_inc.php");
-                    
-                    $user_data = getUserData();
 
-                ?>
                 <form action="reservation_confirmation.php" method="POST">
                 <!-------------------------------------------------------------->
                     <div class="group">

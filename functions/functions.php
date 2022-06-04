@@ -19,9 +19,10 @@ function check_login($con){
             $user_data = mysqli_fetch_assoc($result);
             return $user_data;
         } 
+    }else{
+        header("Location: ../login/logout.php");
+        die;
     }
-    header("Location: ../login/logout.php");
-    die;
 }
 
 function check_no_login($con){

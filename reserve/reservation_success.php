@@ -33,7 +33,7 @@ session_start();
                 <div id="successFrame" class="frame" style="width: 500px">
                     <h1 id="erfolgsmeldung">Prüfung erfolgreich</h1>
                     <?php
-                        if(!isset($_SESSION)) { session_start(); } 
+
                         echo "<h2>KFZ des Typs ". $_SESSION['kfztyp'] ." <br> kann in der Abholstation ". $_SESSION['abholstation'].
                                 "<br>reserviert werden.</h2>";
                     ?>

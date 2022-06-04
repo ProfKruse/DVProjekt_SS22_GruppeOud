@@ -33,8 +33,8 @@ session_start();
                 <div id="failureFrame" class="frame">
                     <h1 id="fehlermeldung">Prüfung fehlgeschlagen</h1>
                     <?php
-                        if(!isset($_SESSION)) { session_start(); } 
-                        require_once("../Database/db_inc.php");
+
+                 
                         $buttons;
                         
                         $kfzids = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende", "WHERE mietstationID = ".$_SESSION['abholstation']);

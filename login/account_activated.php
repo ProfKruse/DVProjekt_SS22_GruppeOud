@@ -25,7 +25,7 @@ $user_data = check_login($con);
                     <li><a href="">Reservierungen</a></li>
                     <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
                     <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
-                    <li><a href="../login/logout.php">Logout</a></li>
+                    <li><a href="../login/logout.php">Anmeldung</a></li>
                     
                 </b>
             </ul>

@@ -17,7 +17,7 @@ session_start();
             <nav>
                 <ul>
                     <b>
-                    <li><a href="../index.php">Home</a></li>
+                        <li><a href="../index.php">Home</a></li>
                         <li><a href="reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
                         <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
@@ -35,6 +35,7 @@ session_start();
                 <form action="reservation_processing.php" method="POST">
                 <div class="group">
                     <?php
+
                         
                         $options = "";
                         $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
