@@ -1,6 +1,11 @@
 @import "global.css";
 
-b#fehlermeldung {
-    visibility: hidden;
-    color: red;
+
+.form_font_error {
+    font-weight: bold;
+    color:red
+} 
+
+.form_frame_error {
+    background-color: red;
 }
