@@ -42,7 +42,6 @@ function getUserData() {
     if(!isset($_SESSION)) { session_start(); } 
 
     global $con;
-    $result;
 
     if(!isset($_SESSION['pseudo'])) {
         return null;
