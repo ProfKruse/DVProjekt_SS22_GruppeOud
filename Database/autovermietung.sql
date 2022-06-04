@@ -108,15 +108,15 @@ INSERT INTO `kfztypen` (`kfzTypID`, `typBezeichnung`, `tarifID`) VALUES
 --
 
 CREATE TABLE `kunden` (
- `creationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
- `updateDate` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `creationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  `updateDate` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `kundeID` int NOT NULL AUTO_INCREMENT,
   `vorname` varchar(45) DEFAULT NULL,
   `nachname` varchar(45) DEFAULT NULL,
   `pseudo` varchar(45) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `validatedAccount` Boolean DEFAULT NULL,
-  `codeResetPassword` varchar(45) DEFAULT NULL,
+  `token` varchar(45) DEFAULT NULL,
   `strasse` varchar(45) DEFAULT NULL,
   `hausNr` varchar(4) DEFAULT NULL,
   `plz` int DEFAULT NULL,
@@ -126,8 +126,8 @@ CREATE TABLE `kunden` (
   `bic` varchar(45) DEFAULT NULL,
   `telefonNr` varchar(45) DEFAULT NULL,
   `emailAdresse` varchar(45) DEFAULT NULL,
+  `AnzVersuche` int DEFAULT (0),
   `kontostand` double DEFAULT NULL,
-  `Anzahl Versuche` int DEFAULT NULL,
   PRIMARY KEY (`kundeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -135,11 +135,11 @@ CREATE TABLE `kunden` (
 -- Daten für Tabelle `kunden`
 --
 
-INSERT INTO `kunden` ( `vorname`, `nachname`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `pseudo`, `password`, `validatedAccount`, `codeResetPassword`,  `Anzahl Versuche`) VALUES
-( 'Anne', 'Kappel', 'Bleibtreustraße', 34, 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'AnneKappel@einrot.com', 100, 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL,NULL),
-( 'Sihem', 'Osterman', 'Neue Roßstraße', 80, 55545, 'Frankfurt', 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'SihemOstermann@cuvox.de', 200, 'SihemOstermann', '$2y$10$N3lMm01agYLv71ClWzDxdOaufBbbERXvJG1VeqB5uIAyF.tK.8iCy' , 1, NULL,NULL),
-( 'Annabell', 'Bader', 'Joachimstaler Straße', 50, 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'AnnabellBader@einrot.com',500, 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2' , 1, NULL,NULL),
-( 'Andrea', 'Osterhagen', 'Feldstrasse', 63, 39446, 'Vreden', 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'AndreaOsterhagen@cuvox.de', 0, 'AndreaOsterhagen', '$2y$10$qvK7j7YpGV/bgKHIdgwoeuG7nmI2442/9uhBohPEst3kRDIicethW' , 1, NULL,NULL);
+INSERT INTO `kunden` ( `vorname`, `nachname`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `pseudo`, `password`, `validatedAccount`, `token`,`AnzVersuche`) VALUES
+( 'Anne', 'Kappel', 'Bleibtreustraße', 34, 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'AnneKappel@einrot.com', 100, 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL,0),
+( 'Sihem', 'Osterman', 'Neue Roßstraße', 80, 55545, 'Frankfurt', 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'SihemOstermann@cuvox.de', 200, 'SihemOstermann', '$2y$10$N3lMm01agYLv71ClWzDxdOaufBbbERXvJG1VeqB5uIAyF.tK.8iCy' , 1, NULL,0),
+( 'Annabell', 'Bader', 'Joachimstaler Straße', 50, 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'AnnabellBader@einrot.com',500, 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2' , 1, NULL,0),
+( 'Andrea', 'Osterhagen', 'Feldstrasse', 63, 39446, 'Vreden', 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'AndreaOsterhagen@cuvox.de', 0, 'AndreaOsterhagen', '$2y$10$qvK7j7YpGV/bgKHIdgwoeuG7nmI2442/9uhBohPEst3kRDIicethW' , 1, NULL,0);
 
 -- --------------------------------------------------------
 
