@@ -22,11 +22,10 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 1. Installieren Sie [XAMPP](https://www.apachefriends.org/de/index.html) PHP 7.4.29.
 2. Starten Sie PhpMyAdmin and Apache Server
 3. Erstellen Sie eine Datenbank name: "autovermietung"
-4. Klonen Sie [den Repository](https://github.com/som-ould/rentalCar) in dem Ordner ../xampp/htdocs
-5. Führen Sie den [SQL-Script](https://github.com/som-ould/rentalCar/blob/feature/database/Database/autovermietung.sql) durch
-6. Passen Sie [DB-Config](https://github.com/som-ould/rentalCar/blob/feature/database/Database/db_inc.php) an, nur falls Sie die Default Parameter der Datanbank geändert haben
-7. Clonen Sie den Repository [PHPMailer](https://github.com/PHPMailer/PHPMailer) in Xampp/php/ Ordner
-8. Rufen Sie Local/rentalCar/index.html 
+4. Führen Sie den [SQL-Script](https://github.com/som-ould/rentalCar/blob/feature/database/Database/autovermietung.sql) durch
+5. Passen Sie [DB-Config](https://github.com/som-ould/rentalCar/blob/feature/database/Database/db_inc.php) an, nur falls Sie die Default Parameter der Datanbank geändert haben
+6. Clonen Sie den Repository [PHPMailer](https://github.com/PHPMailer/PHPMailer) in Xampp/php/ Ordner
+7. Rufen Sie Local/rentalCar/index.html 
 
 ### Dokumentation
 
