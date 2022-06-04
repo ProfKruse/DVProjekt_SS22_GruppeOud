@@ -73,7 +73,7 @@
                 </div>
                 <br><br>
                 <div class="buttons" style="width: 50px">
-                    <button type="button" onclick="window.location='..\\index.php'">Reservierung abbrechen</button>
+                    <button type="button" onclick="window.location='..\\index.html'">Reservierung abbrechen</button>
                     <button type="submit">Eingaben prüfen</button>
                 </div>
             </form>
