@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/style_reservationSuccess.css">
+        <link rel="stylesheet" href="../src/styles/global.css">
         <title>Reservierung erfolgreich</title>
     </head>
     <body>
@@ -21,25 +21,23 @@
         </header>
         <!--Reservierungseingaben-->
         <main>
-            <h1>Reservierung erfolgreich</h1>
             <center>
-                <div class="frame">
-                    <h1>Kfz 123</h1>
-                    <h2>von 01.01.2022 bis 07.01.2022 reserviert</h2>
-
-                    <br>
-                    <br>
-
-                    <h2>Reservierung erfolgreich abgeschlossen.<br>Die Reservierungsbestätigung wird Ihnen per E-Mail zugestellt.</h2>
-                    <h2>Enjoy your Journey</h2>
+                <div id="successFrame" class="frame" style="width: 500px">
+                    <h1 id="erfolgsmeldung">Prüfung erfolgreich</h1>
+                    <?php
+                        if(!isset($_SESSION)) { session_start(); } 
+                        echo "<h2>KFZ des Typs ". $_SESSION['kfztyp'] ." <br> kann in der Abholstation ". $_SESSION['abholstation'].
+                                "<br>reserviert werden.</h2>";
+                    ?>
                 </div>
 
-                <button type="button">Startseite</button>
+                <div class="buttons" style="width: 150px;">
+                    <button type="button" onclick="history.back()">Zurück</button>
+                    <button type="button" onclick="window.location='reservation_check.php'">Daten prüfen</button>
+                </div>
             </center>
             
         </main>
-        <!--Sonstige Links-->
-        <aside>
 
         <!--Footer-->
         <footer>

@@ -32,46 +32,58 @@ session_start();
             <h1>Überprüfung</h1>
             <center>
             <div class="frame">
-                <form action="" method="POST">
-                <!-------------------------------------------------------------->
-                    <div class="group">
-                        <label for="textfield1"><b>*Text field 1</b></label>
-                        <input type="text" name="textfield1" placeholder="xxx" required>
-
-                        <label for="textfield3"><b>*Text field 3</b></label>
-                        <select name="kfztyp">
-                            <option value="">Typ 1</option>
-                            <option value="">Typ 2</option>
-                            <option value="">Typ 3</option>
-                        </select>
-                    </div>
-
-                <!-------------------------------------------------------------->
-
-                    <div class="group">
-                        <label for="textfield2"><b>*Text field 2</b></label>
-                        <input type="text" name="textfield2" placeholder="xxx" required>
+                <?php
+                    require_once("../Database/db_inc.php");
                     
-                        <label for="textfield4"><b>*Select Date</b></label>
-                        <input type="date" name="textfield4" placeholder="xxx" required>
+                    $user_data = getUserData();
+
+                ?>
+                <form action="reservation_confirmation.php" method="POST">
+                <!-------------------------------------------------------------->
+                    <div class="group">
+                        <label for="vorname"><b>*Vorname</b></label>
+                        <input type="text" name="vorname" value="<?php echo $user_data['vorname'] ?>" required>
+
+                        <label for="nachname"><b>*Nachname</b></label>
+                        <input type="text" name="nachname" value="<?php echo $user_data['nachname'] ?>" required>
+
+                        <label for="telefonnr"><b>*Telefonnr.</b></label>
+                        <input type="text" name="telefonnr" value="<?php echo $user_data['telefonNr'] ?>" required>
                     </div>
 
+                <!-------------------------------------------------------------->
+
+                    <div class="group">
+                        <label for="kfztyp"><b>*KFZ-Typ</b></label>
+                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfztyp'] ?>" readonly required>
+                    
+                        <label for="abholstation"><b>*Abholstation</b></label>
+                        <input type="text" name="abholstation" value="<?php echo $_SESSION['abholstation'] ?>" readonly required>     
+                        
+                        <label for="email"><b>*Email-Adresse</b></label>
+                        <input type="text" name="email" value="<?php echo $user_data['emailAdresse'] ?>" required>
+                    </div>
+                    
                 <!-------------------------------------------------------------->
 
                     <br>
                     <div class="group">
                         <label for="message"><b>Message</b></label>
-                        <textarea name="message"></textarea>
+                        <textarea name="message"><?php echo $_SESSION['message'] ?></textarea>
                     </div>
                     <br>
                 
                     <br>
-                    <label for="checkbox1" id="checkbox">
-                        <input type="checkbox" name="checkbox1"><b>Checkbox Text</b>
+                    <label for="bedingung" id="checkbox">
+                        <input type="checkbox" name="bedingung"><b>Die Daten sind korrekt</b>
                     </label>
                     <br>
 
-                    <button type="submit">Send</button>
+                    <b class="invisible" id="fehlermeldung">Bitte bestätigen sie die Korrektheit der Daten</b><br><br>
+                    <div class="buttons" style="width: 50px">
+                        <button type="button" onclick="if(window.confirm('Möchten sie die Reservierung wirklich abbrechen?')){window.location='..\\index.php'}">Abbrechen</button>
+                        <button type="button" onclick="if(form.bedingung.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}"">Reservieren</button>
+                    </div>
                 </form>
             </div>
             </center>
