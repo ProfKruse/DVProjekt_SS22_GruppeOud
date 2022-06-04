@@ -109,9 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             <div class="frame">
                 <form method="POST">
-                    <label for="pseudo">*Pseudo</label>
+                    <label for="pseudo">*Username</label>
                     <div <?php if (isset($error)) : ?> class="form_frame_error" <?php endif ?>>
-                        <input type="text" name="pseudo" placeholder="Pseudo" required value=<?php echo $pseudo ?>>
+                        <input type="text" name="pseudo" placeholder="Username" required value=<?php echo $pseudo ?>>
                     </div>
                     <label for="password">*Passwort</label>
                     <input type="password" name="password" placeholder="Passwort" required>

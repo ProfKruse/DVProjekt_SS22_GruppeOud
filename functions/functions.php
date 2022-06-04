@@ -35,20 +35,20 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
             'verify_peer' => false,
             'verify_peer_name' => false,
             'allow_self_signed' => true)
-        );
+            );
 
         $mail->isSMTP();
         $mail->Host='smtp.mail.yahoo.com';
         
-        $mail->Username='gamma_autovermietung@yahoo.com';
-        $mail->Password='njnzwgvpkcjmnsji';
+        $mail->Username='sihem.ouldmohand@yahoo.com';
+        $mail->Password='ugihmzgcrdnrhogf';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         
         $mail->Port=587;
     
         $mail->SMTPAuth = true;
     
-        $mail->setFrom('gamma_autovermietung@yahoo.com', 'Team Gamma');
+        $mail->setFrom('sihem.ouldmohand@yahoo.com', 'Team Gamma');
     
         //recipient
         $mail->addAddress($recipient, '');
@@ -59,12 +59,10 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         $mail->Body= $message;
         
         if($stringAttachment != Null and $nameAttachment !=null){
-            $mail->addStringAttachment($stringAttachment, $nameAttachment);
+            $mail->addAttachment($stringAttachment, $nameAttachment);
         }
         
         $mail->send();
-
-
     } 
     catch(Exception $e) {
         echo 'Email wurde nicht gesendet';

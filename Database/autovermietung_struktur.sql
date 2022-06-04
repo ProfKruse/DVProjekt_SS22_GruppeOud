@@ -254,12 +254,6 @@ ALTER TABLE `kfztypen`
   ADD KEY `kfztypen_tarifID_idx` (`tarifID`);
 
 --
--- Indizes für die Tabelle `kunden`
---
-ALTER TABLE `kunden`
-  ADD PRIMARY KEY (`kundeID`);
-
---
 -- Indizes für die Tabelle `mietstationen`
 --
 ALTER TABLE `mietstationen`
