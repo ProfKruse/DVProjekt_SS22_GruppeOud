@@ -2,7 +2,7 @@
     <?php
         session_start();
         function mietvertragsAnzeige(){ 
-            include("db_inc.php"); 
+            include("../database/db_inc.php");
             if (isset($_POST['mietvertagid'])) { 
                 $_SESSION['mietvertragID'] = $_POST["mietvertagid"]; 
                 $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $_SESSION['mietvertragID']; 
@@ -58,7 +58,7 @@
 
         function datenSpeichern()
         {  
-            include("db_inc.php");
+            include("../database/db_inc.php");
                 if (isset($_POST['tank'])) 
                 {
                     $tank = trim($_POST['tank']);
