@@ -35,8 +35,6 @@ session_start();
                 <form action="reservation_processing.php" method="POST">
                 <div class="group">
                     <?php
-                        if(!isset($_SESSION)) { session_start(); } 
-                        require_once("../database/db_inc.php");
                         
                         $options = "";
                         $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
@@ -57,7 +55,6 @@ session_start();
 
                 <div class="group">
                     <?php
-                        require_once("../database/db_inc.php");
 
                         $options_abholen = "";
                         $options_abgabe = "";

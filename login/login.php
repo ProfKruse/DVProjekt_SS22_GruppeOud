@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 die;
             }
             else{
-                header("Location: ../reserve/reservation_check.php");
+                header("Location: ../reserve/reservation.php");
                 die;
             }
 
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <li><a href="../reserve/reservation.php">Reservieren</a></li>
                 <li><a href="">Reservierungen</a></li>
                 <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                <li><a href="../login/login.php">Login</a></li>
+                <li><a href="../login/register.php">Registrieren</a></li>
             </b>
         </ul>
     </nav>

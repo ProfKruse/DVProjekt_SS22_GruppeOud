@@ -2,6 +2,7 @@
 session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
+$user_data = check_login($con);
 
 $token_toCheck = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
