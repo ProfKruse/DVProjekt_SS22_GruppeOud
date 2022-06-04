@@ -18,6 +18,7 @@ session_start();
             <nav>
                 <ul>
                     <b>
+                        <li><a href="../index.php">Home</a></li>
                         <li><a href="reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
                         <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
@@ -33,7 +34,7 @@ session_start();
             <center>
             <div class="frame">
                 <?php
-                    require_once("../Database/db_inc.php");
+                    require_once("../database/db_inc.php");
                     
                     $user_data = getUserData();
 

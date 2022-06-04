@@ -58,7 +58,7 @@ function getUserData() {
             $data["strasse"] = $row["strasse"];
             $data["hausNr"] = $row["hausNr"];
             $data["plz"] = $row["plz"];
-            $data["stadt"] = $row["stadt"];
+            $data["ort"] = $row["ort"];
             $data["land"] = $row["land"];
             $data["iban"] = $row["iban"];
             $data["bic"] = $row["bic"];
@@ -69,7 +69,6 @@ function getUserData() {
             $data["zahlungszielTage"] = $row["zahlungszielTage"];
         }
     }
-
     return $data;
 }
 

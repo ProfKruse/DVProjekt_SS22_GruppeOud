@@ -1,3 +1,9 @@
+<?php   
+session_start();
+    include("../database/db_inc.php");
+    include("../functions/functions.php");
+    $user_data = check_login($con);
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,10 +17,12 @@
             <nav>
                 <ul>
                     <b>
-                        <li><a href="">Reservieren</a></li>
+                    <li><a href="../index.php">Home</a></li>
+                        <li><a href="reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
-                        <li><a href="">Rechnungen</a></li>
-                        <li><a href="">Konto</a></li>
+                        <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
+                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                        <li><a href="../login/logout.php">Logout</a></li>
                     </b>
                 </ul>
             </nav>

@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 include("../database/db_inc.php");
 include("../functions/functions.php");
 
@@ -84,10 +83,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <nav>
         <ul>
             <b>
-                <li><a href="../reserve/reservation_check.php">Reservieren</a></li>
+                <li><a href="../index.php">Home</a></li>
+                <li><a href="../reserve/reservation.php">Reservieren</a></li>
                 <li><a href="">Reservierungen</a></li>
-                <li><a href="">Rechnungen</a></li>
-                <li><a href="register.php">Regestrieren</a></li>
+                <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
+                <li><a href="../login/login.php">Login</a></li>
             </b>
         </ul>
     </nav>
@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <body>
     <main>
-        <h1>Anmeldung</h1>
+        <h1> Möchten Sie ein Auto reservieren?<br> Melden Sie sich ein!</h1>
         <center>
             <!--Hier werden ggf. die Nachrichten angezeigt-->
             <!--Nachricht falls es ein Fehlversuch war-->

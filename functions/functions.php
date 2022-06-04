@@ -20,8 +20,14 @@ function check_login($con){
             return $user_data;
         } 
     }
-    header("Location: ../login/login.php");
+    header("Location: ../login/logout.php");
     die;
+}
+
+function check_no_login($con){
+    if(isset($_SESSION['pseudo'])){      
+        die;
+    }
 }
 
 

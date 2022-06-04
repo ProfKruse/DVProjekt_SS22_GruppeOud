@@ -1,6 +1,9 @@
-<?php
-    if(!isset($_SESSION)) { session_start(); } 
-    require_once("../Database/db_inc.php");
+<?php   
+session_start();
+    include("../database/db_inc.php");
+    include("../functions/functions.php");
+    $user_data = check_login($con);
+
     $_SESSION["pseudo"] = "SvenKappel";
     $_SESSION["kfztyp"] = $_POST["kfztyp"];
     $_SESSION["mietstation"] = $_POST["abholstation"];

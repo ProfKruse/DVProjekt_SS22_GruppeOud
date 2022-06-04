@@ -3,6 +3,8 @@ session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
 
+
+
 $email = "";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -47,10 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <nav>
         <ul>
             <b>
-                <li><a href="">Reservieren</a></li>
+                <li><a href="../index.php">Home</a></li>
+                <li><a href="../reserve/reservation.php">Reservieren</a></li>
                 <li><a href="">Reservierungen</a></li>
-                <li><a href="">Rechnungen</a></li>
-                <li><a href="login.php">Anmeldung</a></li>
+                <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
+                <li><a href="../login/login.php">Login</a></li>
             </b>
         </ul>
     </nav>

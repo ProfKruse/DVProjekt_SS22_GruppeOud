@@ -2,7 +2,7 @@
 session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
-$user_data = check_login($con);
+
 $token_toCheck = "";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($token_toCheck == $token) {
         $activate_account = "update kunden set validatedAccount = true where pseudo = '$pseudo' ";
         mysqli_query($con, $activate_account);
-        header("Location: verify_email.php");
+        header("Location: account_activated.php");
         die;
     } else {
         $error = "Der eingegebenen Code ist Falsch!";
@@ -34,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <nav>
             <ul>
                 <b>
-                    <li><a href="">Reservieren</a></li>
+                    <li><a href="../index.php">Home</a></li>
+                    <li><a href="../reserve/reservation.php">Reservieren</a></li>
                     <li><a href="">Reservierungen</a></li>
-                    <li><a href="">Rechnungen</a></li>
-                    <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
-                    <li><a href="../login/logout.php">Logout</a></li>
+                    <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
+                    <li><a href="../login/login.php">Login</a></li>
                 </b>
             </ul>
         </nav>
