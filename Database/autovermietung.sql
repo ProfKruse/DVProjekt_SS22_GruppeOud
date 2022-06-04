@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 23. Mai 2022 um 16:17
+-- Erstellungszeit: 23. Mai 2022 um 22:58
 -- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 8.1.6
 
@@ -200,16 +200,17 @@ CREATE TABLE `mietvertraege` (
   `zahlart` varchar(45) NOT NULL,
   `abholstation` int(11) NOT NULL,
   `rueckgabestation` int(11) NOT NULL,
-  `vertragID` int(11) NOT NULL
+  `vertragID` int(11) NOT NULL,
+  `kundeID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `mietvertraege`
 --
 
-INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `zahlart`, `abholstation`, `rueckgabestation`, `vertragID`) VALUES
-(1, 'bestätigt', 30, 500, 'Kreditkarte', 1, 2, 1),
-(2, 'bestätigt', 60, 2500, 'Rechnung', 4, 3, 2);
+INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `zahlart`, `abholstation`, `rueckgabestation`, `vertragID` ,`kundeID` ) VALUES
+(1, 'bestätigt', 30, 500, 'Kreditkarte', 1, 2, 1,1),
+(2, 'bestätigt', 60, 2500, 'Rechnung', 4, 3, 2,1);
 
 -- --------------------------------------------------------
 
@@ -288,14 +289,15 @@ INSERT INTO `reservierungen` (`kundeID`, `kfzTypID`, `mietstationID`, `status`, 
 --
 
 CREATE TABLE `ruecknahmeprotokolle` (
-  `ruecknahmeprotokollID` int(11) NOT NULL,
+  `ruecknahmeprotokollID` int(11) NOT NULL AUTO_INCREMENT,
   `ersteller` int(11) NOT NULL,
   `protokollDatum` date NOT NULL DEFAULT current_timestamp(),
   `tank` float NOT NULL,
   `sauberkeit` enum('sehr schmutzig','leicht schmutzig','neutral','sauber','sehr sauber') NOT NULL,
   `mechanik` varchar(45) DEFAULT NULL,
-  `kilometerstand` float NOT NULL,
-  `mietvertragID` int(11) NOT NULL
+  `kilometerstand` int(11) NOT NULL,
+  `mietvertragID` int(11) NOT NULL,
+  PRIMARY KEY (`ruecknahmeprotokollID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -376,6 +378,8 @@ ALTER TABLE `kfztypen`
   ADD PRIMARY KEY (`kfzTypID`),
   ADD KEY `kfztypen_tarifID_idx` (`tarifID`);
 
+
+
 --
 -- Indizes für die Tabelle `mietstationen`
 --
@@ -396,8 +400,9 @@ ALTER TABLE `mietvertraege`
   ADD PRIMARY KEY (`mietvertragID`,`vertragID`),
   ADD KEY `mietvertraege_abholstation_idx` (`abholstation`),
   ADD KEY `mietvertraege_rueckgabestation_idx` (`rueckgabestation`),
-  ADD KEY `mietvertraege_vertragID_idx` (`vertragID`);
-
+  ADD KEY `mietvertraege_vertragID_idx` (`vertragID`),
+  ADD KEY `mietvertraege_kundeID_idx` (`kundeID`);
+  
 --
 -- Indizes für die Tabelle `mitarbeiter`
 --
@@ -425,7 +430,6 @@ ALTER TABLE `reservierungen`
 -- Indizes für die Tabelle `ruecknahmeprotokolle`
 --
 ALTER TABLE `ruecknahmeprotokolle`
-  ADD PRIMARY KEY (`ruecknahmeprotokollID`),
   ADD UNIQUE KEY `ruecknahmeprotokolle_mietvertragID` (`mietvertragID`),
   ADD KEY `ruecknahmeprotokolle_ersteller` (`ersteller`);
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 23. Mai 2022 um 16:17
+-- Erstellungszeit: 23. Mai 2022 um 22:59
 -- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 8.1.6
 
@@ -58,10 +58,11 @@ INSERT INTO `kfztypen` (`kfzTypID`, `typBezeichnung`, `tarifID`) VALUES
 -- Daten für Tabelle `kunden`
 --
 
-INSERT INTO `kunden` (`creationDate`, `updateDate`, `kundeID`, `vorname`, `nachname`, `pseudo`, `password`, `validatedAccount`, `token`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `AnzVersuche`) VALUES
-('2022-05-23 21:56:54', '2022-05-27 23:21:33', 9, 'Anne', 'Kappel', 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, '74848', 'Bleibtreustraße', '34', 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'a.loettert@gmx.de', NULL, 0),
-('2022-05-23 22:00:13', '2022-05-27 23:21:33', 11, 'Annabell', 'Bader', 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2', 1, '74848', 'Joachimstaler Straße', '50', 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'AnnabellBader@einrot.com', NULL, 0),
-('2022-05-23 22:02:04', '2022-05-28 09:15:32', 12, 'Andrea', 'Osterhagen', 'AndreaOsterhagen', '$2y$10$HQI874Ljz6abL2GFyrpbheh0NeaAxltoNIc049Cv2OY0pUwaqg3eO', NULL, '74848', 'Feldstrasse', '63', 39446, 'Vreden', 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', '039265 38 37', 'AndreaOsterhagen@cuvox.de', NULL, 0);
+INSERT INTO `kunden` ( `vorname`, `nachname`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `pseudo`, `password`, `validatedAccount`, `codeResetPassword`,  `Anzahl Versuche`) VALUES
+( 'Anne', 'Kappel', 'Bleibtreustraße', 34, 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'AnneKappel@einrot.com', 100, 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL,NULL),
+( 'Sihem', 'Osterman', 'Neue Roßstraße', 80, 55545, 'Frankfurt', 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'SihemOstermann@cuvox.de', 200, 'SihemOstermann', '$2y$10$N3lMm01agYLv71ClWzDxdOaufBbbERXvJG1VeqB5uIAyF.tK.8iCy' , 1, NULL,NULL),
+( 'Annabell', 'Bader', 'Joachimstaler Straße', 50, 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'AnnabellBader@einrot.com',500, 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2' , 1, NULL,NULL),
+( 'Andrea', 'Osterhagen', 'Feldstrasse', 63, 39446, 'Vreden', 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'AndreaOsterhagen@cuvox.de', 0, 'AndreaOsterhagen', '$2y$10$qvK7j7YpGV/bgKHIdgwoeuG7nmI2442/9uhBohPEst3kRDIicethW' , 1, NULL,NULL);
 --
 -- Daten für Tabelle `mietstationen`
 --
