@@ -34,7 +34,8 @@ session_start();
                     <h1 id="fehlermeldung">Prüfung fehlgeschlagen</h1>
                     <?php
 
-                 
+                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION["kfztyp"] ."<br> in der Abholstation ". $_SESSION['abholstation']. " zur Verfügung.</h2>";
+  
                         $buttons;
                         
                         $kfzids = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende", "WHERE mietstationID = ".$_SESSION['abholstation']);
@@ -43,7 +44,6 @@ session_start();
                             $kfztypids = databaseSelectQuery("kfzTypID","kfzs","WHERE kfzID IN (".implode(',',$kfzids).")");
                             $altkfzid = $kfztypids[0];
                         }               
-                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION['kfztyp'] ."<br> in der Abholstation ". $_SESSION['abholstation']. " zur Verfügung.</h2>";
                         
                         if ($altkfzid == NULL) {
                             echo "<h2>Es steht aktuell kein Fahrzeug in der Abholstation zur Verfügung</h2>";

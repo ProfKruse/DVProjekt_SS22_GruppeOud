@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     $query_email = "select * from kunden where emailAdresse = '$email' limit 1 ";
     $result_email = mysqli_query($con, $query_email);
-
+ 
     if (mysqli_num_rows($result_email) == 0) {
         $error = " Die Email Adresse $email existiert nicht in unsere Datenbank!";
     } else {
@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $message = '<!DOCTYPE html>
         <html>
         <body>
-        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'" > Reset Your Password!</a> 
+        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'&emailAdresse='.$email.'" > Reset Your Password!</a> 
+        
         </body>
         </html>';
     

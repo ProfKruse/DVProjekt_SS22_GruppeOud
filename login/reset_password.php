@@ -8,6 +8,7 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
     $_SESSION["password_token"]= $_GET['password_token'];
+    $_SESSION["email"]= $_GET['emailAdresse'];
     $query = "select * from kunden where token = '{$_SESSION["password_token"]}' limit 1 ";
     $result = mysqli_query($con, $query);
     $user_data = mysqli_fetch_assoc($result);

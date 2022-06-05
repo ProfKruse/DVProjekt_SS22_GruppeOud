@@ -15,4 +15,23 @@ session_start();
 
     $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
     $anzahlUebrigeAutos > 0 ?  header("Location:reservation_success.php") : header("Location:reservation_failure.php");   
+
+
+/* 
+    Fall 1 (Happy Path): 
+        Typ: Sportwagen (4)
+        Abholstation: Gubener Str. 17 Rosenheim (1)
+        Abgabestation: Egal solange wir kein risige Datenmenge in der Datenbankhaben, 
+                       da müssen wir checken welche Station nicht voll ist
+    
+    Fall 2 (Kein KFZ auf der Station verfügbar): 
+        Typ: 
+        Abholstation: 
+        Abgabestation: 
+
+    Fall 2 (Kein Ersatz KFZ verfügbar): 
+        Typ: Sportwagen (4)
+        Abholstation: 
+        Abgabestation: 
+*/
 ?>    
