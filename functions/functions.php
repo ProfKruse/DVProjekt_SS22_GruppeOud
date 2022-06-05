@@ -9,7 +9,6 @@
     require '../library/TCPDF/tcpdf.php';
     
     use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
 
     function check_login($con){
@@ -22,29 +21,43 @@
                 $user_data = mysqli_fetch_assoc($result);
                 return $user_data;
             } 
+        }else{
+            header("Location: ../login/logout.php");
+            die;
         }
-        header("Location: ../login/login.php");
-        die;
+    }
+    
+    function check_no_login($con){
+        if(isset($_SESSION['pseudo'])){      
+            die;
+        }
     }
     
     
-    function send_mail($recipient,$subject, $message,$stringAttachement=null,$nameAttachment=null){
+    function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAttachment=null){
         $mail=new PHPMailer(true);
         try {
-            //settings
+            
+            //Debug Sendmail Pascal
+            $mail->SMTPOptions = array(
+                'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true)
+                );
     
             $mail->isSMTP();
             $mail->Host='smtp.mail.yahoo.com';
             
-            $mail->Username='gamma_autovermietung@yahoo.com';
-            $mail->Password='njnzwgvpkcjmnsji';
+            $mail->Username='sihem.ouldmohand@yahoo.com';
+            $mail->Password='ugihmzgcrdnrhogf';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             
             $mail->Port=587;
         
             $mail->SMTPAuth = true;
         
-            $mail->setFrom('gamma_autovermietung@yahoo.com', 'Team Gamma');
+            $mail->setFrom('sihem.ouldmohand@yahoo.com', 'Team Gamma');
         
             //recipient
             $mail->addAddress($recipient, '');
@@ -54,13 +67,11 @@
             $mail->Subject = $subject;
             $mail->Body= $message;
             
-            if($stringAttachement != Null and $nameAttachment !=null){
-                $mail->addStringAttachment($stringAttachement, $nameAttachment);
+            if($stringAttachment != Null and $nameAttachment !=null){
+                $mail->addAttachment($stringAttachment, $nameAttachment);
             }
             
             $mail->send();
-    
-    
         } 
         catch(Exception $e) {
             echo 'Email wurde nicht gesendet';
