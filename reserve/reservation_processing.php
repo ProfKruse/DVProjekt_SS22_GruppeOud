@@ -4,7 +4,6 @@ session_start();
     include("../functions/functions.php");
     $user_data = check_login($con);
 
-    $_SESSION["pseudo"] = "SvenKappel";
     $_SESSION["kfztyp"] = $_POST["kfztyp"];
     $_SESSION["mietstation"] = $_POST["abholstation"];
     $_SESSION["abholstation"] = $_POST["abholstation"];
