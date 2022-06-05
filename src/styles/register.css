@@ -3,16 +3,3 @@
 input#land {
     width: calc(2*var(--formInputWidth));
 }
-
-.form_font_error {
-    font-weight: bold;
-    color:red
-} 
-
-.form_frame_error {
-    background-color: red;
-} 
-
-.account_created {
-    background-image: url("logo.png");
-  }

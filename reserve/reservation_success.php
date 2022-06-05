@@ -1,14 +1,8 @@
-<?php   
-session_start();
-    include("../database/db_inc.php");
-    include("../functions/functions.php");
-    $user_data = check_login($con);
-?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/global.css">
+        <link rel="stylesheet" href="../src/styles/style_reservationSuccess.css">
         <title>Reservierung erfolgreich</title>
     </head>
     <body>
@@ -17,35 +11,35 @@ session_start();
             <nav>
                 <ul>
                     <b>
-                    <li><a href="../index.php">Home</a></li>
-                        <li><a href="reservation.php">Reservieren</a></li>
+                        <li><a href="">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
-                        <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
-                        <li><a href="../login/logout.php">Logout</a></li>
+                        <li><a href="">Rechnungen</a></li>
+                        <li><a href="">Konto</a></li>
                     </b>
                 </ul>
             </nav>
         </header>
         <!--Reservierungseingaben-->
         <main>
+            <h1>Reservierung erfolgreich</h1>
             <center>
-                <div id="successFrame" class="frame" style="width: 500px">
-                    <h1 id="erfolgsmeldung">Prüfung erfolgreich</h1>
-                    <?php
+                <div class="frame">
+                    <h1>Kfz 123</h1>
+                    <h2>von 01.01.2022 bis 07.01.2022 reserviert</h2>
 
-                        echo "<h2>KFZ des Typs ". $_SESSION['kfztyp'] ." <br> kann in der Abholstation ". $_SESSION['abholstation'].
-                                "<br>reserviert werden.</h2>";
-                    ?>
+                    <br>
+                    <br>
+
+                    <h2>Reservierung erfolgreich abgeschlossen.<br>Die Reservierungsbestätigung wird Ihnen per E-Mail zugestellt.</h2>
+                    <h2>Enjoy your Journey</h2>
                 </div>
 
-                <div class="buttons" style="width: 150px;">
-                    <button type="button" onclick="history.back()">Zurück</button>
-                    <button type="button" onclick="window.location='reservation_check.php'">Daten prüfen</button>
-                </div>
+                <button type="button">Startseite</button>
             </center>
             
         </main>
+        <!--Sonstige Links-->
+        <aside>
 
         <!--Footer-->
         <footer>

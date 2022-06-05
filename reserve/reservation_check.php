@@ -1,10 +1,3 @@
-<?php   
-session_start();
-    include("../database/db_inc.php");
-    include("../functions/functions.php");
-    $user_data = check_login($con);
-?>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,12 +11,10 @@ session_start();
             <nav>
                 <ul>
                     <b>
-                        <li><a href="../index.php">Home</a></li>
-                        <li><a href="reservation.php">Reservieren</a></li>
+                        <li><a href="">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
-                        <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
-                        <li><a href="../login/logout.php">Logout</a></li>
+                        <li><a href="">Rechnungen</a></li>
+                        <li><a href="">Konto</a></li>
                     </b>
                 </ul>
             </nav>
@@ -33,53 +24,46 @@ session_start();
             <h1>Überprüfung</h1>
             <center>
             <div class="frame">
-
-                <form action="reservation_confirmation.php" method="POST">
+                <form action="" method="POST">
                 <!-------------------------------------------------------------->
                     <div class="group">
-                        <label for="vorname"><b>*Vorname</b></label>
-                        <input type="text" name="vorname" value="<?php echo $user_data['vorname'] ?>" required>
+                        <label for="textfield1"><b>*Text field 1</b></label>
+                        <input type="text" name="textfield1" placeholder="xxx" required>
 
-                        <label for="nachname"><b>*Nachname</b></label>
-                        <input type="text" name="nachname" value="<?php echo $user_data['nachname'] ?>" required>
-
-                        <label for="telefonnr"><b>*Telefonnr.</b></label>
-                        <input type="text" name="telefonnr" value="<?php echo $user_data['telefonNr'] ?>" required>
+                        <label for="textfield3"><b>*Text field 3</b></label>
+                        <select name="kfztyp">
+                            <option value="">Typ 1</option>
+                            <option value="">Typ 2</option>
+                            <option value="">Typ 3</option>
+                        </select>
                     </div>
 
                 <!-------------------------------------------------------------->
 
                     <div class="group">
-                        <label for="kfztyp"><b>*KFZ-Typ</b></label>
-                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfzTypBezeichnung']?>" readonly required>
+                        <label for="textfield2"><b>*Text field 2</b></label>
+                        <input type="text" name="textfield2" placeholder="xxx" required>
                     
-                        <label for="abholstation"><b>*Abholstation</b></label>
-                        <input type="text" name="abholstation" value="<?php echo $_SESSION ['abholstationBezeichnung'] ?>" readonly required>     
-                        
-                        <label for="email"><b>*Email-Adresse</b></label>
-                        <input type="text" name="email" value="<?php echo $user_data['emailAdresse'] ?>" required>
+                        <label for="textfield4"><b>*Select Date</b></label>
+                        <input type="date" name="textfield4" placeholder="xxx" required>
                     </div>
-                    
+
                 <!-------------------------------------------------------------->
 
                     <br>
                     <div class="group">
                         <label for="message"><b>Message</b></label>
-                        <textarea name="message"><?php echo $_SESSION['message'] ?></textarea>
+                        <textarea name="message"></textarea>
                     </div>
                     <br>
                 
                     <br>
-                    <label for="bedingung" id="checkbox">
-                        <input type="checkbox" name="bedingung"><b>Die Daten sind korrekt</b>
+                    <label for="checkbox1" id="checkbox">
+                        <input type="checkbox" name="checkbox1"><b>Checkbox Text</b>
                     </label>
                     <br>
 
-                    <b class="invisible" id="fehlermeldung">Bitte bestätigen sie die Korrektheit der Daten</b><br><br>
-                    <div class="buttons" style="width: 50px">
-                        <button type="button" onclick="if(window.confirm('Möchten sie die Reservierung wirklich abbrechen?')){window.location='..\\index.php'}">Abbrechen</button>
-                        <button type="button" onclick="if(form.bedingung.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}"">Reservieren</button>
-                    </div>
+                    <button type="submit">Send</button>
                 </form>
             </div>
             </center>

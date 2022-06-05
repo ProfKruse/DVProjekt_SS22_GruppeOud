@@ -1,9 +1,3 @@
-<?php   
-session_start();
-    include("../database/db_inc.php");
-    include("../functions/functions.php");
-    $user_data = check_login($con);
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,12 +11,10 @@ session_start();
             <nav>
                 <ul>
                     <b>
-                        <li><a href="../index.php">Home</a></li>
-                        <li><a href="reservation.php">Reservieren</a></li>
+                        <li><a href="">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
-                        <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
-                        <li><a href="../login/logout.php">Logout</a></li>
+                        <li><a href="">Rechnungen</a></li>
+                        <li><a href="">Konto</a></li>
                     </b>
                 </ul>
             </nav>
@@ -32,56 +24,43 @@ session_start();
             <h1>Reservierung</h1>
             <center>
             <div class="frame">
-                <form action="reservation_processing.php" method="POST">
+                <form action="" method="POST">
+                <!-------------------------------------------------------------->
                 <div class="group">
-                    <?php
+                    <label for="kfztyp"><b>*Kfz-Typ</b></label>
+                    <select name="kfztyp">
+                        <option value="">Van</option>
+                        <option value="">Limousine</option>
+                        <option value="">Cabriolet</option>
+                        <option value="">Sportwagen</option>
+                        <option value="">Pickup</option>
+                        <option value="">Kombi</option>
+                        <option value="">SUV</option>
+                        <option value="">Kleinwagen</option>
+                    </select>
 
-                        
-                        $options = "";
-                        $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
+                    <label for="abgabestation"><b>*Abgabestation</b></label>
+                    <input type="text" name="abgabestation" placeholder="Abgabestation" required>
+                </div>
 
-                        foreach($arr as $id) {
-                            $bezeichnung = databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID=".$id);
-                            $options .= "<option value='".$id."'>".$bezeichnung[0]."</option>";    
-                        }   
+                <!-------------------------------------------------------------->
 
-                        $stationen = "<label for='kfztyp'><b>*Kfz-Typ</b></label>"."<select name='kfztyp'>".$options."</select>";
-                        echo $stationen;
-                    ?>
+                <div class="group">
+                    <label for="abholstation"><b>*Abholstation</b></label>
+                    <input type="text" name="abholstation" placeholder="Abholstation" required>
 
                     <label for="message"><b>Message</b></label>
                     <input type="text" name="message" placeholder="Message">
-
                 </div>
+                <br>
+                
+                <br>
+                <label for="checkbox1" id="checkbox">
+                    <input type="checkbox" name="checkbox1"><b>Checkbox Text</b>
+                </label>
+                <br>
 
-                <div class="group">
-                    <?php
-
-                        $options_abholen = "";
-                        $options_abgabe = "";
-                        $abholstation = databaseSelectQuery("mietstationID","mietstationen", "WHERE mietstationTyp='Abholstation'");
-                        $abgabestation = databaseSelectQuery("mietstationID","mietstationen", "WHERE mietstationTyp='Abgabestation'");
-
-                        foreach($abholstation as $id) {
-                            $bezeichnung = databaseSelectQuery("beschreibung","mietstationen","WHERE mietstationID=".$id);
-                            $options_abholen .= "<option value='".$id."'>".$bezeichnung[0]."</option>";
-                        }
-
-                        foreach($abgabestation as $id) {
-                            $bezeichnung = databaseSelectQuery("beschreibung","mietstationen","WHERE mietstationID=".$id);
-                            $options_abgabe .= "<option value='".$id."'>".$bezeichnung[0]."</option>";
-                        }
-
-                        $stationen = "<label for='abholstation'><b>*Abholstation</b></label>"."<select name='abholstation'>".$options_abholen."</select>".
-                        "<label for='abgabestation'><b>*Abgabestation</b></label>"."<select name='abgabestation'>".$options_abgabe."</select>";
-                        echo $stationen;
-                    ?>
-                </div>
-                <br><br>
-                <div class="buttons" style="width: 50px">
-                    <button type="button" onclick="window.location='..\\index.php'">Reservierung abbrechen</button>
-                    <button type="submit">Eingaben prüfen</button>
-                </div>
+                <button type="submit">Send</button>
             </form>
         </div>
 </center>
