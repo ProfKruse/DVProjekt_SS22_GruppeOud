@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
     <?php
         //require fuer die Datenbankverbindung
-        require("../Database/db_inc.php");
+        require("../database/db_inc.php");
         //require fuer die Funkionsaufrufe
         require("../functions/functions.php");
         //Session start, zum setzen von Objekten
@@ -85,7 +85,7 @@
                     }
                     //Erklaerung zur Verwendung der Seite und Hinweis wenn nur das untere Formular ausgefuellt und abgesendet werden soll, ohne vorherige Abfrage der Mietvertragsnummer
                     else{
-                        echo "Bitte geben sie eine Mietvertragsnummer einund fragen Sie diese ab und geben Sie dann die KFZ-nutzungsrelevanten Daten.";
+                        echo "Bitte geben sie eine Mietvertragsnummer ein, fragen Sie diese ab und geben Sie dann die KFZ-nutzungsrelevanten Daten.";
                     }
                 ?>  
             </form> 
