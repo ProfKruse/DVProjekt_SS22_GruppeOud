@@ -160,6 +160,7 @@ button {
     cursor: pointer;
     outline: none;
     width: 75px;
+    margin: 15px 2px;
     font-weight: bold;
 }
 

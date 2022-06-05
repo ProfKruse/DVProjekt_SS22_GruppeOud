@@ -23,53 +23,5 @@ if (!$con)
    die();
 }
 
-function databaseSelectQuery($spalte, $tabelle, $bedingung) {
-    global $con; 
-
-    $result = $con->query("SELECT $spalte FROM $tabelle $bedingung");
-    $array = array();
-    
-    if($result != null) {
-        while($row = $result->fetch_assoc()) {
-            array_push($array, $row[$spalte]);
-        }
-        $result->free_result();
-    }
-    return $array;
-}
-
-function getUserData() {
-    if(!isset($_SESSION)) { session_start(); } 
-
-    global $con;
-
-    if(!isset($_SESSION['pseudo'])) {
-        return null;
-    }
-
-    $result = $con->query("SELECT * FROM kunden WHERE pseudo='".$_SESSION['pseudo']."'");
-
-    $data = array();
-    if($result != null > 0) {
-        while($row = $result->fetch_assoc()) {
-            $data["kundeID"] = $row["kundeID"];
-            $data["vorname"] = $row["vorname"];
-            $data["nachname"] = $row["nachname"];
-            $data["strasse"] = $row["strasse"];
-            $data["hausNr"] = $row["hausNr"];
-            $data["plz"] = $row["plz"];
-            $data["ort"] = $row["ort"];
-            $data["land"] = $row["land"];
-            $data["iban"] = $row["iban"];
-            $data["bic"] = $row["bic"];
-            $data["telefonNr"] = $row["telefonNr"];
-            $data["emailAdresse"] = $row["emailAdresse"];
-            $data["kontostand"] = $row["kontostand"];
-            $data["sammelrechnungen"] = $row["sammelrechnungen"];
-            $data["zahlungszielTage"] = $row["zahlungszielTage"];
-        }
-    }
-    return $data;
-}
 
 ?>
