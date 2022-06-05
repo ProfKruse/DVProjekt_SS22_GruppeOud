@@ -301,8 +301,8 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
             <b>Ruecknahmeprotokoll</b>
             <pre>
             Sehr geehrter Herr/Frau '.$kundendaten["nachname"].'
-            Vielen Dank für deine Rueckgabe.
-            Du hattest folgende Nutzungsdaten:
+            Vielen Dank für Ihre Rueckgabe.
+            Sie hatten folgende Nutzungsdaten:
             </pre>
             <table>
                 <tr style="background-color: rgb(228, 228, 228);">
