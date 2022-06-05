@@ -150,7 +150,7 @@ values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$or
                 <div>
             <img alt=\"Image\" src=\"https://media0.giphy.com/media/00Tkw1cnIsl2gdZHZ7/giphy.gif?cid=20eb4e9dikte6pkvfjiu7nht9hol0uy1j6voplctwx19xiq0&rid=giphy.gif&ct=s\" style=\"height: auto; width: 230px; max-width: 80%;\" title=\"Image\"/></div>
             <div><img alt=\"Image\" src=\"https://ideagensite-ideagensiteprodstore.azureedge.net/corp-prodcache/1/b/c/8/3/7/1bc83723ef56d62965e79d96692601e36557914d.png\" style=\"height: auto; width: 230px; max-width: 80%;\" title=\"Image\"/>
-            <br>  <b>Ihr Gamma Team</b>
+            <br>  <b>Ihr Rentalcar Team</b>
             
             </div>
             
