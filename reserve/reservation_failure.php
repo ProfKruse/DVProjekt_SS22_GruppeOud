@@ -3,6 +3,7 @@ session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
+    //echo $_SESSION["kfztyp"]." ".$_SESSION["mietstation"]." ".$_SESSION["abholstation"]." ".$_SESSION["abgabestation"];
 ?>
 <!DOCTYPE html>
 <html>
@@ -34,7 +35,11 @@ session_start();
                     <h1 id="fehlermeldung">Prüfung fehlgeschlagen</h1>
                     <?php
 
-                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION["kfztyp"] ."<br> in der Abholstation ". $_SESSION['abholstation']. " zur Verfügung.</h2>";
+                        $kfzTypBezeichnung = databaseSelectQuery("typBezeichnung","kfztypen", "WHERE kfzTypID = ".$_SESSION['kfztyp'] );
+                        $abholstationBezeichnung= databaseSelectQuery("beschreibung","mietstationen", "WHERE mietstationID = ".$_SESSION['abholstation']);
+                        $_SESSION ['kfzTypBezeichnung'] = $kfzTypBezeichnung[0];
+                        $_SESSION ['abholstationBezeichnung'] = $abholstationBezeichnung[0];
+                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION ['kfzTypBezeichnung'] ."<br> in der Abholstation ". $_SESSION ['abholstationBezeichnung']. " zur Verfügung.</h2>";
   
                         $buttons;
                         

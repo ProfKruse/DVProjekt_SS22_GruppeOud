@@ -51,10 +51,10 @@ session_start();
 
                     <div class="group">
                         <label for="kfztyp"><b>*KFZ-Typ</b></label>
-                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfztyp'] ?>" readonly required>
+                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfzTypBezeichnung']?>" readonly required>
                     
                         <label for="abholstation"><b>*Abholstation</b></label>
-                        <input type="text" name="abholstation" value="<?php echo $_SESSION['abholstation'] ?>" readonly required>     
+                        <input type="text" name="abholstation" value="<?php echo $_SESSION ['abholstationBezeichnung'] ?>" readonly required>     
                         
                         <label for="email"><b>*Email-Adresse</b></label>
                         <input type="text" name="email" value="<?php echo $user_data['emailAdresse'] ?>" required>
