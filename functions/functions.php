@@ -392,7 +392,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         }
     }
 
-    function databaseSelectQuery($spalte, $tabelle, $bedingung) {
+    function databaseSelectQuery($spalte, $tabelle, $bedingung=NULL) {
         global $con; 
     
         $result = $con->query("SELECT $spalte FROM $tabelle $bedingung");

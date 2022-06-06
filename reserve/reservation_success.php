@@ -1,5 +1,5 @@
 <?php   
-session_start();
+    session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
@@ -42,9 +42,7 @@ session_start();
                     <button type="button" onclick="window.location='reservation_check.php'">Daten prüfen</button>
                 </div>
             </center>
-            
         </main>
-
         <!--Footer-->
         <footer>
             <b>Privacy Policy</b>

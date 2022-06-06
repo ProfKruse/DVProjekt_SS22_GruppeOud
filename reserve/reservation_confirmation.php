@@ -38,10 +38,9 @@ session_start();
             <center>
                     <?php
                         $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
-                        $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]);
+                        $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietende > ".$_SESSION['Mietbeginn'].") AND (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietbeginn < ".$_SESSION['Mietende'].")");  
+                        
                         $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
-                        echo $anzahlUebrigeAutos;
-
                         if ($anzahlUebrigeAutos > 0 && $user_data != null) {
                             $record = "INSERT INTO reservierungen (kundeID, kfzTypID, mietstationID, status,datum, Mietbeginn, Mietende) VALUES (".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", 'bestätigt','".date('Y-m-d')."', '".$_SESSION['Mietbeginn']."','".$_SESSION['Mietende']."');";
                             $result = $con->query($record);
@@ -49,10 +48,16 @@ session_start();
                             $frametype = "successFrame";
                             $confirmationtype = "erfolgsmeldung";
                             $message = "<h2>Ihre Reservierung wurde erfolgreich durchgeführt! <br> Sie erhalten eine Bestätigung per E-Mail </h2>";
-                            $mail= "<center><h2>Ihre Reservierung</h2> <br><br><p>Sie haben ein KFZ des Typs ".$_SESSION ['kfzTypBezeichnung'] ." <br> in der Abholstation ". $_SESSION ['abholstationBezeichnung']." reseriviert.<br> Sie können es abgeholt werden.</h2><center>";
- 
+                            // get reservation id for the a cancel link
+                            $stmtIdReserve = "SELECT MAX(reservierungID) AS MAXID FROM reservierungen;";
+                            $erg = mysqli_query($con, $stmtIdReserve);
+                            $reservierungID = mysqli_fetch_assoc($erg);
+                            $mail= "<center><h2>Ihre Reservierung</h2> 
+                            <p>Sie haben ein KFZ des Typs ".$_SESSION ['kfzTypBezeichnung'] ." 
+                            <br> in der Abholstation ". $_SESSION ['abholstationBezeichnung']." 
+                            reseriviert. Zeitraum von ".$_SESSION['Mietbeginn']." bis ".$_SESSION['Mietende']." <br> Sie können die reservierung bis 24 Std vor der Mitbeginn stornieren. <a href= 'localhost/rentalcar/reserve/reservation_cancel.php?reservierungID=".$reservierungID['MAXID']."'> Ihre Reservierung stornieren </a></h2><center>";
                         }
-                        
+  
                         else {
                             $confirmation = "Reservierungsfehler";
                             $frametype = "failureFrame";
