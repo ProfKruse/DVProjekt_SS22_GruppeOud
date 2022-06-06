@@ -68,7 +68,7 @@
             $mail->Body= $message;
             
             if($stringAttachment != Null and $nameAttachment !=null){
-                $mail->addAttachment($stringAttachment, $nameAttachment);
+                $mail->addStringAttachment($stringAttachment, $nameAttachment);
             }
             
             $mail->send();
