@@ -49,8 +49,6 @@ session_start();
                             $kfztypids = databaseSelectQuery("kfzTypID","kfzs","WHERE kfzID IN (".implode(',',$kfzids).") AND kfzTypID <> ".$_SESSION['kfztyp']);
                             $kfztypBeschreibung = databaseSelectQuery("TypBezeichnung","kfztypen","WHERE kfzTypID IN (".implode(',',$kfztypids).")");
 
-                            //$kfztypBeschreibung = databaseSelectQuery("TypBezeichnung","kfztypen","WHERE kfzTypID IN (".implode(',',$kfztypids).")");
-
                             // Für die nächste Session kfzTypBezeichnung updaten und behalten
                             $vorschlag = $kfztypBeschreibung[0];
                             $_SESSION ['kfzTypBezeichnung'] = $vorschlag;
@@ -72,8 +70,6 @@ session_start();
                         }
                         else {
                             echo "<h2>Stattdessen ein KFZ vom Typ ".$vorschlag." reservieren?</h2>";
-
-                            //$_SESSION["kfztyp"] = $altkfzid;
                             $buttons = "<button type='button' onclick=\"window.location='reservation_check.php'\">Ja</button>".
                                 "<button type='button' onclick=\"window.location='reservation.php'\">Nein</button>";
                         }
