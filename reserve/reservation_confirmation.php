@@ -3,11 +3,12 @@ session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
-    echo "kundenid: ".$user_data["kundeID"]
+    
+    /*echo "kundenid: ".$user_data["kundeID"]
     ." kfztypid: ".$_SESSION["kfztyp"]
     ." mietstationid: ".$_SESSION["mietstation"]
     ." Mietbeginn: ".$_SESSION['Mietbeginn']
-    ." Mietende: ".$_SESSION['Mietende'];
+    ." Mietende: ".$_SESSION['Mietende'];*/
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,6 +16,7 @@ session_start();
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../src/styles/global.css">
         <title>Reservierung erfolgreich</title>
+     
     </head>
     <body>
         <!--Header-->
@@ -39,9 +41,6 @@ session_start();
                     <?php
                         $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
                         $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietende >= '".$_SESSION['Mietbeginn']."') AND (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietbeginn <= '".$_SESSION['Mietende']."')");  
-                        foreach($anzahlReservierteAutos as $value){
-                            echo $value . "<br>";
-                        }
                         $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
                         if ($anzahlUebrigeAutos > 0 && $user_data != null) {
                             $record = "INSERT INTO reservierungen (kundeID, kfzTypID, mietstationID, status,datum, Mietbeginn, Mietende) VALUES (".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", 'bestätigt','".date('Y-m-d')."', '".$_SESSION['Mietbeginn']."','".$_SESSION['Mietende']."');";
@@ -58,6 +57,7 @@ session_start();
                             <p>Sie haben ein KFZ des Typs ".$_SESSION ['kfzTypBezeichnung'] ." 
                             <br> in der Abholstation ". $_SESSION ['abholstationBezeichnung']." 
                             reseriviert. Zeitraum von ".$_SESSION['Mietbeginn']." bis ".$_SESSION['Mietende']." <br> Sie können die reservierung bis 24 Std vor der Mitbeginn stornieren. <a href= 'localhost/rentalcar/reserve/reservation_cancel.php?reservierungID=".$reservierungID['MAXID']."'> Ihre Reservierung stornieren </a></h2><center>";
+                            send_mail($user_data['emailAdresse'],"Ihre Reservierung bei Rentalcar GmBH wurde erfolgreich durchgeführt!",$mail);
                         }
   
                         else {
@@ -69,19 +69,14 @@ session_start();
                         
                         echo "<div id='$frametype' class='frame'>";
                         echo "<h1 id='$confirmationtype'>$confirmation</h1>";
-                        echo $message;
-                        send_mail($user_data['emailAdresse'],"Ihre Reservierung bei Rentalcar GmBH wurde erfolgreich durchgeführt!",$mail);
+                        echo $message;                     
                     ?>
                 </div>
-
                 <div class="buttons" style="width: 150px;">
                     <button type="button" onclick="window.location='..\\index.php'">Zurück</button>
                 </div>
             </center>
-            
         </main>
-
-
         <!--Footer-->
         <footer>
             <b>Privacy Policy</b>

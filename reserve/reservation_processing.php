@@ -14,10 +14,12 @@ session_start();
 
     $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID = ".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
     $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietende >= '".$_SESSION['Mietbeginn']."') AND (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietbeginn <= '".$_SESSION['Mietende']."')");  
-                        
+    $totavailableKfz = databaseSelectQuery("kfzTypID","reservierungen","WHERE (mietstationID = ".$_SESSION['abholstation']." AND Mietende >= '".$_SESSION['Mietbeginn']."') AND (mietstationID = ".$_SESSION['abholstation']."  AND Mietbeginn <= '".$_SESSION['Mietende']."')");  
+    
     $_SESSION["anzahlVerfuegbareAutos"] = count($anzahlVerfuegbareAutos);
     $_SESSION["anzahlReservierteAutos"] = count($anzahlReservierteAutos);
-
+    $_SESSION["totavailableKfz"] = count($totavailableKfz);
+    
     $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
     $anzahlUebrigeAutos > 0 ?  header("Location:reservation_success.php") : header("Location:reservation_failure.php");   
 
