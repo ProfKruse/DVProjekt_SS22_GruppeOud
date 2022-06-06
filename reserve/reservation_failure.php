@@ -57,7 +57,8 @@ session_start();
                         $availableKfzTyp = mysqli_num_rows($erg);
 
                         if (($availableKfzTyp - $_SESSION["anzahlReservierteAutos"]) == 0) {
-                            echo "<h2>Es steht aktuell kein Fahrzeug in der Abholstation zur Verfügung</h2>";
+                            echo "<h3>Es steht aktuell kein Fahrzeug  für den ausgewählten Tag in der Abholstation zur Verfügung. 
+                            <br>Bitte wählen Sie ein andere Zeitraum oder eine andere Station</h3>";
                             $buttons = "<button type='button' onclick=\"window.location='reservation.php'\">Zurück</button>";
                         }
                         else {
