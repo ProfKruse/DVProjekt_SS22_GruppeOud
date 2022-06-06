@@ -52,7 +52,11 @@ session_start();
                             $_SESSION["kfztyp"] = $kfztypids[0];
                         }               
                         
-                        if ($altkfzid == NULL) {
+                        $stmt = "SELECT m.kfzId FROM mietstationen_mietwagenbestaende as m INNER JOIN kfzs as k on k.kfzID = m.kfzID WHERE kfztypId = ".$_SESSION['kfztyp'].";";
+                        $erg = mysqli_query($con, $stmt);
+                        $availableKfzTyp = mysqli_num_rows($erg);
+
+                        if (($availableKfzTyp - $_SESSION["anzahlReservierteAutos"]) == 0) {
                             echo "<h2>Es steht aktuell kein Fahrzeug in der Abholstation zur Verfügung</h2>";
                             $buttons = "<button type='button' onclick=\"window.location='reservation.php'\">Zurück</button>";
                         }

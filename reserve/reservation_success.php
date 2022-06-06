@@ -3,6 +3,8 @@
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
+    echo $_SESSION["anzahlVerfuegbareAutos"] ;
+    echo $_SESSION["anzahlReservierteAutos"] ;
 ?>
 <!DOCTYPE html>
 <html>
