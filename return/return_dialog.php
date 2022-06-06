@@ -21,7 +21,7 @@
                 <ul> 
                     <b> 
                         <li><a href="../index.php">Home</a></li>
-                        <li><a href="reservation.php">Reservieren</a></li>
+                        <li><a href="../reserve/reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
                         <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
                         <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>

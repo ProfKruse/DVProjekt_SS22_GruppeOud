@@ -45,6 +45,10 @@ session_start();
 
                         <label for="telefonnr"><b>*Telefonnr.</b></label>
                         <input type="text" name="telefonnr" value="<?php echo $user_data['telefonNr'] ?>" required>
+
+                        <label for='Mietbeginn'>Mietbeginn:</label>
+                        <input type='date' name='Mietbeginn' value="<?php echo $_SESSION['Mietbeginn'] ?>" required readonly>
+
                     </div>
 
                 <!-------------------------------------------------------------->
@@ -58,6 +62,11 @@ session_start();
                         
                         <label for="email"><b>*Email-Adresse</b></label>
                         <input type="text" name="email" value="<?php echo $user_data['emailAdresse'] ?>" required>
+
+                        <label for='Mietende'>Mietende:</label>
+                        <input type='date' name='Mietende' value="<?php echo $_SESSION['Mietende'] ?>" required readonly> 
+
+
                     </div>
                     
                 <!-------------------------------------------------------------->

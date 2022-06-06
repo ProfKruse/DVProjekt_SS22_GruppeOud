@@ -4,14 +4,27 @@ session_start();
     include("../functions/functions.php");
     $user_data = check_login($con);
 ?>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../src/styles/reservation.css">
         <title>Reservierung</title>
+
+        <script>
+            function validationForm() {
+                let mietbeginn = document.forms["myForm"]["Mietbeginn"].value;
+                let mietende = document.forms["myForm"]["Mietende"].value;
+                if (mietbeginn > mietende) {
+                    alert("Mietende muss grösser als Mietbeginn sein");
+                    return false;
+                }
+            }
+        </script>
     </head>
     <body>
+    
         <!--Header-->
         <header>
             <nav>
@@ -32,7 +45,7 @@ session_start();
             <h1>Reservierung</h1>
             <center>
             <div class="frame">
-                <form action="reservation_processing.php" method="POST">
+                <form name="myForm" action="reservation_processing.php" onsubmit="return validationForm()" method="POST">
                 <div class="group">
                     <?php
 
@@ -49,14 +62,20 @@ session_start();
                         echo $stationen;
                     ?>
 
-                    <label for="message"><b>Message</b></label>
-                    <input type="text" name="message" placeholder="Message">
+                    <?php
+                        $mindate =  date("Y-m-d");
+                        $html = "<label for='message'><b>Message</b></label>
+                        <input type='text' name='message' placeholder='Message'>
+                        <label for='Mietbeginn'>Mietbeginn:</label>
+                        <input type='date' min = '".$mindate."' id='Mietbeginn' name='Mietbeginn' required>";
+                        echo $html;
+                    ?>
 
                 </div>
 
                 <div class="group">
                     <?php
-
+                        $minDate = date("d.m.y");
                         $options_abholen = "";
                         $options_abgabe = "";
                         $abholstation = databaseSelectQuery("mietstationID","mietstationen", "WHERE mietstationTyp='Abholstation'");
@@ -73,14 +92,17 @@ session_start();
                         }
 
                         $stationen = "<label for='abholstation'><b>*Abholstation</b></label>"."<select name='abholstation'>".$options_abholen."</select>".
-                        "<label for='abgabestation'><b>*Abgabestation</b></label>"."<select name='abgabestation'>".$options_abgabe."</select>";
+                        "<label for='abgabestation'><b>*Abgabestation</b></label>"."<select name='abgabestation'>".$options_abgabe."</select>".
+                        "<label for='Mietende'>Mietende:</label>
+                        <input type='date' min = " . date("Y-m-d") . " id='Mietende' name='Mietende' required>";
+
                         echo $stationen;
                     ?>
                 </div>
                 <br><br>
                 <div class="buttons" style="width: 50px">
                     <button type="button" onclick="window.location='..\\index.php'">Reservierung abbrechen</button>
-                    <button type="submit">Eingaben prüfen</button>
+                    <button type="submit">Verfügbarkeit prüfen</button>
                 </div>
             </form>
         </div>

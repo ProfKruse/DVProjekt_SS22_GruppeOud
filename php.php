@@ -3,11 +3,11 @@ session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
-    /*echo "kundenid: ".$user_data["kundeID"]
-    ." kfztypid: ".$_SESSION["kfztyp"]
-    ." mietstationid: ".$_SESSION["mietstation"]
-    ." Mietbeginn: ".$_SESSION['Mietbeginn']
-    ." Mietende: ".$_SESSION['Mietende'];*/
+    echo "kundenid: ".$user_data["kundeID"]
+    ."kfztypid: ".$_SESSION["kfztyp"]
+    ."mietstationid: ".$_SESSION["mietstation"]
+    ."Mietbeginn: ".$_SESSION['Mietbeginn']
+    ."Mietende: ".$_SESSION['Mietende'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -43,7 +43,7 @@ session_start();
                         echo $anzahlUebrigeAutos;
 
                         if ($anzahlUebrigeAutos > 0 && $user_data != null) {
-                            $record = "INSERT INTO reservierungen (kundeID, kfzTypID, mietstationID, status,datum, Mietbeginn, Mietende) VALUES (".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", 'bestätigt','".date('Y-m-d')."', '".$_SESSION['Mietbeginn']."','".$_SESSION['Mietende']."');";
+                            $record = "INSERT INTO reservierungen (kundeID, kfzTypID, mietstationID, status, Mietbeginn, Mietende) VALUES (".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", 'bestätigt', '".$_SESSION['Mietbeginn']."','".$_SESSION['Mietende']."');";
                             $result = $con->query($record);
                             $confirmation = "Reservierung durchgeführt";
                             $frametype = "successFrame";

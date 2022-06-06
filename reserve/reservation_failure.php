@@ -3,7 +3,6 @@ session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
-    //echo $_SESSION["kfztyp"]." ".$_SESSION["mietstation"]." ".$_SESSION["abholstation"]." ".$_SESSION["abgabestation"];
 ?>
 <!DOCTYPE html>
 <html>
@@ -47,7 +46,10 @@ session_start();
                         $altkfzid = NULL;
                         if(count($kfzids) > 0) {
                             $kfztypids = databaseSelectQuery("kfzTypID","kfzs","WHERE kfzID IN (".implode(',',$kfzids).")");
-                            $altkfzid = $kfztypids[0];
+                            $kfztypBeschreibung = databaseSelectQuery("TypBezeichnung","kfztypen","WHERE kfzTypID IN (".implode(',',$kfztypids).")");
+                            $altkfzid = $kfztypBeschreibung[0];
+                            $_SESSION ['kfzTypBezeichnung'] = $altkfzid;
+                            $_SESSION["kfztyp"] = $kfztypids[0];
                         }               
                         
                         if ($altkfzid == NULL) {
@@ -57,7 +59,7 @@ session_start();
                         else {
                             echo "<h2>Stattdessen ein KFZ vom Typ ".$altkfzid." reservieren?</h2>";
 
-                            $_SESSION["kfztyp"] = $altkfzid;
+                            //$_SESSION["kfztyp"] = $altkfzid;
                             $buttons = "<button type='button' onclick=\"window.location='reservation_check.php'\">Ja</button>".
                                 "<button type='button' onclick=\"window.location='reservation.php'\">Nein</button>";
                         }
