@@ -150,7 +150,9 @@
             }
             //Ende der Datenbankverbindung
             mysqli_free_result( $db_erg ); 
-            mysqli_close($con); 
+            mysqli_close($con);
+            
+            
         } 
     }
     /*
@@ -193,8 +195,8 @@
                             //try-catch Block, welcher die benoetigten Datenbank-Ab- und Anfragen ausfuehrt und die Methode zur Ruecknahmeprotokollerstellung als PDF und dem Email-Versand aufruft
                             try {
                                 
-                                //Einfuegen des Ruecknahmeprotokolltupels in die Datenbank
-                                $statement = "insert INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
+                                //Einfuegen des Ruecknahmeprotokolltupels in die Datenbank #ALTERNATIVE:".$_SESSION['pseudo']."
+                                $statement = "insert INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES ('1','$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
                                 $ergebnis = $con->query($statement);
                                 //Abfrage der kfzID durch die vertragid
                                 $kfzIDAbfrage =  "select kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
