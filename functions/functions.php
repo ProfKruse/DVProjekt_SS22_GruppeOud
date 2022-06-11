@@ -19,6 +19,7 @@
             $result = mysqli_query($con,$query);
             if($result && mysqli_num_rows($result) > 0){
                 $user_data = mysqli_fetch_assoc($result);
+                $_SESSION['mitarbeiterID'] = $user_data['kundeID'];
                 return $user_data;
             } 
         }else{
@@ -195,7 +196,7 @@
                             //try-catch Block, welcher die benoetigten Datenbank-Ab- und Anfragen ausfuehrt und die Methode zur Ruecknahmeprotokollerstellung als PDF und dem Email-Versand aufruft
                             try {
                                 //Einfuegen des Ruecknahmeprotokolltupels in die Datenbank #ALTERNATIVE:".$_SESSION['pseudo']."
-                                $stmt = "insert INTO ruecknahmeprotokolle (ersteller, tank, sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES ('1','$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
+                                $stmt = "insert INTO ruecknahmeprotokolle (ersteller, tank, sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES ('".$_SESSION['mitarbeiterID']."','$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
                                 $erg = $con->query($stmt);
                                 //Abfrage der kfzID durch die vertragid
                                 $kfzIDAbfrage =  "select kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
