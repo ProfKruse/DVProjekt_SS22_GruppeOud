@@ -1,5 +1,5 @@
 <?php   
-session_start();
+    session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
@@ -48,14 +48,12 @@ session_start();
                 <form name="myForm" action="reservation_processing.php" onsubmit="return validationForm()" method="POST">
                 <div class="group">
                     <?php
-
-                        
                         $options = "";
                         $arr = databaseSelectQuery("kfzTypID","kfztypen", "");
 
                         foreach($arr as $id) {
-                            $bezeichnung = databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID=".$id);
-                            $options .= "<option value='".$id."'>".$bezeichnung[0]."</option>";    
+                            $bezeichnung_kfztyp = databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID=".$id);
+                            $options .= "<option value='".$id."'>".$bezeichnung_kfztyp[0]."</option>";    
                         }   
 
                         $stationen = "<label for='kfztyp'><b>*Kfz-Typ</b></label>"."<select name='kfztyp'>".$options."</select>";

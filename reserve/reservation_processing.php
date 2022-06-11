@@ -11,6 +11,8 @@ session_start();
     $_SESSION["message"] = $_POST["message"];
     $_SESSION["Mietbeginn"] = strval($_POST["Mietbeginn"]);
     $_SESSION["Mietende"] = strval($_POST["Mietende"]);
+    $_SESSION["kfzTypBezeichnung"]= databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID=".$_SESSION["kfztyp"]);
+    $_SESSION ['abholstationBezeichnung'] =  databaseSelectQuery("beschreibung","mietstationen","WHERE mietstationID=".$_SESSION["abholstation"]);
 
     $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID = ".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
     $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietende >= '".$_SESSION['Mietbeginn']."') AND (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietbeginn <= '".$_SESSION['Mietende']."')");  
@@ -22,6 +24,10 @@ session_start();
     
     $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
     $anzahlUebrigeAutos > 0 ?  header("Location:reservation_success.php") : header("Location:reservation_failure.php");   
+
+    
+
+
 
 /* 
     Fall 1 (Happy Path): 

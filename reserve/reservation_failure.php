@@ -33,12 +33,8 @@ session_start();
                 <div id="failureFrame" class="frame">
                     <h1 id="fehlermeldung">Prüfung fehlgeschlagen</h1>
                     <?php
-                        // Bezeichnungen sind übersichtlicher für den Kunden
-                        $kfzTypBezeichnung = databaseSelectQuery("typBezeichnung","kfztypen", "WHERE kfzTypID = ".$_SESSION['kfztyp'] );
-                        $abholstationBezeichnung= databaseSelectQuery("beschreibung","mietstationen", "WHERE mietstationID = ".$_SESSION['abholstation']);
-                        $_SESSION ['kfzTypBezeichnung'] = $kfzTypBezeichnung[0];
-                        $_SESSION ['abholstationBezeichnung'] = $abholstationBezeichnung[0];
-                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION ['kfzTypBezeichnung'] ."<br> in der Abholstation ". $_SESSION ['abholstationBezeichnung']. " zur Verfügung.</h2>";
+
+                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION ['kfzTypBezeichnung'][0] ."<br> in der Abholstation ". $_SESSION ['abholstationBezeichnung'][0]. " zur Verfügung.</h2>";
   
                         $buttons;
                         // alle autos die zu der Abholstation gehören
@@ -51,25 +47,22 @@ session_start();
 
                             // Für die nächste Session kfzTypBezeichnung updaten und behalten
                             $vorschlag = $kfztypBeschreibung[0];
-                            $_SESSION ['kfzTypBezeichnung'] = $vorschlag;
-                            $_SESSION["kfztyp"] = $kfztypids[0];
+                            $_SESSION ['kfzTypBezeichnung'][0] = $vorschlag;
+                            $_SESSION["kfztyp"][0] = $kfztypids[0];
+
                         }               
                         // Check, ob auf der ausgewählten Station und kfztyp gar keine Autos mehr zu Verfügung sind
                         $stmt = "SELECT k.kfztypId FROM mietstationen_mietwagenbestaende as m INNER JOIN kfzs as k on k.kfzID = m.kfzID;";
                         $erg = mysqli_query($con, $stmt);
                         $availableKfz = mysqli_num_rows($erg);
-
-                        $stmt = "SELECT k.kfztypId FROM mietstationen_mietwagenbestaende as m INNER JOIN kfzs as k on k.kfzID = m.kfzID WHERE kfztypId <> ".$_SESSION['kfztyp'].";";
-                        $erg = mysqli_query($con, $stmt);
-                        $vorschläge = mysqli_num_rows($erg);
-
+ 
                         if (($availableKfz -  $_SESSION["totavailableKfz"]) == 0 ) {
                             echo "<h3>Es steht aktuell kein Fahrzeug  für den ausgewählten Tag in der Abholstation zur Verfügung. 
                             <br>Bitte wählen Sie ein andere Zeitraum oder eine andere Station</h3>";
                             $buttons = "<button type='button' onclick=\"window.location='reservation.php'\">Zurück</button>";
                         }
                         else {
-                            echo "<h2>Stattdessen ein KFZ vom Typ ".$vorschlag." reservieren?</h2>";
+                            echo "<h2>Stattdessen ein KFZ vom Typ ".$vorschlag." reservieren? Oder eine andere Zeitraum auswählen?</h2>";
                             $buttons = "<button type='button' onclick=\"window.location='reservation_check.php'\">Ja</button>".
                                 "<button type='button' onclick=\"window.location='reservation.php'\">Nein</button>";
                         }
