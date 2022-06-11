@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 die;
             }
             else{
-                header("Location: ../reserve/reservation.php");
+                header("Location: ../index.php");
                 die;
             }
 

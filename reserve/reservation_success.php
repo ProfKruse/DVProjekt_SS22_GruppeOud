@@ -3,8 +3,6 @@
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
-    echo $_SESSION["anzahlVerfuegbareAutos"] ;
-    echo $_SESSION["anzahlReservierteAutos"] ;
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,7 +33,7 @@
                 <div id="successFrame" class="frame" style="width: 500px">
                     <h1 id="erfolgsmeldung">Prüfung erfolgreich</h1>
                     <?php
-                        echo "<h2>KFZ des Typs ".$_SESSION ['kfzTypBezeichnung'] ." <br> kann in der Abholstation ". $_SESSION ['abholstationBezeichnung']."<br>reserviert werden.</h2>";
+                        echo "<h2>KFZ des Typs ".$_SESSION ['kfzTypBezeichnung'][0] ." <br> kann in der Abholstation ". $_SESSION ['abholstationBezeichnung'][0]."<br>reserviert werden.</h2>";
                     ?>
                 </div>
 

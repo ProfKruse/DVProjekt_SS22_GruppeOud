@@ -38,16 +38,16 @@ session_start();
                 <!-------------------------------------------------------------->
                     <div class="group">
                         <label for="vorname"><b>*Vorname</b></label>
-                        <input type="text" name="vorname" value="<?php echo $user_data['vorname'] ?>" required>
+                        <input type="text" name="vorname" value="<?php echo $user_data['vorname'] ?>" readonly required>
 
                         <label for="nachname"><b>*Nachname</b></label>
-                        <input type="text" name="nachname" value="<?php echo $user_data['nachname'] ?>" required>
+                        <input type="text" name="nachname" value="<?php echo $user_data['nachname'] ?>" readonly required>
 
                         <label for="telefonnr"><b>*Telefonnr.</b></label>
-                        <input type="text" name="telefonnr" value="<?php echo $user_data['telefonNr'] ?>" required>
+                        <input type="text" name="telefonnr" value="<?php echo $user_data['telefonNr'] ?>" readonly required>
 
                         <label for='Mietbeginn'>Mietbeginn:</label>
-                        <input type='date' name='Mietbeginn' value="<?php echo $_SESSION['Mietbeginn'] ?>" required readonly>
+                        <input type='date' name='Mietbeginn' value="<?php echo $_SESSION['Mietbeginn'] ?>" readonly required readonly>
 
                     </div>
 
@@ -55,13 +55,13 @@ session_start();
 
                     <div class="group">
                         <label for="kfztyp"><b>*KFZ-Typ</b></label>
-                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfzTypBezeichnung']?>" readonly required>
+                        <input type="text" name="kfztyp" value="<?php echo $_SESSION['kfzTypBezeichnung'][0]?>" readonly required>
                     
                         <label for="abholstation"><b>*Abholstation</b></label>
-                        <input type="text" name="abholstation" value="<?php echo $_SESSION ['abholstationBezeichnung'] ?>" readonly required>     
+                        <input type="text" name="abholstation" value="<?php echo $_SESSION ['abholstationBezeichnung'][0] ?>" readonly required>     
                         
                         <label for="email"><b>*Email-Adresse</b></label>
-                        <input type="text" name="email" value="<?php echo $user_data['emailAdresse'] ?>" required>
+                        <input type="text" name="email" value="<?php echo $user_data['emailAdresse'] ?>" readonly required>
 
                         <label for='Mietende'>Mietende:</label>
                         <input type='date' name='Mietende' value="<?php echo $_SESSION['Mietende'] ?>" required readonly> 
@@ -87,7 +87,7 @@ session_start();
                     <b class="invisible" id="fehlermeldung">Bitte bestätigen sie die Korrektheit der Daten</b><br><br>
                     <div class="buttons" style="width: 50px">
                         <button type="button" onclick="if(window.confirm('Möchten sie die Reservierung wirklich abbrechen?')){window.location='..\\index.php'}">Abbrechen</button>
-                        <button type="button" onclick="if(form.bedingung.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}"">Reservieren</button>
+                        <button type="button" onclick="if(form.bedingung.checked){form.submit()}else{document.getElementById('fehlermeldung').classList.remove('invisible');}">Reservieren</button>
                     </div>
                 </form>
             </div>
