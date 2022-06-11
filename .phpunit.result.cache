@@ -1,1 +1,1 @@
-C:37:"PHPUnit\Runner\DefaultTestResultCache":113:{a:2:{s:7:"defects";a:0:{}s:5:"times";a:1:{s:53:"return_dialogTest::test_that_mietvertragWirdAngezeigt";d:0.006;}}}
+C:37:"PHPUnit\Runner\DefaultTestResultCache":245:{a:2:{s:7:"defects";a:1:{s:52:"return_dialogTest::test_this_checkIfIdProtocoleExist";i:4;}s:5:"times";a:2:{s:53:"return_dialogTest::test_that_mietvertragWirdAngezeigt";d:0.006;s:52:"return_dialogTest::test_this_checkIfIdProtocoleExist";d:0.005;}}}
