@@ -40,7 +40,7 @@
                         require_once('../database/db_inc.php');
                         if(!isset($_SESSION)) session_start();
 
-                        $_SESSION['kunde'] = 1;
+                        $_SESSION['kunde'] = 3;
                         $kundendaten;
                         $rechnungsdaten = array();
 

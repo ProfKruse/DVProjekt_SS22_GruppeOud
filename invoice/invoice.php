@@ -1,24 +1,17 @@
 <?php
 require_once('../functions/functions.php');
+require_once('../database/db_inc.php');
 if(!isset($_SESSION)) session_start();
 
 if(isset($_SESSION['invoice_kundendaten']) && isset($_SESSION['invoice_rechnungsdaten'])) {
+    global $con;
     $daten_kunde = $_SESSION['invoice_kundendaten'];
     $daten_rechnungen = $_SESSION['invoice_rechnungsdaten'];
-    
+
+    $pdf = createRechnungPDF($daten_kunde,$daten_rechnungen,$_GET['invoice_type'],$con);
+
     //$daten_kunde = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");
-    //$daten_rechnungen = array(array("rechnungsnr"=>2,"marke"=>"Porsche","modell"=>"Carrera GT","kennzeichen"=>"WES-DE-82","mietdauer"=>30,"gesamtpreis"=>2500));
-
-    $pdf = createRechnungPDF($daten_kunde,$daten_rechnungen);
-
-    if($_GET['invoice_type'] == 'mail') {
-        rechnungPDFMail($pdf,$daten_kunde["kundennr"]);
-    }
-
-    else if ($_GET['invoice_type'] == 'file') {
-       rechnungPDFFile($pdf,$daten_kunde["kundennr"]);
-    }
-
+    //$daten_rechnungen = array(array("rechnungsnr"=>2,"marke"=>"Porsche","modell"=>"Carrera GT","kennzeichen"=>"WES-DE-82","mietdauer"=>30,"gesamtpreis"=>2500));    
 }
 
 /*

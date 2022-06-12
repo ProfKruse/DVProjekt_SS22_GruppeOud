@@ -375,7 +375,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
     }
 
     
-function createRechnungPDF($kundendaten, $rechnungsdaten) {
+function createRechnungPDF($kundendaten, $rechnungsdaten, $type,$con) {
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
     $pdf->setCreator(PDF_CREATOR);
     $pdf->setAuthor('Rentalcar GmbH');
@@ -410,13 +410,18 @@ function createRechnungPDF($kundendaten, $rechnungsdaten) {
         </style>
         EOF;
 
+    $rechnungsdatum = date("d.m.Y");
+
+    $zahlungsdatum = strtotime($rechnungsdatum)+(databaseSelectQuery('zahlungszielTage','kunden','WHERE kundeID='.$kundendaten['kundennr'],$con)[0]*86400);
+    $zahlungsdatum = date('d.m.Y',$zahlungsdatum);
+
     $sender_receiver_information = 
         $style.'
         <h1 style="font-family: Arial;">Rentalcar</h1>
         <table>
             <tr>
                 <td>'.$kundendaten["name"].'</td>
-                <td style="text-align:right;">Rechnungsdatum: '.date("d.m.Y").'</td>
+                <td style="text-align:right;">Rechnungsdatum: '.$rechnungsdatum.'</td>
             </tr>
             <tr>
                 <td>'.$kundendaten["straße"].'</td>
@@ -424,7 +429,7 @@ function createRechnungPDF($kundendaten, $rechnungsdaten) {
             </tr>
             <tr>
                 <td>'.$kundendaten["stadt"].'</td>
-                <td style="text-align:right;">Zahlbar bis: XXXX</td>
+                <td style="text-align:right;">Zahlbar bis: '.$zahlungsdatum.'</td>
             </tr>
         <table>
         <br>';
@@ -511,21 +516,16 @@ Wir erlauben uns folgende Rechnungsstellung:
 
     $pdf->writeHTML($contact_information, true, false, true, false, '');
     if (ob_get_contents()) ob_end_clean();
-    return $pdf;
-}
-
-function rechnungPDFFile($pdf,$kundennr) {
-    $pdfString = $pdf->Output(realpath(__DIR__ . DIRECTORY_SEPARATOR . '../invoice/invoices')."/rechung_".$kundennr."_".date('Y-m-d').'.pdf', 'I');
-}
-
-function rechnungPDFMail($pdf,$kundennr) {
-    $pdfString = $pdf->Output('rechnung_'.$kundennr."_".date('Y-m-d').'.pdf', 'S');
     
-    //send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
-    //'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre Rechnung entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
-    //$pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
+    $output_type = $type == 'file' ? 'I' : 'S';
+    $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
+    
+    if($type == 'file') {
+        //send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
+        //'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre Rechnung entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+        //$pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
+    }
 }
-
     
     function pdf_area_separation($pdf_file, $separation_lines) {
         for ($i=0; $i<$separation_lines; $i++) {
@@ -545,9 +545,7 @@ function rechnungPDFMail($pdf,$kundennr) {
         }
     }
 
-    function databaseSelectQuery($spalte, $tabelle, $bedingung=NULL) {
-        global $con; 
-    
+    function databaseSelectQuery($spalte, $tabelle, $bedingung=NULL, $con) {
         $result = $con->query("SELECT $spalte FROM $tabelle $bedingung");
         $array = array();
         
