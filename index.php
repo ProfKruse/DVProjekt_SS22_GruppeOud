@@ -104,7 +104,7 @@
                 <p id="banner-small-description">Mieten sie ihr Traumauto</p>
                 <p id="banner-title">Zuverlässige Autovermietung<br>Mit hoher Qualität</p>
                 <br>
-                <button id="banner-button" class="blue-button" onclick="window.location.href=window.location.href+'reserve/reservation.php'">Jetzt reservieren</button>
+                <button id="banner-button" class="blue-button" onclick="window.location.href='reserve/reservation.php'">Jetzt reservieren</button>
                 <img id="next-button-left" src="src/images/next_button.png">
                 <img id="next-button-right" src="src/images/next_button.png">
             </div>
