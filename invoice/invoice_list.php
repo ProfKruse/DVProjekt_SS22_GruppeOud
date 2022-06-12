@@ -37,35 +37,31 @@
                 <!-- Inhalt -->
                 <tbody>
                     <?php
-                        include_once('invoice.php');
-                        session_start();
+                        require_once('invoice.php');
+                        require_once('../database/db_inc.php');
+                        if(!isset($_SESSION)) session_start();
 
                         $_SESSION['kunde'] = 3;
 
-                        $connection = new mysqli("localhost","root","","autovermietung");
-                            if($connection->connect_error) {
-                                die("Es konnte keine Verbindung zur Datenbank aufgebaut werden");
-                        }
-
                         function sammelrechnungen() {
-                            global $connection;
+                            global $con;
                             $rechnungsdaten = array();
                             
-                            $kunde = mysqli_fetch_array($connection->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
+                            $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
                             $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["stadt"]);
                             
                             //Alle Rechnungen, welche noch nicht bezahlt wurden und <= 
-                            $rechnungen = $connection->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
+                            $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
                             if($rechnungen != NULL) {
                                 while($row = $rechnungen->fetch_array()) {
                                     $rechnungnr = $row["rechnungNr"];
                                     $gesamtpreis = $row["rechnungBetrag"];
 
-                                    $mietvertrag = mysqli_fetch_array($connection->query("SELECT * FROM mietvertraege WHERE mietvertragID=".$row["rechnungNr"]));
+                                    $mietvertrag = mysqli_fetch_array($con->query("SELECT * FROM mietvertraege WHERE mietvertragID=".$row["rechnungNr"]));
                                     $mietdauer = $mietvertrag["mietdauerTage"];
 
-                                    $vertrag = mysqli_fetch_array($connection->query("SELECT * FROM vertraege WHERE vertragID=".$mietvertrag["mietvertragID"]));
-                                    $kfz = mysqli_fetch_array($connection->query("SELECT * FROM kfzs WHERE kfzID=".$vertrag["kfzID"]));
+                                    $vertrag = mysqli_fetch_array($con->query("SELECT * FROM vertraege WHERE vertragID=".$mietvertrag["mietvertragID"]));
+                                    $kfz = mysqli_fetch_array($con->query("SELECT * FROM kfzs WHERE kfzID=".$vertrag["kfzID"]));
 
                                     $marke = $kfz["marke"];
                                     $modell = $kfz["modell"];
@@ -80,14 +76,14 @@
     
                         sammelrechnungen();
     
-                        $result = $connection->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]);
+                        $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]);
 
                         if($result->num_rows > 0) {
                             while($row = $result->fetch_array()) {
-                            $sammelrechnungen = mysqli_fetch_array($connection->query("SELECT DISTINCT sammelrechnungen FROM kunden WHERE kundeID=".$_SESSION['kunde']))["sammelrechnungen"];
+                            $sammelrechnungen = mysqli_fetch_array($con->query("SELECT DISTINCT sammelrechnungen FROM kunden WHERE kundeID=".$_SESSION['kunde']))["sammelrechnungen"];
                             
                             //Tage nach Zusendung der Sammelrechnungen um Rechnungen zu begleichen
-                            $zahlungszielTage = mysqli_fetch_array($connection->query("SELECT DISTINCT zahlungszielTage FROM kunden WHERE kundeID=".$_SESSION['kunde']))["zahlungszielTage"];
+                            $zahlungszielTage = mysqli_fetch_array($con->query("SELECT DISTINCT zahlungszielTage FROM kunden WHERE kundeID=".$_SESSION['kunde']))["zahlungszielTage"];
                             $rechnungdatum = strtotime($row["rechnungDatum"]);
                             $zahlungslimit = ($zahlungszielTage*86400)+$rechnungdatum;
                             $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400); 
@@ -174,7 +170,7 @@
                             }
 
                         $result->free_result();
-                        $connection->close();
+                        $con->close();
                     ?>
                 </tbody>
             </table>

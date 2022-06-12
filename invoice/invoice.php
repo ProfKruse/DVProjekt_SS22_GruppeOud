@@ -1,5 +1,5 @@
 <?php
-require_once('../../../bibs/tcpdf/tcpdf.php');
+require_once('../library/tcpdf/tcpdf.php');
 require_once('../functions/functions.php');
 
 $kundendaten = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");

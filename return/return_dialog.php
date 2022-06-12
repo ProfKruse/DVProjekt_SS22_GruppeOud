@@ -1,7 +1,7 @@
 <!DOCTYPE html>
     <?php
         function mietvertragsAnzeige(){
-            include("db_inc.php");
+            require_once("../database/db_inc.php");
             if (isset($_POST['mietvertagsid'])) {
                 $mietvertragsid = $_POST["mietvertagsid"];
                 $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsid;
