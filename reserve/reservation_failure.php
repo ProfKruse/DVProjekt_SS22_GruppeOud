@@ -29,22 +29,45 @@
                         require_once("../Database/db_inc.php");
                         $buttons;
                         
-                        $kfzids = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende", "WHERE mietstationID = ".$_SESSION['abholstation']);
-                        $altkfzid = NULL;
-                        if(count($kfzids) > 0) {
-                            $kfztypids = databaseSelectQuery("kfzTypID","kfzs","WHERE kfzID IN (".implode(',',$kfzids).")");
-                            $altkfzid = $kfztypids[0];
-                        }               
-                        echo "<h2>Es steht leider kein KFZ des Typs ". $_SESSION['kfztyp'] ."<br> in der Abholstation ". $_SESSION['abholstation']. " zur Verfügung.</h2>";
+                        //Wähle alle IDs der KFZs mit den Bedingungen:-
+                        //1. Stehen in der ausgewählten Abholstation
+                        //2. Nicht bereits komplett reserviert wurde
+                        global $con; 
+
+                        $autos = $con->query("SELECT DISTINCT kfzTypID FROM kfzs WHERE kfzID IN (SELECT kfzID FROM mietstationen_mietwagenbestaende WHERE mietstationID=".$_SESSION['abholstation'].");");
+                        $uebrigeAutos = array();
                         
-                        if ($altkfzid == NULL) {
+                        if($autos != null) {
+                            while($row = $autos->fetch_assoc()) {
+                                $anfrage = $con->query("SELECT COUNT(*)-
+                                (SELECT COUNT(*) FROM reservierungen WHERE mietstationID=".$_SESSION['abholstation']." AND kfzTypID=".$row["kfzTypID"].") table1
+                                FROM (SELECT * FROM mietstationen_mietwagenbestaende WHERE mietstationID=".$_SESSION['abholstation'].
+                                " AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$row["kfzTypID"].")) table2;");
+                                $anzahlUebrigeAutos = $anfrage->fetch_array();
+                                if($anzahlUebrigeAutos[0] > 0) {
+                                    array_push($uebrigeAutos, $row["kfzTypID"]);
+                                }
+                            }
+                        }
+
+                        
+                        //$verfuegbareAutos->free_result();
+
+                        $alternative = NULL;
+                        if(count($uebrigeAutos) > 0) $alternative = $uebrigeAutos[0];
+                        $typBezeichnung = databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID = ".$_SESSION['kfztyp'])[0];      
+                        $abholstationBeschreibung = databaseSelectQuery("beschreibung","mietstationen","WHERE mietstationID = ".$_SESSION['abholstation'])[0];         
+                        echo "<h2>Es steht leider kein KFZ des Typs $typBezeichnung <br> in der Abholstation $abholstationBeschreibung zur Verfügung.</h2>";
+                        
+                        if ($alternative == NULL) {
                             echo "<h2>Es steht aktuell kein Fahrzeug in der Abholstation zur Verfügung</h2>";
                             $buttons = "<button type='button' onclick=\"window.location='reservation.php'\">Zurück</button>";
                         }
                         else {
-                            echo "<h2>Stattdessen ein KFZ vom Typ ".$altkfzid." reservieren?</h2>";
+                            $alternativeBezeichnung = databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID = ".$alternative)[0];
+                            echo "<h2>Stattdessen ein KFZ vom Typ ".$alternativeBezeichnung." reservieren?</h2>";
 
-                            $_SESSION["kfztyp"] = $altkfzid;
+                            $_SESSION["kfztyp"] = $alternative;
                             $buttons = "<button type='button' onclick=\"window.location='reservation_check.php'\">Ja</button>".
                                 "<button type='button' onclick=\"window.location='reservation.php'\">Nein</button>";
                         }

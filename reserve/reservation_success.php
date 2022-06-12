@@ -26,8 +26,10 @@
                     <h1 id="erfolgsmeldung">Prüfung erfolgreich</h1>
                     <?php
                         if(!isset($_SESSION)) { session_start(); } 
-                        echo "<h2>KFZ des Typs ". $_SESSION['kfztyp'] ." <br> kann in der Abholstation ". $_SESSION['abholstation'].
-                                "<br>reserviert werden.</h2>";
+                        require_once("../Database/db_inc.php");
+                        $typBezeichnung = databaseSelectQuery("typBezeichnung","kfztypen","WHERE kfzTypID = ".$_SESSION['kfztyp'])[0];      
+                        $abholstationBeschreibung = databaseSelectQuery("beschreibung","mietstationen","WHERE mietstationID = ".$_SESSION['abholstation'])[0];  
+                        echo "<h2>KFZ des Typs $typBezeichnung <br> kann in der Abholstation $abholstationBeschreibung <br>reserviert werden.</h2>";
                     ?>
                 </div>
 
