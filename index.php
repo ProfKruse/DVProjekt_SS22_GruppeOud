@@ -1,6 +1,3 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -164,14 +161,8 @@ session_start();
 Yet no jokes worse her why. Bed one supposing breakfast day fulfilled off depending questions. Whatever boy her exertion his extended.<br>
 Ecstatic followed handsome drawings entirely mrs one yet outweigh. Of acceptance insipidity remarkably is invitation.<br>
 Satisfied conveying an dependent contented he gentleman agreeable do be. Warrant private blushes removed an in equally totally if.<br>
-Delivered dejection necessary objection do mr prevailed. Mr feeling do chiefly cordial in do. Water timed folly right aware if oh truth.<br>
-Imprudence attachment him his for sympathize. Large above be to means. Dashwood do provided stronger is. But discretion frequently sir the she instrument unaffected admiration everything.<br>
-No depending be convinced in unfeeling he. Excellence she unaffected and too sentiments her. Rooms he doors there ye aware in by shall.<br>
-Education remainder in so cordially. His remainder and own dejection daughters sportsmen. Is easy took he shed to kind.
             </p>
         </div>
-
-        <br><br><br><br><br><br>
         </article>
         
 
@@ -182,8 +173,6 @@ Education remainder in so cordially. His remainder and own dejection daughters s
             <b><h2>Kontakt</h2><br><a href="tel:+4912345678">Telefon: +49 1234 5678</a><br><a href="mailto:contact@rentalcar.com">E-Mail: contact@rentalcar.com</a><br>Web: www.rentalcar.com</b>
             <b><h2>Adresse</h2><br>Rentalcar<br>GmbHStraße 1<br>12345 Ort<br></b>
         </article>
-
-        <br><br><br><br><br><br>
 
         <footer>
             <b>Privacy Policy</b>
