@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 12. Jun 2022 um 14:31
+-- Erstellungszeit: 23. Mai 2022 um 22:59
 -- Server-Version: 10.4.24-MariaDB
--- PHP-Version: 7.4.29
+-- PHP-Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -75,28 +75,28 @@ CREATE TABLE `kfztypen` (
 --
 
 CREATE TABLE `kunden` (
-  `kundeID` int(11) NOT NULL,
+  `creationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+  `updateDate` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `kundeID` int NOT NULL AUTO_INCREMENT,
   `vorname` varchar(45) DEFAULT NULL,
   `nachname` varchar(45) DEFAULT NULL,
-  `strasse` varchar(45) NOT NULL,
-  `hausNr` int(11) NOT NULL,
-  `plz` int(11) NOT NULL,
-  `stadt` varchar(45) CHARACTER SET utf8 NOT NULL,
-  `land` varchar(45) NOT NULL,
-  `iban` varchar(45) NOT NULL,
-  `bic` varchar(45) NOT NULL,
-  `telefonNr` varchar(45) NOT NULL,
-  `emailAdresse` varchar(45) NOT NULL,
-  `kontostand` double NOT NULL,
-  `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updateDate` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `pseudo` varchar(45) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
-  `validatedAccount` tinyint(1) DEFAULT NULL,
-  `codeResetPassword` varchar(45) DEFAULT NULL,
-  `sammelrechnungen` enum('keine','woechentlich','monatlich','quartalsweise','halbjaehrlich','jaehrlich') CHARACTER SET utf8 COLLATE utf8_general_mysql500_ci DEFAULT NULL,
-  `zahlungszielTage` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `validatedAccount` Boolean DEFAULT NULL,
+  `token` varchar(45) DEFAULT NULL,
+  `strasse` varchar(45) DEFAULT NULL,
+  `hausNr` varchar(4) DEFAULT NULL,
+  `plz` int DEFAULT NULL,
+  `ort` varchar(45) DEFAULT NULL,
+  `land` varchar(45) DEFAULT NULL,
+  `iban` varchar(45) DEFAULT NULL,
+  `bic` varchar(45) DEFAULT NULL,
+  `telefonNr` varchar(45) DEFAULT NULL,
+  `emailAdresse` varchar(45) DEFAULT NULL,
+  `AnzVersuche` int DEFAULT (0),
+  `kontostand` double DEFAULT NULL,
+  PRIMARY KEY (`kundeID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -109,8 +109,7 @@ CREATE TABLE `mietstationen` (
   `mietstationTyp` varchar(45) NOT NULL,
   `stellplaetze` int(11) NOT NULL,
   `lage` varchar(45) NOT NULL,
-  `groesse` int(11) NOT NULL,
-  `beschreibung` varchar(45) NOT NULL
+  `groesse` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -168,9 +167,7 @@ CREATE TABLE `rechnungen` (
   `kundeID` int(11) NOT NULL,
   `rechnungDatum` date NOT NULL DEFAULT current_timestamp(),
   `rechnungBetrag` double NOT NULL,
-  `mahnstatus` enum('keine','erste Mahnung','zweite Mahnung') NOT NULL,
-  `zahlungslimit` date DEFAULT NULL,
-  `bezahltAm` date DEFAULT NULL
+  `mahnstatus` enum('keine','erste Mahnung','zweite Mahnung') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -180,7 +177,6 @@ CREATE TABLE `rechnungen` (
 --
 
 CREATE TABLE `reservierungen` (
-  `reservierungID` int(11) NOT NULL,
   `kundeID` int(11) NOT NULL,
   `kfzTypID` int(11) NOT NULL,
   `mietstationID` int(11) NOT NULL,
@@ -257,11 +253,6 @@ ALTER TABLE `kfztypen`
   ADD PRIMARY KEY (`kfzTypID`),
   ADD KEY `kfztypen_tarifID_idx` (`tarifID`);
 
---
--- Indizes für die Tabelle `kunden`
---
-ALTER TABLE `kunden`
-  ADD PRIMARY KEY (`kundeID`);
 
 --
 -- Indizes für die Tabelle `mietstationen`
@@ -273,9 +264,8 @@ ALTER TABLE `mietstationen`
 -- Indizes für die Tabelle `mietstationen_mietwagenbestaende`
 --
 ALTER TABLE `mietstationen_mietwagenbestaende`
-  ADD UNIQUE KEY `mietstationen_mietwagenbestaende_kfzID` (`kfzID`),
-  ADD KEY `mietwagenbestaende_mietstationID_idx` (`mietstationID`),
-  ADD KEY `mietwagenbestaende_kfzID_idx` (`kfzID`) USING BTREE;
+  ADD KEY `mietwagenbestaende_kfzTypID_idx` (`kfzID`),
+  ADD KEY `mietwagenbestaende_mietstationID_idx` (`mietstationID`);
 
 --
 -- Indizes für die Tabelle `mietvertraege`
@@ -304,7 +294,7 @@ ALTER TABLE `rechnungen`
 -- Indizes für die Tabelle `reservierungen`
 --
 ALTER TABLE `reservierungen`
-  ADD PRIMARY KEY (`reservierungID`),
+  ADD PRIMARY KEY (`kundeID`,`kfzTypID`,`mietstationID`),
   ADD KEY `reservierungen_kfzTypID_idx` (`kfzTypID`),
   ADD KEY `reservierungen_mietstationID_idx` (`mietstationID`),
   ADD KEY `reservierungen_kundeID_idx` (`kundeID`) USING BTREE;
@@ -330,82 +320,6 @@ ALTER TABLE `vertraege`
   ADD PRIMARY KEY (`vertragID`),
   ADD KEY `vertrage_kundeID_idx` (`kundeID`),
   ADD KEY `vertraege_kfzID_idx` (`kfzID`);
-
---
--- AUTO_INCREMENT für exportierte Tabellen
---
-
---
--- AUTO_INCREMENT für Tabelle `aktuellepersonalplaene`
---
-ALTER TABLE `aktuellepersonalplaene`
-  MODIFY `personalplanID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `kfzs`
---
-ALTER TABLE `kfzs`
-  MODIFY `kfzID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `kfztypen`
---
-ALTER TABLE `kfztypen`
-  MODIFY `kfzTypID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `kunden`
---
-ALTER TABLE `kunden`
-  MODIFY `kundeID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `mietstationen`
---
-ALTER TABLE `mietstationen`
-  MODIFY `mietstationID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `mietvertraege`
---
-ALTER TABLE `mietvertraege`
-  MODIFY `mietvertragID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `mitarbeiter`
---
-ALTER TABLE `mitarbeiter`
-  MODIFY `mitarbeiterID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `rechnungen`
---
-ALTER TABLE `rechnungen`
-  MODIFY `rechnungNr` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `reservierungen`
---
-ALTER TABLE `reservierungen`
-  MODIFY `reservierungID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `ruecknahmeprotokolle`
---
-ALTER TABLE `ruecknahmeprotokolle`
-  MODIFY `ruecknahmeprotokollID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `tarife`
---
-ALTER TABLE `tarife`
-  MODIFY `tarifID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT für Tabelle `vertraege`
---
-ALTER TABLE `vertraege`
-  MODIFY `vertragID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints der exportierten Tabellen
@@ -435,7 +349,7 @@ ALTER TABLE `kfztypen`
 -- Constraints der Tabelle `mietstationen_mietwagenbestaende`
 --
 ALTER TABLE `mietstationen_mietwagenbestaende`
-  ADD CONSTRAINT `mietwagenbestaende_kfzID` FOREIGN KEY (`kfzID`) REFERENCES `kfzs` (`kfzID`),
+  ADD CONSTRAINT `mietwagenbestaende_kfzTypID` FOREIGN KEY (`kfzID`) REFERENCES `kfzs` (`kfzID`),
   ADD CONSTRAINT `mietwagenbestaende_mietstationID` FOREIGN KEY (`mietstationID`) REFERENCES `mietstationen` (`mietstationID`);
 
 --
