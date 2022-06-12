@@ -84,11 +84,10 @@
                         current_banner_id += 1
 
                         if(current_banner_id > 3) {
-                            current_banner_id = 0;
+                            current_banner_id = 0;  
                         }
                     }
                     current_banner_elem.style.backgroundImage = "url('src/images/banner-"+current_banner_id+".jpg')";
-                    console.log( current_banner_elem.style.backgroundImage);
                     banner_small_description.innerHTML = slide_content[current_banner_id][0];
                     banner_title.innerHTML = slide_content[current_banner_id][1];
                     banner_button.innerHTML = slide_content[current_banner_id][2];

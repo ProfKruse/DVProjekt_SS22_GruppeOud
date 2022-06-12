@@ -172,7 +172,6 @@
                         $_SESSION['invoice_kundendaten'] = $kundendaten;
                         $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
                         $result->free_result();
-                        $con->close();
                     ?>
 
                 </tbody>
@@ -191,11 +190,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>12_04_2022</td>
-                        <td>1</td>
-                        <td>500€</td>
-                    </tr>
+                    <?php
+                        function mahnungen() {
+                            global $con;
+                            $result = $con->query("SELECT * FROM rechnungen WHERE mahnstatus != 'keine'");
+                            
+                            while($row = $result->fetch_assoc()) {
+                                echo "<tr>".
+                                "<td>".$row["rechnungNr"]."</td>".
+                                "<td>".$row["mahnstatus"]."</td>".
+                                "<td>".$row["rechnungBetrag"]."€</td>".
+                                "</tr>";
+                            }
+                        }
+                            
+                        mahnungen();
+                        $con->close();
+                    ?>
                 </tbody>
             </table>
 
