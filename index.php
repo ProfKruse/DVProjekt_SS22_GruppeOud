@@ -17,17 +17,16 @@
                     <li><b><a href="#contact">Kontakt</a></b></li>
                 </ul>
                 <?php
-                //$_SESSION['pseudo'] = "pascal";
                 echo '<ul class="right-bar">';
 
                 if(isset($_SESSION['pseudo'])) {
-                    echo '<li><button onclick="window.location=\'login/logout.php\'">Abmelden</button></li>
+                    echo '<li><button onclick="window.location.href=window.location.href+\'login/logout.php\'">Abmelden</button></li>
                         <b>'.$_SESSION['pseudo'].'</b>';
                 }
 
                 else {
-                    echo '<li><button onclick="window.location=\'login/register.php\'">Registrieren</button<></li>
-                        <li><button onclick="window.location=\'login/login.php\'">Anmelden</button></li>';
+                    echo '<li><button onclick="window.location.href=window.location.href+\'login/register.php\'">Registrieren</button<></li>
+                        <li><button onclick="window.location.href=window.location.href+\'login/login.php\'">Anmelden</button></li>';
                 }
 
                 echo '<img id="user-symbol" src="src/images/user_symbol.png"></ul>';
@@ -106,7 +105,7 @@
                 <p id="banner-small-description">Mieten sie ihr Traumauto</p>
                 <p id="banner-title">Zuverlässige Autovermietung<br>Mit hoher Qualität</p>
                 <br>
-                <button id="banner-button" class="blue-button" onclick="window.location.href='reserve/reservation.php'">Jetzt reservieren</button>
+                <button id="banner-button" class="blue-button" onclick="window.location.href=window.location.href+'reserve/reservation.php'">Jetzt reservieren</button>
                 <img id="next-button-left" src="src/images/next_button.png">
                 <img id="next-button-right" src="src/images/next_button.png">
             </div>
