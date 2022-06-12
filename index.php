@@ -20,13 +20,13 @@
                 echo '<ul class="right-bar">';
 
                 if(isset($_SESSION['pseudo'])) {
-                    echo '<li><button onclick="window.location.href=window.location.href+\'login/logout.php\'">Abmelden</button></li>
+                    echo '<li><button onclick="window.location.href=\'login/logout.php\'">Abmelden</button></li>
                         <b>'.$_SESSION['pseudo'].'</b>';
                 }
 
                 else {
-                    echo '<li><button onclick="window.location.href=window.location.href+\'login/register.php\'">Registrieren</button<></li>
-                        <li><button onclick="window.location.href=window.location.href+\'login/login.php\'">Anmelden</button></li>';
+                    echo '<li><button onclick="window.location.href=\'login/register.php\'">Registrieren</button<></li>
+                        <li><button onclick="window.location.href=\'login/login.php\'">Anmelden</button></li>';
                 }
 
                 echo '<img id="user-symbol" src="src/images/user_symbol.png"></ul>';
@@ -92,7 +92,7 @@
                     banner_small_description.innerHTML = slide_content[current_banner_id][0];
                     banner_title.innerHTML = slide_content[current_banner_id][1];
                     banner_button.innerHTML = slide_content[current_banner_id][2];
-                    banner_button.onclick = function(){window.location.href=window.location.href+slide_content[current_banner_id][3]};
+                    banner_button.onclick = function(){window.location.href=slide_content[current_banner_id][3]};
 
                     return current_banner_id;
                 }
