@@ -95,6 +95,7 @@
                                 case "woechentlich":
                                     if (date('D',$rechnungdatum) != 'Mon') {
                                         $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime('next monday');
+                                        
                                     }
                                     break;
 
