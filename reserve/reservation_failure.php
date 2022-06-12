@@ -62,7 +62,7 @@ session_start();
                             $buttons = "<button type='button' onclick=\"window.location='reservation.php'\">Zurück</button>";
                         }
                         else {
-                            echo "<h2>Stattdessen ein KFZ vom Typ ".$vorschlag." reservieren? Oder eine andere Zeitraum auswählen?</h2>";
+                            echo "<h2>Stattdessen ein KFZ vom Typ ".$vorschlag." reservieren? <br> Oder Sie können auch eine andere Zeitraum auswählen <br>beim Klicken auf Nein</h2>";
                             $buttons = "<button type='button' onclick=\"window.location='reservation_check.php'\">Ja</button>".
                                 "<button type='button' onclick=\"window.location='reservation.php'\">Nein</button>";
                         }
