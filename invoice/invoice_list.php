@@ -169,7 +169,7 @@
                             }
 
                         $_SESSION['invoice_kundendaten'] = $kundendaten;
-                        $_SESSION['invoice_rechnungsdaten'] = $rechnungdatum;
+                        $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
                         $result->free_result();
                         $con->close();
                     ?>

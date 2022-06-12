@@ -424,7 +424,7 @@ function createRechnungPDF($kundendaten, $rechnungsdaten) {
             </tr>
             <tr>
                 <td>'.$kundendaten["stadt"].'</td>
-                <td style="text-align:right;">Zahlbar bis: 30.05.2022</td>
+                <td style="text-align:right;">Zahlbar bis: XXXX</td>
             </tr>
         <table>
         <br>';

@@ -16,7 +16,7 @@ if(isset($_SESSION['invoice_kundendaten']) && isset($_SESSION['invoice_rechnungs
     }
 
     else if ($_GET['invoice_type'] == 'file') {
-        rechnungPDFFile($pdf,$daten_kunde["kundennr"]);
+       rechnungPDFFile($pdf,$daten_kunde["kundennr"]);
     }
 
 }
