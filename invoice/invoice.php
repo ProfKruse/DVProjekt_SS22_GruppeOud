@@ -1,6 +1,6 @@
 <?php
 require_once('../../../bibs/tcpdf/tcpdf.php');
-require_once('functions/functions.php');
+require_once('../functions/functions.php');
 
 $kundendaten = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");
 $rechnungsdaten = array(array("rechnungsnr"=>2,"marke"=>"Porsche","modell"=>"Carrera GT","kennzeichen"=>"WES-DE-82","mietdauer"=>30,"gesamtpreis"=>2500));
@@ -141,7 +141,7 @@ Wir erlauben uns folgende Rechnungsstellung:
         pdf_area_separation($pdf, 7);
 
     $pdf->writeHTML($contact_information, true, false, true, false, '');
-    ob_end_clean();
+    if (ob_get_contents()) ob_end_clean();
     $pdfString = $pdf->Output('rechnung'.$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', 'S');
 
     //send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
