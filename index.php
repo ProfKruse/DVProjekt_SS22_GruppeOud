@@ -168,9 +168,8 @@ Education remainder in so cordially. His remainder and own dejection daughters s
             </p>
         </div>
 
-        <br><br><br><br><br><br>
-        </article>
         
+        </article>
 
 
         <!-- Kontaktinformationen -->
@@ -179,8 +178,6 @@ Education remainder in so cordially. His remainder and own dejection daughters s
             <b><h2>Kontakt</h2><br><a href="tel:+4912345678">Telefon: +49 1234 5678</a><br><a href="mailto:contact@rentalcar.com">E-Mail: contact@rentalcar.com</a><br>Web: www.rentalcar.com</b>
             <b><h2>Adresse</h2><br>Rentalcar<br>GmbHStraße 1<br>12345 Ort<br></b>
         </article>
-
-        <br><br><br><br><br><br>
 
         <footer>
             <b>Privacy Policy</b>
