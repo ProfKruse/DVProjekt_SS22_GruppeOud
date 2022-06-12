@@ -39,7 +39,7 @@
             <script type="text/javascript">
                 window.onload = function() {
                     var pause = false;
-                    var current_banner_id = 1;
+                    var current_banner_id = 0;
                     var left_next = document.getElementById("next-button-left");
                     var right_next = document.getElementById("next-button-right");
 
@@ -67,33 +67,32 @@
                     var banner_button = document.getElementById("banner-button");
                     var slide_content = new Array(
                         new Array("Mieten sie ihr Traumauto","Zuverlässige Autovermietung<br>Mit hoher Qualität","Jetzt reservieren","reserve/reservation.php"),
-                        new Array("Verwalten sie ihre Rechnungen","Einfache Rechnungsübersicht<br>zahlreiche Möglichkeiten","Rechnungen ansehen","invoice/invoice_list.html"),
+                        new Array("Verwalten sie ihre Rechnungen","Einfache Rechnungsübersicht<br>zahlreiche Möglichkeiten","Rechnungen ansehen","invoice/invoice_list.php"),
                         new Array("Kaufen sie ihr Traumauto","Günstiger und einfacher<br>Gebrauchtwagenkauf","Gebrauchtwagen kaufen",""),
                         new Array("Nutzen sie unsere Leistungen","Zahlreiche Zusatzleistungen<br>für Kunden ","Leistungen ansehen","#leistungen"));
-                    console.log(slide_content[0][0]);
                     //[0] = small banner description; [1] = banner title; [2] = Banner button content; [3] = Banner Link
 
                     if (direction == "left") {
                         current_banner_id -= 1;
 
-                        if(current_banner_id < 1) {
-                            current_banner_id = 4;
+                        if(current_banner_id < 0) {
+                            current_banner_id = 3;
                         }
                     }
 
                     else {
                         current_banner_id += 1
 
-                        if(current_banner_id > 4) {
-                            current_banner_id = 1;
+                        if(current_banner_id > 3) {
+                            current_banner_id = 0;
                         }
                     }
-
                     current_banner_elem.style.backgroundImage = "url('src/images/banner-"+current_banner_id+".jpg')";
-                    banner_small_description.innerHTML = slide_content[current_banner_id-1][0];
-                    banner_title.innerHTML = slide_content[current_banner_id-1][1];
-                    banner_button.innerHTML = slide_content[current_banner_id-1][2];
-                    banner_button.onclick = "window.location.href="+slide_content[current_banner_id-1][3];
+                    console.log( current_banner_elem.style.backgroundImage);
+                    banner_small_description.innerHTML = slide_content[current_banner_id][0];
+                    banner_title.innerHTML = slide_content[current_banner_id][1];
+                    banner_button.innerHTML = slide_content[current_banner_id][2];
+                    banner_button.onclick = function(){window.location.href=window.location.href+slide_content[current_banner_id][3]};
 
                     return current_banner_id;
                 }
@@ -121,8 +120,8 @@
                 <div class="group">
                     <h2>Autovermietung</h2>
                     <br>
-                    <p class="description">Dies ist ein Beschreibungstext.<br>Er beschreibt die Leistung mit dem Titel xyz.
-                    <br>Die Leistung biet dem Kunden die Möglichkeit xy.<br>Dies bringt den erheblichen Vorteil abc.</p>
+                    <p class="description">Kostengünstig und einfach<br>aus einer großen Anzahl verschiedenster Autotypen
+                    <br>ihren Traumwagen zuverlässig<br>und schnell reservieren und mit <br>garantierter Qualität mieten.</p>
                     <br><br>
                     <button id="leistung-button" class="blue-button" onclick="window.location='reserve/reservation.php'">Zur Autovermietung</button>
                 </div>
@@ -130,8 +129,9 @@
                 <div class="group">
                     <h2>Rechnungsverwaltung</h2>
                     <br>
-                    <p class="description">Dies ist ein Beschreibungstext.<br>Er beschreibt die Leistung mit dem Titel xyz.
-                    <br>Die Leistung biet dem Kunden die Möglichkeit xy.<br>Dies bringt den erheblichen Vorteil abc.</p>
+                    <p class="description">Alle Rechnungen einfach<br>im Überblick behalten.
+                    <br>Listenübersicht und Versand als PDF.<br>Flexibel per Direktzahlung oder per Sammelrechnungen
+                    <br>die Rechnungen begleichen.</p>
                     <br><br>
                     <button id="leistung-button" class="blue-button" onclick="window.location=''">Mehr Informationen</button>
                 </div>
@@ -139,8 +139,8 @@
                 <div class="group">
                     <h2>Gebrauchtwagenkauf</h2>
                     <br>
-                    <p class="description">Dies ist ein Beschreibungstext.<br>Er beschreibt die Leistung mit dem Titel xyz.
-                    <br>Die Leistung biet dem Kunden die Möglichkeit xy.<br>Dies bringt den erheblichen Vorteil abc.</p>
+                    <p class="description">Mehr als nur Mieten? Klar!<br>Profitieren sie von unserem Gebrauchtwagenverkauf.
+                    <br>Ganz einfach aus einer großen Auswahl ihr Lieblingsauto.<br>gebraucht und günstig kaufen.</p>
                     <br><br>
                     <button id="leistung-button" class="blue-button" onclick="window.location=''">Zum Gebrauchtwarenverkauf</button>
                 </div>                
@@ -156,10 +156,11 @@
             <h1>Unternehmensgeschichte</h1>
             <br>
             <p class="description">
-<br>Demesne far hearted suppose venture excited see had has. Dependent on so extremely delivered by.<br>
-Yet no jokes worse her why. Bed one supposing breakfast day fulfilled off depending questions. Whatever boy her exertion his extended.<br>
-Ecstatic followed handsome drawings entirely mrs one yet outweigh. Of acceptance insipidity remarkably is invitation.<br>
-Satisfied conveying an dependent contented he gentleman agreeable do be. Warrant private blushes removed an in equally totally if.<br>
+<br>Seit über 20 Jahren fokussieren wir uns leidenschaftlich auf die Vermietung und den Verkauf von Gebrauchtwagen.<br>
+Nach langjähriger Erfahrung haben wir unser Angebot an Services erweitert und angepasst um den Kundenanforderungen gerecht zu werden.<br>
+Unsere Prozesse und Angebote wurden langjährig optimiert und optimal für die Kunden gestaltet.<br>
+Kundenrezensionen sorgen kontinuierlich für die Verbesserung unserer Leistungen und für die Erweiterung unseres Angebots an Wagen zur
+Vermietung und für den Verkauf.<br>
             </p>
         </div>
         </article>
