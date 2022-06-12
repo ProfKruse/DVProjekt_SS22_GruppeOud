@@ -35,22 +35,24 @@
                     </tr>
                 </thead>
                 <!-- Inhalt -->
-                <tbody>
+                <tbody id="rechnungen">
                     <?php
-                        require_once('invoice.php');
                         require_once('../database/db_inc.php');
                         if(!isset($_SESSION)) session_start();
 
-                        $_SESSION['kunde'] = 3;
+                        $_SESSION['kunde'] = 1;
+                        $kundendaten;
+                        $rechnungsdaten = array();
 
                         function sammelrechnungen() {
                             global $con;
-                            $rechnungsdaten = array();
+                            global $kundendaten;
+                            global $rechnungsdaten;
                             
                             $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
                             $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["stadt"]);
-                            
-                            //Alle Rechnungen, welche noch nicht bezahlt wurden und <= 
+
+                            //Alle Rechnungen, welche noch nicht bezahlt wurden
                             $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
                             if($rechnungen != NULL) {
                                 while($row = $rechnungen->fetch_array()) {
@@ -70,8 +72,6 @@
                                     array_push($rechnungsdaten,array("rechnungsnr"=>$rechnungnr,"marke"=>$marke,"modell"=>$modell,"kennzeichen"=>$kennzeichen,"mietdauer"=>$mietdauer,"gesamtpreis"=>$gesamtpreis));
                                 }
                             }
-
-                            echo gettype(create_pdf($kundendaten,$rechnungsdaten));
                         }
     
                         sammelrechnungen();
@@ -86,11 +86,10 @@
                             $zahlungszielTage = mysqli_fetch_array($con->query("SELECT DISTINCT zahlungszielTage FROM kunden WHERE kundeID=".$_SESSION['kunde']))["zahlungszielTage"];
                             $rechnungdatum = strtotime($row["rechnungDatum"]);
                             $zahlungslimit = ($zahlungszielTage*86400)+$rechnungdatum;
-                            $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400); 
-
+                            $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400);                             
+                            
                             switch ($sammelrechnungen) {
                                 case "keine":
-                                    echo date('Y-m-d',$zahlungslimit);
                                     break;
 
                                 case "woechentlich":
@@ -163,15 +162,18 @@
                                     <td>'.date('Y-m-d',$zahlungslimit).'</td>
                                     <td>'.$row["bezahltAm"].'</td>
                                     <td>'.$verspaetung.'</td>
-                                    <td><button type="button" onclick="<?php echo $a ?>">Download</button></td>
-                                </tr>';
+                                    <td><button type="button" onclick="window.location.href=\'invoice.php?invoice_type=file\'">Download</button></td>
+                                    </tr>';
 
                                 }
                             }
 
+                        $_SESSION['invoice_kundendaten'] = $kundendaten;
+                        $_SESSION['invoice_rechnungsdaten'] = $rechnungdatum;
                         $result->free_result();
                         $con->close();
                     ?>
+
                 </tbody>
             </table>
 

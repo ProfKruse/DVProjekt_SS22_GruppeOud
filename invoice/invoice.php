@@ -1,11 +1,27 @@
 <?php
-require_once('../library/tcpdf/tcpdf.php');
 require_once('../functions/functions.php');
+if(!isset($_SESSION)) session_start();
 
-$kundendaten = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");
-$rechnungsdaten = array(array("rechnungsnr"=>2,"marke"=>"Porsche","modell"=>"Carrera GT","kennzeichen"=>"WES-DE-82","mietdauer"=>30,"gesamtpreis"=>2500));
-create_pdf($kundendaten,$rechnungsdaten);
+if(isset($_SESSION['invoice_kundendaten']) && isset($_SESSION['invoice_rechnungsdaten'])) {
+    $daten_kunde = $_SESSION['invoice_kundendaten'];
+    $daten_rechnungen = $_SESSION['invoice_rechnungsdaten'];
+    
+    //$daten_kunde = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");
+    //$daten_rechnungen = array(array("rechnungsnr"=>2,"marke"=>"Porsche","modell"=>"Carrera GT","kennzeichen"=>"WES-DE-82","mietdauer"=>30,"gesamtpreis"=>2500));
 
+    $pdf = createRechnungPDF($daten_kunde,$daten_rechnungen);
+
+    if($_GET['invoice_type'] == 'mail') {
+        rechnungPDFMail($pdf,$daten_kunde["kundennr"]);
+    }
+
+    else if ($_GET['invoice_type'] == 'file') {
+        rechnungPDFFile($pdf,$daten_kunde["kundennr"]);
+    }
+
+}
+
+/*
 function create_pdf($kundendaten, $rechnungsdaten) {
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
     $pdf->setCreator(PDF_CREATOR);
@@ -147,12 +163,5 @@ Wir erlauben uns folgende Rechnungsstellung:
     //send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
     //'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre Rechnung entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
     //$pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
-}
-
-function pdf_area_separation($pdf_file, $separation_lines) {
-    for ($i=0; $i<$separation_lines; $i++) {
-        $pdf_file->Ln();
-    }
-}
-
+}*/
 ?>
