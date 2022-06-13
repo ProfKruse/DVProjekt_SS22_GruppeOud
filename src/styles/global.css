@@ -25,6 +25,35 @@ body {
     background-size: cover;
 }
 
+div.buttons {
+    display:flex;
+    justify-content: space-around;
+}
+
+div.buttons button {
+    margin: 5px;
+}
+
+div#successFrame {
+    border: 3px solid #49bd3f;
+}
+
+div#failureFrame {
+    border: 3px solid #f65656;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+#fehlermeldung {
+    color: rgb(204, 0, 0);
+}
+
+#erfolgsmeldung {
+    color: rgb(29, 107, 29);
+}
+
 /* Footer */
 
 footer {
@@ -119,6 +148,10 @@ input[type=checkbox] {
 
 input:hover, textarea:hover, select:hover{
     background-color: rgb(241, 241, 241);
+}
+
+input[readonly] {
+    background-color:rgba(194, 194, 194, 0.4);
 }
 
 button {
