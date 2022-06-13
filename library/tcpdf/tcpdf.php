@@ -18255,9 +18255,9 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						}
 						if (!isset($dom[$trid]['startx'])) {
 							$dom[$trid]['startx'] = $this->x;
-							$this->x += @$cellspacingx;
+							$this->x += $cellspacingx;
 						} else {
-							$this->x += (@$cellspacingx / 2);
+							$this->x += ($cellspacingx / 2);
 						}
 						if (isset($dom[$parentid]['attribute']['rowspan'])) {
 							$rowspan = intval($dom[$parentid]['attribute']['rowspan']);
@@ -18322,7 +18322,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 								$cellw += (isset($table_colwidths[($colid + $i)]) ? $table_colwidths[($colid + $i)] : 0);
 							}
 						}
-						$cellw += (($colspan - 1) * @$cellspacing['H']);
+						$cellw += (($colspan - 1) * $cellspacing['H']);
 						// increment column indicator
 						$colid += $colspan;
 						// add rowspan information to table element
@@ -18348,7 +18348,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 						} else {
 							$this->colxshift['x'] = $this->x - $this->lMargin;
 						}
-						$this->colxshift['s'] = @$cellspacing;
+						$this->colxshift['s'] = $cellspacing;
 						$this->colxshift['p'] = $current_cell_padding;
 						// ****** write the cell content ******
 						$this->MultiCell($cellw, $cellh, $cell_content, false, $lalign, false, 2, '', '', true, 0, true, true, 0, 'T', false);
@@ -18403,7 +18403,7 @@ Putting 1 is equivalent to putting 0 and calling Ln() just after. Default value:
 								}
 							}
 						}
-						$this->x += (@$cellspacingx / 2);
+						$this->x += ($cellspacingx / 2);
 					} else {
 						// opening tag (or self-closing tag)
 						if (!isset($opentagpos)) {

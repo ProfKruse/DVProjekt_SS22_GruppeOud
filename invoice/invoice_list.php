@@ -1,8 +1,7 @@
 <?php
-session_start();
+if(!isset($_SESSION)) session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
-$user_data = check_login($con);
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +21,7 @@ $user_data = check_login($con);
                         <li><a href="../reserve/reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
                         <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                        <li><b> Hallo <?php echo $_SESSION['pseudo'] ?><b></li>
                         <li><a href="../login/logout.php">Logout</a></li>
                     </b>
                 </ul>
@@ -47,7 +46,6 @@ $user_data = check_login($con);
                 <tbody id="rechnungen">
                     <?php
                         require_once('../database/db_inc.php');
-                        if(!isset($_SESSION)) session_start();
 
                         $_SESSION['kunde'] = 3;
                         $kundendaten;
@@ -59,7 +57,7 @@ $user_data = check_login($con);
                             global $rechnungsdaten;
                             
                             $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
-                            $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["stadt"]);
+                            $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"]);
 
                             //Alle Rechnungen, welche noch nicht bezahlt wurden
                             $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
