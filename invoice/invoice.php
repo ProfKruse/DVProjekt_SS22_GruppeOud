@@ -8,10 +8,16 @@ if(isset($_SESSION['invoice_kundendaten']) && isset($_SESSION['invoice_rechnungs
     $daten_kunde = $_SESSION['invoice_kundendaten'];
     $daten_rechnungen = $_SESSION['invoice_rechnungsdaten'];
 
-    $pdf = createRechnungPDF($daten_kunde,$daten_rechnungen,$_GET['invoice_type'],$con);
+    if(isset($_GET["einzelrechnungnr"])) {
+        foreach($_SESSION['invoice_rechnungsdaten'] as $rechnung) {
+            if($rechnung['rechnungsnr'] == $_GET["einzelrechnungnr"]) {
+                $daten_rechnungen = array($rechnung);
+                break;
+            }
+        }
+    }
 
-    //$daten_kunde = array("kundennr"=>3,"name"=>"Max Mustermann","straße"=>"BStraße 5","stadt"=>"46487 Wesel");
-    //$daten_rechnungen = array(array("rechnungsnr"=>2,"marke"=>"Porsche","modell"=>"Carrera GT","kennzeichen"=>"WES-DE-82","mietdauer"=>30,"gesamtpreis"=>2500));    
+    $pdf = createRechnungPDF($daten_kunde,$daten_rechnungen,$_GET['invoice_type'],$con);   
 }
 
 /*

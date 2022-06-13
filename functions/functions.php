@@ -1,12 +1,12 @@
 <?php
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
-    require '../library/PHPMailer/src/Exception.php';
+    require(realpath(dirname(__FILE__) . '/../library/PHPMailer/src/Exception.php'));
     /* PHPMailer-Klasse */
-    require '../library/PHPMailer/src/PHPMailer.php';
+    require (realpath(dirname(__FILE__) . '/../library/PHPMailer/src/PHPMailer.php'));
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
-    require '../library/PHPMailer/src/SMTP.php';
+    require (realpath(dirname(__FILE__) . '/../library/PHPMailer/src/SMTP.php'));
     /* TCPDF Einbindung, um eine PDF zu erzeugen*/
-    require '../library/TCPDF/tcpdf.php';
+    require (realpath(dirname(__FILE__) . '/../library/TCPDF/tcpdf.php'));
     
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
@@ -375,7 +375,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
     }
 
     
-function createRechnungPDF($kundendaten, $rechnungsdaten, $type,$con) {
+function createRechnungPDF($kundendaten, $rechnungsdaten, $type, $con, $einzelrechnungNr=null) {
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
     $pdf->setCreator(PDF_CREATOR);
     $pdf->setAuthor('Rentalcar GmbH');
@@ -453,6 +453,8 @@ Wir erlauben uns folgende Rechnungsstellung:
                 <th>Gesamtpreis</th>
             </tr>';
             
+            if($einzelrechnungNr) $rechnungsdaten = $rechnungsdaten[0];
+
             foreach($rechnungsdaten as $rechnung) {
                 $invoices_data.='<tr>';
                 foreach($rechnung as $key => $value) {
@@ -520,12 +522,55 @@ Wir erlauben uns folgende Rechnungsstellung:
     $output_type = $type == 'file' ? 'I' : 'S';
     $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
     
-    if($type == 'file') {
-        //send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
-        //'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre Rechnung entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
-        //$pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
+    if($type == 'mail') {
+        send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
+        'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre Rechnung entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+        $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
     }
 }
+
+    function sammelrechnungenEvent() {
+        require_once('../database/db_inc.php');
+        $con = mysqli_connect($host, $user, $passwd, $schema);
+        $heute = date("Y-m-d");
+        $zahlungsausstehendeKunden = $con->query("SELECT DISTINCT kundeID FROM rechnungen WHERE kundeID IN (SELECT kundeID FROM kunden WHERE sammelrechnungen != 'keine') AND versanddatum = '$heute'");
+        $kundendaten;
+        $rechnungsdaten = array();
+
+        if($zahlungsausstehendeKunden != null) {
+            while($rowKunde = $zahlungsausstehendeKunden->fetch_assoc()) {
+                $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$rowKunde["kundeID"]));
+                $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"]);
+                
+                $heutigeRechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID = ".$rowKunde['kundeID']." AND versanddatum = '$heute'");
+                if($heutigeRechnungen != null) {
+                    while($rowRechnung = $heutigeRechnungen->fetch_assoc()) {
+                        $rechnungnr = $rowRechnung["rechnungNr"];
+                        $gesamtpreis = $rowRechnung["rechnungBetrag"];
+    
+                        $mietvertrag = mysqli_fetch_array($con->query("SELECT * FROM mietvertraege WHERE mietvertragID=".$rowRechnung["mietvertragID"]));
+                        $mietdauer = $mietvertrag["mietdauerTage"];
+    
+                        $vertrag = mysqli_fetch_array($con->query("SELECT * FROM vertraege WHERE vertragID=".$mietvertrag["vertragID"]));
+                        $kfz = mysqli_fetch_array($con->query("SELECT * FROM kfzs WHERE kfzID=".$vertrag["kfzID"]));
+    
+                        $marke = $kfz["marke"];
+                        $modell = $kfz["modell"];
+                        $kennzeichen = $kfz["kennzeichen"];
+                        
+                        array_push($rechnungsdaten,array("rechnungsnr"=>$rechnungnr,"marke"=>$marke,"modell"=>$modell,"kennzeichen"=>$kennzeichen,"mietdauer"=>$mietdauer,"gesamtpreis"=>$gesamtpreis));
+                        
+                    }
+
+                    $_SESSION['invoice_kundendaten'] = $kundendaten;
+                    $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
+                    //createRechnungPDF($kundendaten,$rechnungsdaten,'mail',$con);
+                }
+
+            }
+        }
+
+    }
     
     function pdf_area_separation($pdf_file, $separation_lines) {
         for ($i=0; $i<$separation_lines; $i++) {

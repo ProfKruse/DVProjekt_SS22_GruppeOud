@@ -2,6 +2,7 @@
 if(!isset($_SESSION)) session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
+$_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden WHERE kundeID=".$_SESSION["kunde"]))[0];
 ?>
 
 <!DOCTYPE html>
@@ -45,9 +46,7 @@ include("../functions/functions.php");
                 <!-- Inhalt -->
                 <tbody id="rechnungen">
                     <?php
-                        require_once('../database/db_inc.php');
-
-                        $_SESSION['kunde'] = 3;
+                        $_SESSION['kunde'] = 1;
                         $kundendaten;
                         $rechnungsdaten = array();
 
@@ -66,10 +65,10 @@ include("../functions/functions.php");
                                     $rechnungnr = $row["rechnungNr"];
                                     $gesamtpreis = $row["rechnungBetrag"];
 
-                                    $mietvertrag = mysqli_fetch_array($con->query("SELECT * FROM mietvertraege WHERE mietvertragID=".$row["rechnungNr"]));
+                                    $mietvertrag = mysqli_fetch_array($con->query("SELECT * FROM mietvertraege WHERE mietvertragID=".$row["mietvertragID"]));
                                     $mietdauer = $mietvertrag["mietdauerTage"];
 
-                                    $vertrag = mysqli_fetch_array($con->query("SELECT * FROM vertraege WHERE vertragID=".$mietvertrag["mietvertragID"]));
+                                    $vertrag = mysqli_fetch_array($con->query("SELECT * FROM vertraege WHERE vertragID=".$mietvertrag["vertragID"]));
                                     $kfz = mysqli_fetch_array($con->query("SELECT * FROM kfzs WHERE kfzID=".$vertrag["kfzID"]));
 
                                     $marke = $kfz["marke"];
@@ -170,7 +169,7 @@ include("../functions/functions.php");
                                     <td>'.date('Y-m-d',$zahlungslimit).'</td>
                                     <td>'.$row["bezahltAm"].'</td>
                                     <td>'.$verspaetung.'</td>
-                                    <td><button type="button" onclick="window.location.href=\'invoice.php?invoice_type=file\'">Download</button></td>
+                                    <td><button type="button" onclick="window.location.href=\'invoice.php?invoice_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>
                                     </tr>';
 
                                 }
