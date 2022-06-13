@@ -534,7 +534,7 @@ Wir erlauben uns folgende Rechnungsstellung:
 }
 
     function sammelrechnungenEvent() {
-        require_once('../database/db_inc.php');
+        require_once(realpath(dirname(__FILE__) . '/../database/db_inc.php'));
         $con = mysqli_connect($host, $user, $passwd, $schema);
         $heute = date("Y-m-d");
         $zahlungsausstehendeKunden = $con->query("SELECT DISTINCT kundeID FROM rechnungen WHERE kundeID IN (SELECT kundeID FROM kunden WHERE sammelrechnungen != 'keine') AND versanddatum = '$heute'");
