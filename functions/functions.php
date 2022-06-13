@@ -411,6 +411,7 @@ function createRechnungPDF($kundendaten, $rechnungsdaten, $type, $con, $einzelre
         EOF;
 
     $rechnungsdatum = date("d.m.Y");
+    $rechnungstyp = "Sammelrechnung";
 
     $zahlungsdatum = strtotime($rechnungsdatum)+(databaseSelectQuery('zahlungszielTage','kunden','WHERE kundeID='.$kundendaten['kundennr'],$con)[0]*86400);
     $zahlungsdatum = date('d.m.Y',$zahlungsdatum);
@@ -453,7 +454,10 @@ Wir erlauben uns folgende Rechnungsstellung:
                 <th>Gesamtpreis</th>
             </tr>';
             
-            if($einzelrechnungNr) $rechnungsdaten = $rechnungsdaten[0];
+            if($einzelrechnungNr) {
+                $rechnungsdaten = $rechnungsdaten[0];
+                $rechnungstyp = "Einzelrechnung";
+            }
 
             foreach($rechnungsdaten as $rechnung) {
                 $invoices_data.='<tr>';
@@ -521,10 +525,10 @@ Wir erlauben uns folgende Rechnungsstellung:
     
     $output_type = $type == 'file' ? 'I' : 'S';
     $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
-    
+
     if($type == 'mail') {
-        send_mail('pascal_ewald@web.de','Rechnung zum '.date('d.m.Y'),
-        'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre Rechnung entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+        send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
+        'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre '.$rechnungstyp.' entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
         $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
     }
 }
@@ -540,7 +544,7 @@ Wir erlauben uns folgende Rechnungsstellung:
         if($zahlungsausstehendeKunden != null) {
             while($rowKunde = $zahlungsausstehendeKunden->fetch_assoc()) {
                 $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$rowKunde["kundeID"]));
-                $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"]);
+                $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"]);
                 
                 $heutigeRechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID = ".$rowKunde['kundeID']." AND versanddatum = '$heute'");
                 if($heutigeRechnungen != null) {

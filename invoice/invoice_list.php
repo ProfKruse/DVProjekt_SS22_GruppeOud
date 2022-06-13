@@ -56,7 +56,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                             global $rechnungsdaten;
                             
                             $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
-                            $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"]);
+                            $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"]);
 
                             //Alle Rechnungen, welche noch nicht bezahlt wurden
                             $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
