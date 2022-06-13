@@ -564,7 +564,7 @@ Wir erlauben uns folgende Rechnungsstellung:
 
                     $_SESSION['invoice_kundendaten'] = $kundendaten;
                     $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
-                    //createRechnungPDF($kundendaten,$rechnungsdaten,'mail',$con);
+                    createRechnungPDF($kundendaten,$rechnungsdaten,'mail',$con);
                 }
 
             }
