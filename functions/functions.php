@@ -1,5 +1,5 @@
 <?php
-     set_include_path('C:\xampp\htdocs\rentalCar\functions');
+    set_include_path('C:\xampp\htdocs\rentalCar');
 
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
     require 'library/PHPMailer/src/Exception.php';
@@ -219,7 +219,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                 mysqli_close($con);
                                 //Ruecknahmeprotokollerzeugungsmethodenaufruf
                                 createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragid);
-                                header("Location: ../return/return_dialog.php");
+                                header("Location: ../index.php");
                             //Catch Block zum Fehlerauswurf
                             } catch (mysqli_sql_exception $e) {
                                 if ($e->getCode() == 1062) {
@@ -384,7 +384,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
     }
 
     function checkIfIdProtocoleExist(){
-        include("database/db_inc.php");
+        include("../database/db_inc.php");
         $stmt = "select ruecknahmeprotokollID from ruecknahmeprotokolle where mietvertragID = ".$_SESSION['mietvertragid'].";";
         $erg = mysqli_query($con, $stmt);
         $protocole_data = mysqli_fetch_assoc($erg); 
