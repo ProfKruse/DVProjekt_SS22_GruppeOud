@@ -50,14 +50,16 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         $kundendaten;
                         $rechnungsdaten = array();
 
-                        //Entnimmt aus allen Rechnungen des Kunden die notwendigen Daten um diese zu speichern um daraus später Rechnungen erzeugen zu können
+                        /*
+                            Entnimmt aus allen Rechnungen des Kunden die notwendigen Daten um diese zu speichern um daraus später Rechnungen erzeugen zu können
+                        */
                         function rechnungsdaten() {
                             global $con;
                             global $kundendaten;
                             global $rechnungsdaten;
 
                             $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
-                            $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"]);
+                            $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"],"sammelrechnungen"=>$kunde["sammelrechnungen"]);
 
                             $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
                             if($rechnungen != NULL) {
@@ -75,36 +77,36 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                                     $modell = $kfz["modell"];
                                     $kennzeichen = $kfz["kennzeichen"];
                                     
-                                    array_push($rechnungsdaten,array("rechnungsnr"=>$rechnungnr,"marke"=>$marke,"modell"=>$modell,"kennzeichen"=>$kennzeichen,"mietdauer"=>$mietdauer,"gesamtpreis"=>$gesamtpreis));
+                                    array_push($rechnungsdaten,array("rechnungsnr"=>$rechnungnr,"marke"=>$marke,"modell"=>$modell,"kennzeichen"=>$kennzeichen,"mietdauer"=>$mietdauer,"gesamtpreis"=>$gesamtpreis,"zahlungslimit"=>$row["zahlungslimit"]));
                                 }
                             }
                         }
     
                         rechnungsdaten();
+                        $_SESSION['invoice_kundendaten'] = $kundendaten;
+                        $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
     
                         $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]);
 
-                        //Einfügen der Rechnungsdaten in die Tabellenzeile
+                        /*
+                            Einfügen der Rechnungsdaten in eine neue Tabellenzeile
+                        */
                         if($result->num_rows > 0) {
                             while($row = $result->fetch_array()) {
                                 $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400);                             
-                            
-                                //Auf Basis der vereinbarten Sammelrechnungen (keine, wöchentlich, ...) das
 
-                                    echo '<tr>
-                                    <td>'.$row["rechnungNr"].'</td>
-                                    <td>'.$row["rechnungDatum"].'</td>
-                                    <td>'.$row["zahlungslimit"].'</td>
-                                    <td>'.$row["bezahltAm"].'</td>
-                                    <td>'.$verspaetung.'</td>
-                                    <td><button type="button" onclick="window.location.href=\'invoice.php?invoice_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>
-                                    </tr>';
+                                echo '<tr>
+                                <td>'.$row["rechnungNr"].'</td>
+                                <td>'.$row["rechnungDatum"].'</td>
+                                <td>'.$row["zahlungslimit"].'</td>
+                                <td>'.$row["bezahltAm"].'</td>
+                                <td>'.$verspaetung.'</td>
+                                <td><button type="button" onclick="window.location.href=\'invoice.php?invoice_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>
+                                </tr>';
 
                                 }
                             }
-
-                        $_SESSION['invoice_kundendaten'] = $kundendaten;
-                        $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
+                            
                         $result->free_result();
                     ?>
 

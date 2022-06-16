@@ -374,7 +374,10 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         send_mail($kundendaten['emailAdresse'],$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
     }
 
-    //Legt eine neue Rechnung für den Mietvertrag mit der übergebenen Mietvertrag ID in der Datenbank an
+    /*
+        Inhalt: Legt eine neue Rechnung für den Mietvertrag mit der übergebenen Mietvertrag ID in der Datenbank an
+        Parameter: $mietvertragId: ID des Mietvertrags in der Datenbank, anhand dessen eine Rechnung erstellt werden soll
+    */
     function rechnungAnlegen($mietvertragId) {
         global $con;
 
@@ -479,165 +482,172 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         }
     }
 
+    /*
+        Inhalt: Erzeugt eine Rechnung als Datei im PDF-Format
+        Parameter: $kundendaten: Alle relevanten über den Kunden, an die Rechnung gestellt wird
+                   $rechnungsdaten: Alle relevanten Daten einer oder mehrerer Rechnungen, welche in die PDF übernommen werden
+                   $type: 
+                   $einzelrechnungNr: Unterscheidung in Einzelrechnung & Sammelrechnungen für die Bezeichnung innerhalb des Textes
+    */
+    function createRechnungPDF($kundendaten, $rechnungsdaten, $type) {
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
+        $pdf->setCreator(PDF_CREATOR);
+        $pdf->setAuthor('Rentalcar GmbH');
+        $pdf->setTitle('Rechnung');
+        $pdf->setSubject('Rechnungen');
     
-function createRechnungPDF($kundendaten, $rechnungsdaten, $type, $con, $einzelrechnungNr=null) {
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
-    $pdf->setCreator(PDF_CREATOR);
-    $pdf->setAuthor('Rentalcar GmbH');
-    $pdf->setTitle('Rechnung');
-    $pdf->setSubject('Rechnungen');
-
-    // set default monospaced font
-    $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-    // set margins
-    $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-    $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-    $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-    // set auto page breaks
-    $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-    // set some language-dependent strings (optional)
-    if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-        require_once(dirname(__FILE__).'/lang/eng.php');
-        $pdf->setLanguageArray($l);
-    }
-
-    $pdf->AddPage();
-
-    $style = <<<EOF
-        <style>
-            * {
-                line-height: 100%;
-                font-family: Monospace;
-            }
-        </style>
-        EOF;
-
-    $rechnungsdatum = date("d.m.Y");
-    $rechnungstyp = "Sammelrechnung";
-
-    $zahlungsdatum = strtotime($rechnungsdatum)+(databaseSelectQuery('zahlungszielTage','kunden','WHERE kundeID='.$kundendaten['kundennr'],$con)[0]*86400);
-    $zahlungsdatum = date('d.m.Y',$zahlungsdatum);
-
-    $sender_receiver_information = 
-        $style.'
-        <h1 style="font-family: Arial;">Rentalcar</h1>
-        <table>
-            <tr>
-                <td>'.$kundendaten["name"].'</td>
-                <td style="text-align:right;">Rechnungsdatum: '.$rechnungsdatum.'</td>
-            </tr>
-            <tr>
-                <td>'.$kundendaten["straße"].'</td>
-                <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
-            </tr>
-            <tr>
-                <td>'.$kundendaten["stadt"].'</td>
-                <td style="text-align:right;">Zahlbar bis: '.$zahlungsdatum.'</td>
-            </tr>
-        <table>
-        <br>';
-
-    $invoices_data = 
-        $style.'
-        <b>Rechnung</b>
-        <pre>
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+    
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+    
+        $pdf->AddPage();
+    
+        $style = <<<EOF
+            <style>
+                * {
+                    line-height: 100%;
+                    font-family: Monospace;
+                }
+            </style>
+            EOF;
+    
+        $rechnungsdatum = date("d.m.Y");
+        $rechnungstyp = $kundendaten["sammelrechnungen"] == 'keine' ? 'Einzelrechnung' : 'Sammelrechnung';
+    
+        $sender_receiver_information = 
+            $style.'
+            <h1 style="font-family: Arial;">Rentalcar</h1>
+            <table>
+                <tr>
+                    <td>'.$kundendaten["name"].'</td>
+                    <td style="text-align:right;">Rechnungsdatum: '.$rechnungsdatum.'</td>
+                </tr>
+                <tr>
+                    <td>'.$kundendaten["straße"].'</td>
+                    <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
+                </tr>
+                <tr>
+                    <td>'.$kundendaten["stadt"].'</td>
+                    <td style="text-align:right;">Zahlbar bis: '.date("d.m.Y",strtotime($rechnungsdaten[0]["zahlungslimit"])).'</td>
+                </tr>
+            <table>
+            <br>';
+    
+        $invoices_data = 
+            $style.'
+            <b>Rechnung</b>
+            <pre>
 Sehr geehrter Herr/Frau '.$kundendaten["name"].'
 Vielen Dank für ihre Aufträge.
 Wir erlauben uns folgende Rechnungsstellung:
-        </pre>
+            </pre>
+    
+            <table>
+                <tr style="background-color: rgb(228, 228, 228);">
+                    <th>Nr.</th>
+                    <th>Marke</th>
+                    <th>Modell</th>
+                    <th>Kennzeichen</th>
+                    <th>Mietdauer</th>
+                    <th>Gesamtpreis</th>
+                </tr>';
 
-        <table>
-            <tr style="background-color: rgb(228, 228, 228);">
-                <th>Nr.</th>
-                <th>Marke</th>
-                <th>Modell</th>
-                <th>Kennzeichen</th>
-                <th>Mietdauer</th>
-                <th>Gesamtpreis</th>
-            </tr>';
-            
-            if($einzelrechnungNr) {
-                $rechnungsdaten = $rechnungsdaten[0];
-                $rechnungstyp = "Einzelrechnung";
-            }
 
-            foreach($rechnungsdaten as $rechnung) {
-                $invoices_data.='<tr>';
-                foreach($rechnung as $key => $value) {
-                    $invoices_data.="<td>$value</td>";
+    
+                foreach($rechnungsdaten as $rechnung) {
+                    $invoices_data.='<tr>';
+                    foreach($rechnung as $key => $value) {
+                        if ($key == "zahlungslimit")
+                            continue;
+                        $invoices_data.="<td>$value</td>";
+                    }
+                    $invoices_data.='</tr>';
                 }
-                $invoices_data.='</tr>';
+    
+        $invoices_data.='
+            </table>
+            <br>
+            <hr>';
+    
+        $total_amount =
+            $style.'
+            <hr>
+            <pre style="text-align: right;">
+            Nettobetrag: ';
+    
+            $nettobetrag = 0;
+            foreach($rechnungsdaten as $rechnung) {
+                $nettobetrag += $rechnung["gesamtpreis"];
             }
-
-    $invoices_data.='
-        </table>
-        <br>
-        <hr>';
-
-    $total_amount =
-        $style.'
-        <hr>
-        <pre style="text-align: right;">
-        Nettobetrag: ';
-
-        $nettobetrag = 0;
-        foreach($rechnungsdaten as $rechnung) {
-            $nettobetrag += $rechnung["gesamtpreis"];
+        
+            $total_amount .=  $nettobetrag.'€
+            zzgl. 19% MwSt: '.($nettobetrag*0.19).'€
+            <b>Gesamtbetrag:'.($nettobetrag+($nettobetrag*0.19)).'€</b>
+            </pre>
+            <hr>
+            <br>';
+    
+        $contact_information = <<<EOF
+            $style
+            <table>
+                <tr>
+                    <td>Rentalcar GmbH</td>
+                    <td>Telefon: +49 1234 5678</td>
+                </tr>
+                <tr>
+                    <td>Straße 1</td>
+                    <td>E-Mail: contact@rentalcar.com</td>
+                </tr>
+                <tr>
+                    <td>12345 Ort</td>
+                    <td>Web: www.rentalcar.com</td>
+                </tr>
+            </table>
+            EOF;
+    
+        $pdf->writeHTML($sender_receiver_information, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 5);
+    
+        $pdf->writeHTML($invoices_data, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 15);
+    
+        $pdf->writeHTML($total_amount, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 7);
+    
+        $pdf->writeHTML($contact_information, true, false, true, false, '');
+        if (ob_get_contents()) ob_end_clean();
+        
+        $output_type = $type == 'file' ? 'I' : 'S';
+        $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
+    
+        if($type == 'mail') {
+            send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
+            'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre '.$rechnungstyp.' entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+            $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
         }
-    
-        $total_amount .=  $nettobetrag.'€
-        zzgl. 19% MwSt: '.($nettobetrag*0.19).'€
-        <b>Gesamtbetrag:'.($nettobetrag+($nettobetrag*0.19)).'€</b>
-        </pre>
-        <hr>
-        <br>';
-
-    $contact_information = <<<EOF
-        $style
-        <table>
-            <tr>
-                <td>Rentalcar GmbH</td>
-                <td>Telefon: +49 1234 5678</td>
-            </tr>
-            <tr>
-                <td>Straße 1</td>
-                <td>E-Mail: contact@rentalcar.com</td>
-            </tr>
-            <tr>
-                <td>12345 Ort</td>
-                <td>Web: www.rentalcar.com</td>
-            </tr>
-        </table>
-        EOF;
-
-    $pdf->writeHTML($sender_receiver_information, true, false, true, false, '');
-
-        pdf_area_separation($pdf, 5);
-
-    $pdf->writeHTML($invoices_data, true, false, true, false, '');
-
-        pdf_area_separation($pdf, 15);
-
-    $pdf->writeHTML($total_amount, true, false, true, false, '');
-
-        pdf_area_separation($pdf, 7);
-
-    $pdf->writeHTML($contact_information, true, false, true, false, '');
-    if (ob_get_contents()) ob_end_clean();
-    
-    $output_type = $type == 'file' ? 'I' : 'S';
-    $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
-
-    if($type == 'mail') {
-        send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
-        'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre '.$rechnungstyp.' entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
-        $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
     }
-}
 
+    /*
+        Generiert für , jeden Kunden einzeln welcher Sammelrechnungen vereinbart hat, aus allen Rechnungen die am aktuellen Tag zu versenden sind eine Sammelrechnung und verschickt
+        diese per E-Mail an den jeweiligen Kunden.
+        Die Funktion wird 1x am Tag von der Aufgabe "Sammelrechnungen_Versand", beschrieben in trigger/Sammelrechnungen_Versand.xml, von der Windows Aufgabenplanung aufgerufen
+    */
     function sammelrechnungenEvent() {
         require_once(realpath(dirname(__FILE__) . '/../database/db_inc.php'));
         $con = mysqli_connect($host, $user, $passwd, $schema);
@@ -649,8 +659,8 @@ Wir erlauben uns folgende Rechnungsstellung:
         if($zahlungsausstehendeKunden != null) {
             while($rowKunde = $zahlungsausstehendeKunden->fetch_assoc()) {
                 $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$rowKunde["kundeID"]));
-                $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"]);
-                
+                $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"],"sammelrechnungen"=>$kunde["sammelrechnungen"]);
+
                 $heutigeRechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID = ".$rowKunde['kundeID']." AND versanddatum = '$heute'");
                 if($heutigeRechnungen != null) {
                     while($rowRechnung = $heutigeRechnungen->fetch_assoc()) {
@@ -667,18 +677,12 @@ Wir erlauben uns folgende Rechnungsstellung:
                         $modell = $kfz["modell"];
                         $kennzeichen = $kfz["kennzeichen"];
                         
-                        array_push($rechnungsdaten,array("rechnungsnr"=>$rechnungnr,"marke"=>$marke,"modell"=>$modell,"kennzeichen"=>$kennzeichen,"mietdauer"=>$mietdauer,"gesamtpreis"=>$gesamtpreis));
-                        
+                        array_push($rechnungsdaten,array("rechnungsnr"=>$rechnungnr,"marke"=>$marke,"modell"=>$modell,"kennzeichen"=>$kennzeichen,"mietdauer"=>$mietdauer,"gesamtpreis"=>$gesamtpreis,"zahlungslimit"=>$rowRechnung["zahlungslimit"]));
                     }
-
-                    $_SESSION['invoice_kundendaten'] = $kundendaten;
-                    $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
-                    createRechnungPDF($kundendaten,$rechnungsdaten,'mail',$con);
+                    createRechnungPDF($kundendaten,$rechnungsdaten,'mail');
                 }
-
             }
         }
-
     }
     
     function pdf_area_separation($pdf_file, $separation_lines) {
@@ -699,6 +703,14 @@ Wir erlauben uns folgende Rechnungsstellung:
         }
     }
 
+    /*
+        Inhalt: Schickt eine SELECT-Anfrage mit konkreter Spalte, konkreter Tabelle und Bedingung an die Datenbank
+        Parameter: $spalte: SELECT Teil der Anfrage / Einzelne Spalte (* nicht möglich) welche abgefragt wird
+                   $tabelle: FROM Teil der Anfrage / Tabelle von welcher der Spaltenwert abgefragt wird
+                   $bedingung: WHERE Teil der Anfrage / Bedingung, welche erfüllt werden muss, damit ein Spaltenwert mit in das Ergebnis übernommen wird
+                   $con: Connection-Objekt über welches eine Verbindung zur Datenbank besteht an die die Anfrage geschickt wird 
+        Return: Gibt ein Array zurück in welchem Zeilenweise die Werte für die Spalte gespeichert sind
+    */
     function databaseSelectQuery($spalte, $tabelle, $bedingung=NULL, $con) {
         $result = $con->query("SELECT $spalte FROM $tabelle $bedingung");
         $array = array();
