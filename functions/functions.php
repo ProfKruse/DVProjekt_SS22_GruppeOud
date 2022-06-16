@@ -374,6 +374,111 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         send_mail($kundendaten['emailAdresse'],$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
     }
 
+    //Legt eine neue Rechnung für den Mietvertrag mit der übergebenen Mietvertrag ID in der Datenbank an
+    function rechnungAnlegen($mietvertragId) {
+        global $con;
+
+        $mietvertrag = $con->query("SELECT * FROM mietvertraege WHERE mietvertragID=1");
+        if($mietvertrag->num_rows > 0) {
+            while($row = $mietvertrag->fetch_array()) {
+                $rechnungdatum   = strtotime(date("Y-m-d"));
+                $zahlungslimit;
+                $versanddatum;
+
+                $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$row["kundeID"]));
+                $zahlungszielTage = $kunde["zahlungszielTage"];
+                $zahlungslimit = ($zahlungszielTage*86400)+$rechnungdatum;
+
+                switch ($kunde["sammelrechnungen"]) {
+                    case "keine":
+                        $versanddatum = strtotime(date("Y-m-d"));
+                        break;
+
+                    case "woechentlich":
+                        if (date('D',$rechnungdatum) != 'Mon') {
+                            $versanddatum = strtotime('next monday');
+                            $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime('next monday');
+                        
+                        }
+                        break;
+
+                    case "monatlich":
+                        if(explode('-',$row['rechnungDatum'])[2] != '01') {
+                            $versanddatum = strtotime('first day of next month');
+                            $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime('first day of next month');
+                        }
+                        break;
+
+                    case "quartalsweise":
+                        $quartale = array('03-31','06-30','09-30','12-31');
+                    
+                        if(!in_array(date('m-d',$rechnungdatum),$quartale)) {
+                            $quartal_1 = strtotime(date('Y-03-31'));
+                            $quartal_2 = strtotime(date('Y-06-30'));
+                            $quartal_3 = strtotime(date('Y-09-30'));
+                            $quartal_4 = strtotime(date('Y-12-31'));
+
+                            if($rechnungdatum < $quartal_1) {
+                                $versanddatum = $quartal_1;
+                                $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_1;
+                            }
+
+                            if($rechnungdatum > $quartal_1 && $rechnungdatum < $quartal_2) {
+                                $versanddatum = $quartal_2;
+                                $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_2;
+                            }
+
+                            if($rechnungdatum > $quartal_2 && $rechnungdatum < $quartal_3) {
+                                $versanddatum = $quartal_3;
+                                $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_3;
+                            }
+
+                            if($rechnungdatum > $quartal_3) {
+                                $versanddatum = $quartal_4;
+                                $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_4;
+                            }
+                        }
+
+                        break;
+
+                    case "halbjaehrlich":
+                        //Noch überarbeiten und schauen ob bis Ende des des Halbjahres oder Anfang des neuen Halbjahres
+                        $halbjahre = array('06-30','12-31');
+
+                        if(!in_array(date('m-d',$rechnungdatum), $halbjahre)) {
+                            $erstes_halbjahr = strtotime(date('Y-06-30'));
+                            $zweites_halbjahr = strtotime(date('Y-12-31'));
+
+                            if ($rechnungdatum < $erstes_halbjahr) {
+                                $versanddatum = $erstes_halbjahr;
+                                $zahlungslimit = $zahlungslimit - $rechnungdatum + $erstes_halbjahr;
+                            }
+                            else {
+                                $versanddatum = $zweites_halbjahr;
+                                $zahlungslimit = $zahlungslimit - $rechnungdatum + $zweites_halbjahr;
+                            }
+                        }
+                        break;
+
+                    case "jaehrlich":
+                        if(date('m-d',$rechnungdatum) != '01-01') {
+                            $versanddatum = strtotime(date('Y-01-01',strtotime('+1 year')));
+                            $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime(date('Y-01-01',strtotime('+1 year')));
+                        }
+                        break;
+                    }
+
+                    $zahlungslimit = date('Y-m-d',$zahlungslimit);
+                    $versanddatum = date('Y-m-d',$versanddatum);
+
+                    $insertStatement = "INSERT INTO rechnungen (mietvertragID, kundeID, rechnungDatum, rechnungBetrag, mahnstatus, zahlungslimit, versanddatum)
+                        VALUES ($mietvertragId, ".$row["kundeID"].", '".date('Y-m-d')."', ".$row["mietgebuehr"].", 'keine', '$zahlungslimit', '$versanddatum') ";
+
+                    $con->query($insertStatement);
+            }
+        }
+    }
+
     
 function createRechnungPDF($kundendaten, $rechnungsdaten, $type, $con, $einzelrechnungNr=null) {
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);

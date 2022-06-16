@@ -28,7 +28,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                 </ul>
             </nav>
         </header>
-        <!--Reservierungseingaben-->
+        <!--Hauptteil-->
         <main>
             <h1>Rechnungen</h1>
 
@@ -43,22 +43,22 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         <th>Herunterladen</th>                     
                     </tr>
                 </thead>
-                <!-- Inhalt -->
+                <!-- Rechnungen -->
                 <tbody id="rechnungen">
                     <?php
                         $_SESSION['kunde'] = 1;
                         $kundendaten;
                         $rechnungsdaten = array();
 
-                        function sammelrechnungen() {
+                        //Entnimmt aus allen Rechnungen des Kunden die notwendigen Daten um diese zu speichern um daraus später Rechnungen erzeugen zu können
+                        function rechnungsdaten() {
                             global $con;
                             global $kundendaten;
                             global $rechnungsdaten;
-                            
+
                             $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
                             $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"]);
 
-                            //Alle Rechnungen, welche noch nicht bezahlt wurden
                             $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
                             if($rechnungen != NULL) {
                                 while($row = $rechnungen->fetch_array()) {
@@ -80,93 +80,21 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                             }
                         }
     
-                        sammelrechnungen();
+                        rechnungsdaten();
     
                         $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]);
 
+                        //Einfügen der Rechnungsdaten in die Tabellenzeile
                         if($result->num_rows > 0) {
                             while($row = $result->fetch_array()) {
-                            $sammelrechnungen = mysqli_fetch_array($con->query("SELECT DISTINCT sammelrechnungen FROM kunden WHERE kundeID=".$_SESSION['kunde']))["sammelrechnungen"];
+                                $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400);                             
                             
-                            //Tage nach Zusendung der Sammelrechnungen um Rechnungen zu begleichen
-                            $zahlungszielTage = mysqli_fetch_array($con->query("SELECT DISTINCT zahlungszielTage FROM kunden WHERE kundeID=".$_SESSION['kunde']))["zahlungszielTage"];
-                            $rechnungdatum = strtotime($row["rechnungDatum"]);
-                            $zahlungslimit = ($zahlungszielTage*86400)+$rechnungdatum;
-                            $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400);                             
-                            
-                            switch ($sammelrechnungen) {
-                                case "keine":
-                                    break;
-
-                                case "woechentlich":
-                                    if (date('D',$rechnungdatum) != 'Mon') {
-                                        $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime('next monday');
-                                        
-                                    }
-                                    break;
-
-                                case "monatlich":
-                                    if(explode('-',$row['rechnungDatum'])[2] != '01') {
-                                        $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime('first day of next month');
-                                    }
-                                    break;
-
-                                case "quartalsweise":
-                                    $quartale = array('03-31','06-30','09-30','12-31');
-                                    
-                                    if(!in_array(date('m-d',$rechnungdatum),$quartale)) {
-                                        $quartal_1 = strtotime(date('Y-03-31'));
-                                        $quartal_2 = strtotime(date('Y-06-30'));
-                                        $quartal_3 = strtotime(date('Y-09-30'));
-                                        $quartal_4 = strtotime(date('Y-12-31'));
-
-                                        if($rechnungdatum < $quartal_1) {
-                                            $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_1;
-                                        }
-
-                                        if($rechnungdatum > $quartal_1 && $rechnungdatum < $quartal_2) {
-                                            $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_2;
-                                        }
-
-                                        if($rechnungdatum > $quartal_2 && $rechnungdatum < $quartal_3) {
-                                            $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_3;
-                                        }
-
-                                        if($rechnungdatum > $quartal_3) {
-                                            $zahlungslimit = $zahlungslimit - $rechnungdatum + $quartal_4;
-                                        }
-                                    }
-
-                                    break;
-
-                                case "halbjaehrlich":
-                                    //Noch überarbeiten und schauen ob bis Ende des des Halbjahres oder Anfang des neuen Halbjahres
-                                    $halbjahre = array('06-30','12-31');
-
-                                    if(!in_array(date('m-d',$rechnungdatum), $halbjahre)) {
-                                        $erstes_halbjahr = strtotime(date('Y-06-30'));
-                                        $zweites_halbjahr = strtotime(date('Y-12-31'));
-
-                                        if ($rechnungdatum < $erstes_halbjahr) {
-                                            $zahlungslimit = $zahlungslimit - $rechnungdatum + $erstes_halbjahr;
-                                        }
-                                        else {
-                                            $zahlungslimit = $zahlungslimit - $rechnungdatum + $zweites_halbjahr;
-                                        }
-                                    }
-                                    break;
-
-                                case "jaehrlich":
-                                    if(date('m-d',$rechnungdatum) != '01-01') {
-                                        $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime(date('Y-01-01',strtotime('+1 year')));
-                                    }
-                                    break;
-                                    }
+                                //Auf Basis der vereinbarten Sammelrechnungen (keine, wöchentlich, ...) das
 
                                     echo '<tr>
                                     <td>'.$row["rechnungNr"].'</td>
                                     <td>'.$row["rechnungDatum"].'</td>
-                                    <td>'.date('Y-m-d',$zahlungslimit).'</td>
+                                    <td>'.$row["zahlungslimit"].'</td>
                                     <td>'.$row["bezahltAm"].'</td>
                                     <td>'.$verspaetung.'</td>
                                     <td><button type="button" onclick="window.location.href=\'invoice.php?invoice_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>
