@@ -8,6 +8,12 @@
     $_SESSION["abgabestation"] = $_POST["abgabestation"];
     $_SESSION["message"] = $_POST["message"];
 
+    /* 
+        Prüft die Anzahl der verfügbaren Autos eines konkreten Typs und die Anzahl der bereits reservierten Kfz von diesem Typ und berechnet anhand ob
+        vom konkreten Kfz-Typ noch ein Auto in der Abholstation zur Verfügung steht
+        Fallunterscheidung: Positiver Fall: Aufruf der Seite zur erfolgreichen Bestätigung der Reservierungsmöglichkeit
+                            Negativer Fall: Aufruf der Seite zur Ausgabe des negativen Überprüfungsergebnisses
+    */
     $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
     $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]);
 
