@@ -13,6 +13,11 @@ class functionTest extends TestCase
         $_SESSION['mietvertragid'] = 1;
         $this->assertTrue(checkIfIdProtocoleExist());
     }
+    public function test_this_checkIfIdProtocoleExist_mit_Nicht_Existierendem_Ruecknahmeprotkoll():void
+    {
+        $_SESSION['mietvertragid'] = 1213443242434;
+        $this->assertFalse(checkIfIdProtocoleExist());
+    }
     public function test_this_mietVertragsanzeige():void
     {
             $array = array("mietvertragid" => 1);
