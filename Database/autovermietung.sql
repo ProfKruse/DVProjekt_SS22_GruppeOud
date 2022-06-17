@@ -224,7 +224,7 @@ INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietge
 
 CREATE TABLE `mitarbeiter` (
   `mitarbeiterID` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL,
+  `nachname` varchar(10) DEFAULT NULL,
   `vorname` varchar(45) NOT NULL,
   `geburtsDatum` date NOT NULL,
   `position` varchar(45) NOT NULL,
@@ -241,7 +241,7 @@ CREATE TABLE `mitarbeiter` (
 -- Daten für Tabelle `mitarbeiter`
 --
 
-INSERT INTO `mitarbeiter` (`mitarbeiterID`, `name`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
+INSERT INTO `mitarbeiter` (`mitarbeiterID`, `nachname`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
 (1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
 (2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
