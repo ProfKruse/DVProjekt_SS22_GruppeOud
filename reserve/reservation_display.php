@@ -1,9 +1,9 @@
 <!DOCTYPE html>
     <?php
-        function reservierungsdatenAnzeigen()
-        {
+        require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
+        function reservierungsdatenAnzeigen() {
+            global $con;
             //Datei für die Verbindung zur Datenbank
-            require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
             if (isset($_GET['reservierungID'])) 
             {
                 $reservierungID = $_GET["reservierungID"];
@@ -93,8 +93,9 @@
                 {
                     echo"<span class=form_font_error>Keine Datenbankeinträge gefunden!</span>";
                 }
-                    mysqli_close($con);
                 }
+
+                return true;
             }
             ?>
 <html>
@@ -135,14 +136,14 @@
                 </div>
             </form>
             <?php
-                reservierungsdatenAnzeigen();
-                if (isset($_GET['reservierungID'])) {
-                    echo '<button type="submit" name="mieten" onclick="window.location.href=\'kfz_check.php?reservierungID='.$_GET['reservierungID'].'\'">Kfz mieten</button>';
-                }
-            ?>
+                $datenLesen = reservierungsdatenAnzeigen();
 
-             
-            
+                if (isset($_GET['reservierungID']) && $datenLesen == TRUE) {
+                    global $con;
+                    $kfztyp = mysqli_fetch_array($con->query("SELECT kfzTypID FROM reservierungen WHERE reservierungID=".$_GET['reservierungID']))[0];
+                    echo '<button type="submit" name="mieten" onclick="window.location.href=\'kfz_check.php?reservierungID='.$_GET['reservierungID'].'&kategorie='.$kfztyp.'\'">Kfz mieten</button>';
+                }
+            ?>            
         </div>
         </center>
             

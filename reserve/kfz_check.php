@@ -4,12 +4,12 @@
             require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
 
             $reservierungsdaten = mysqli_fetch_array($con->query("SELECT * FROM reservierungen WHERE reservierungID = ".$_GET["reservierungID"]));
-            $kategorie = $reservierungsdaten["kfzTypID"];
+            $kategorie = $_GET["kategorie"];
             $abholstation = $reservierungsdaten["mietstationID"];
             
             $kfzids = $con->query("SELECT kfzID FROM kfzs WHERE kfzTypID=$kategorie AND kfzID IN (SELECT kfzID FROM mietstationen_mietwagenbestaende WHERE
                 mietstationID=$abholstation)");
-            $id;
+            $id = null;
             $ids = array();
 
             //Alle IDs der KFZ speichern, welche von der gewünschten Kategorie sind und in der Abholstation stehen
@@ -43,8 +43,17 @@
     
                         //Alternatives Auto anbieten, wenn dieses noch nicht vermietet wurde
                         if(!$vermietet) {
-                            echo "Stattdessen ".$row["kfzID"]." zum selben Tarif mieten?";
-                            array_push($ids,$row["kfzID"]);
+                            $typ = mysqli_fetch_array($con->query("SELECT * FROM kfztypen WHERE kfzTypID=(SELECT kfzTypID FROM kfzs WHERE kfzID=".$row["kfzID"].")"));
+                            $ausgabe = "<h1 style='color:red'>Nicht verfügbar</h1><br> 
+                                        <h2 style='font-size:1.2em;'>Leider ist kein Fahrzeug der gewünschten<br> Kategorie verfügbar.</h2><br><br>
+                                        <br><h3>Soll stattdessen ein Fahrzeug des Typs ".$typ['typBezeichnung']." zum selben Tarif gebucht werden?</h3>";
+                            $buttons = '<div class="buttons" style="width:175px; margin: 25px;">
+                                            <button type="button" onclick="window.location=\'kfz_check.php?reservierungID='.$_GET["reservierungID"].'&kategorie='.$typ['kfzTypID'].'\'">Ja</button>
+                                            <button type="button" onclick="window.history.go(-1); return false;">Nein</button>
+                                        </div>';
+
+                            $id = $row["kfzID"];
+                            echo $ausgabe.$buttons;
 
                             //Wenn angemommen: break;
                             //Sonst: Zurück & Abbrechen
@@ -53,51 +62,70 @@
                     }
                 }
 
-                else {
-                    echo "Es existiert kein Fahrzeug der gewünschten Kategorie oder alternatives Fahrzeug zur Verfügung";
+                if(!$id) {
+                    $fehlerausgabe = "<h2 style='color:red'>Es steht leider kein Fahrzeug zur Verfügung!</h2><br>
+                                    <button type='button' onclick='window.history.go(-1); return false;'>Zurück</button>";
+                    echo $fehlerausgabe;
                 }
-            }         
+            }
             
-            $id = array_values($ids)[0];
-            $kfz = mysqli_fetch_array($con->query("SELECT * FROM kfzs WHERE kfzID=$id"));
+            else {
+                $id = array_values($ids)[0];
+            }
+            
+            //Wenn ein Fahrzeug verfügbar ist oder ein Fahrzeug ausgewählt wurde
+            if($ids) {
+                $id = array_values($ids)[0];
+                $kfz = mysqli_fetch_array($con->query("SELECT * FROM kfzs WHERE kfzID=$id"));
 
-            $tarif = mysqli_fetch_array($con->query("SELECT tarifBez FROM tarife WHERE tarifID = (SELECT tarifID FROM kfztypen WHERE kfzTypID=$kategorie)"))[0];
-            $abholstation = mysqli_fetch_array($con->query("SELECT beschreibung FROM mietstationen WHERE mietstationID = ".$abholstation))[0];
-            $kfzTyp = mysqli_fetch_array($con->query("SELECT typBezeichnung FROM kfztypen WHERE kfzTypID = ".$kfz["kfzTypID"]))[0];
-            $zustand;
-            $kilometerstand;
+                $tarif = mysqli_fetch_array($con->query("SELECT tarifBez FROM tarife WHERE tarifID = (SELECT tarifID FROM kfztypen WHERE kfzTypID=$kategorie)"))[0];
+                $abholstation = mysqli_fetch_array($con->query("SELECT beschreibung FROM mietstationen WHERE mietstationID = ".$abholstation))[0];
+                $kfzTyp = mysqli_fetch_array($con->query("SELECT typBezeichnung FROM kfztypen WHERE kfzTypID = ".$kfz["kfzTypID"]))[0];
+                $zustand;
+                $kilometerstand;
                 
-            echo"<center>
-                <table class='mietdaten'>
-                    <thead>
-                        <tr>
-                            <th>Mietstation ID</th>
-                             <th>Mietstation Name</th>
-                            <th>Tarif ID</th>
-                            <th>Marke</th>
-                            <th>Modell</th>
-                            <th>Typ Bezeichnung</th>
-                            <th>Kennzeichen</th>
-                        </tr>
-                    </thead>
+                $mietvertragDaten = 
+                "<h1 style='color:green'>Fahrzeug auf Lager!</h1>
+                <br>
+                <hr>
+                <center>
+                    <br>
+                    <br>    
+                    <br>
+                    <h2>Mietvertragsdaten</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mietstation ID</th>
+                                <th>Mietstation Name</th>
+                                <th>Tarif ID</th>
+                                <th>Marke</th>
+                                <th>Modell</th>
+                                <th>Typ Bezeichnung</th>
+                                <th>Kennzeichen</th>
+                            </tr>
+                        </thead>
                     <tbody>
-                        <tr>
-                            <td>".$reservierungsdaten['mietstationID']."</td>
-                            <td>$abholstation</td>
-                            <td>$tarif</td>
-                            <td>".$kfz['marke']."</td>
-                            <td>".$kfz['modell']."</td>
-                            <td>$kfzTyp</td>
-                            <td>".$kfz['kennzeichen']."</td>
-                        </tr> 
-                    </tbody>
-                </table>
+                            <tr>
+                                <td>".$reservierungsdaten['mietstationID']."</td>
+                                <td>$abholstation</td>
+                                <td>$tarif</td>
+                                <td>".$kfz['marke']."</td>
+                                <td>".$kfz['modell']."</td>
+                                <td>$kfzTyp</td>
+                                <td>".$kfz['kennzeichen']."</td>
+                            </tr> 
+                        </tbody>
+                    </table>
                 </center>";
+                echo $mietvertragDaten;
+                
+                $erstellButton = "<button type='button' onclick=''>Mietvertrag abschließen</button>";
+                echo $erstellButton;
 
                 //Set status = aktiv
-                    
-                mysqli_close($con);
                 }
+            }
             ?>
 <html>
     <head>
@@ -121,7 +149,6 @@
         </header>
         <!--Reservierungseingaben-->
         <main>
-            <h1>Fahrzeug Verfügbarkeit anzeigen</h1>
             <center>
                 <div class="frame">
                     <?php
