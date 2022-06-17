@@ -28,6 +28,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `aktuellepersonalplaene` (
+  `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updateDate` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `personalplanID` int(11) NOT NULL,
   `erstellDatum` date DEFAULT current_timestamp(),
   `gueltigBis` date DEFAULT NULL,
@@ -223,6 +225,8 @@ INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietge
 --
 
 CREATE TABLE `mitarbeiter` (
+  `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updateDate` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `mitarbeiterID` int(11) NOT NULL,
   `nachname` varchar(50) DEFAULT NULL,
   `vorname` varchar(45) NOT NULL,
@@ -241,12 +245,12 @@ CREATE TABLE `mitarbeiter` (
 -- Daten für Tabelle `mitarbeiter`
 --
 
-INSERT INTO `mitarbeiter` (`mitarbeiterID`, `nachname`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
-(1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
-(2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
-(3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
-(4, 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung', NULL, NULL, NULL, NULL, NULL, NULL);
-
+INSERT INTO `mitarbeiter` (`creationDate`, `updateDate`,`mitarbeiterID`, `nachname`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 1 , 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 2 , 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 3 , 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 4 , 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 5 , 'Ould Mohand', 'Sihem', '2000-06-15', 'test', 'IT', 'SamCarter', '$2y$10$WHErDa2sEVV8a2.1vs63Lu2oPTNQmJqgzCbyU4gSRasr6tQNSsXne', 1, '16664', 0, 's.ouldmohand@gmail.com');
 -- --------------------------------------------------------
 
 --
