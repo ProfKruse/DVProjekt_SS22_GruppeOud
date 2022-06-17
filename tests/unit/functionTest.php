@@ -8,7 +8,7 @@ require("functions/functions.php");
 
 class functionTest extends TestCase
 {
-    public function test_this_checkIfIdProtocoleExist():void
+    public function test_this_checkIfIdProtocoleExist_mit_Schon_Existierendem_Ruecknahmeprotkoll():void
     {
         $_SESSION['mietvertragid'] = 1;
         $this->assertTrue(checkIfIdProtocoleExist());
