@@ -8,12 +8,12 @@
             {
                 $reservierungID = $_POST["reservierungID"];
 
-                //<!--SQL Abfragen für die einzelnen geforderten Felder - Abbruch bei Fehlern-->
+                //SQL Abfragen für die einzelnen geforderten Felder - Abbruch bei Fehlern
                 $result = mysqli_fetch_array($con->query("SELECT vorname, nachname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $reservierungID));
 
                 if (!$result) 
                 { 
-                    die('Fehler in der SQL Anfrage'); 
+                    die('Es konnten keine Daten gefunden werden'); 
                 }
                 else
                 {
@@ -24,7 +24,7 @@
                 $result = mysqli_fetch_array($con->query("SELECT typBezeichnung FROM kfztypen JOIN reservierungen ON kfztypen.kfzTypID = reservierungen.kfzTypID WHERE reservierungID =" . $reservierungID));
                 if (!$result ) 
                 { 
-                    die('Fehler in der SQL Anfrage'); 
+                    die('Es konnten keine Daten gefunden werden'); 
                 }
                 else
                 {
@@ -34,7 +34,7 @@
                 $result = mysqli_fetch_array($con->query("SELECT status FROM reservierungen WHERE reservierungID =" . $reservierungID));
                 if (!$result) 
                 { 
-                    die('Fehler in der SQL Anfrage'); 
+                    die('Es konnten keine Daten gefunden werden');  
                 }
                 else
                 {
@@ -44,7 +44,7 @@
                 $result = mysqli_fetch_array($con->query("SELECT beschreibung FROM mietstationen JOIN reservierungen ON mietstationen.mietstationID = reservierungen.mietstationID WHERE reservierungID =" . $reservierungID));
                 if (!$result ) 
                 { 
-                    die('Fehler in der SQL Anfrage'); 
+                    die('Es konnten keine Daten gefunden werden');  
                 }
                 else
                 {
@@ -54,7 +54,7 @@
                 $result = mysqli_fetch_array($con->query("SELECT datum FROM reservierungen WHERE reservierungID =" . $reservierungID));
                 if (!$result ) 
                 { 
-                    die('Fehler in der SQL Anfrage'); 
+                    die('Es konnten keine Daten gefunden werden'); 
                 }
                 else
                 {
