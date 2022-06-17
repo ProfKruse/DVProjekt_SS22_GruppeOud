@@ -317,6 +317,14 @@ CREATE TABLE `ruecknahmeprotokolle` (
   `mietvertragID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Daten für Tabelle `ruecknahmeprotokolle`
+--
+
+INSERT INTO `ruecknahmeprotokolle` (`ruecknahmeprotokollID`, `ersteller`, `protokollDatum`, `tank`, `sauberkeit`, `mechanik`, `kilometerstand`, `mietvertragID`) VALUES
+(1, 1, '2022-05-23', 100, 'neutral', NULL, 20000, 1),
+(2, 2, '2022-05-23', 65, 'sauber', NULL, 4000, 2);
+
 -- --------------------------------------------------------
 
 --
