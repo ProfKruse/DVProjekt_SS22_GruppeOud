@@ -1,7 +1,6 @@
 <!DOCTYPE html>
     <?php
-        function verfuegbareKfzAnzeigen()
-        {
+        function verfuegbareKfzAnzeigen() {
             require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
 
             $reservierungsdaten = mysqli_fetch_array($con->query("SELECT * FROM reservierungen WHERE reservierungID = ".$_GET["reservierungID"]));
@@ -60,55 +59,44 @@
             }         
             
             $id = array_values($ids)[0];
+            $kfz = mysqli_fetch_array($con->query("SELECT * FROM kfzs WHERE kfzID=$id"));
 
-            //Set status = aktiv
-
-            $tarif;
-            $marke;
-            $modell;
-            $kfzTyp;
-            $kennzeichen;
+            $tarif = mysqli_fetch_array($con->query("SELECT tarifBez FROM tarife WHERE tarifID = (SELECT tarifID FROM kfztypen WHERE kfzTypID=$kategorie)"))[0];
+            $abholstation = mysqli_fetch_array($con->query("SELECT beschreibung FROM mietstationen WHERE mietstationID = ".$abholstation))[0];
+            $kfzTyp = mysqli_fetch_array($con->query("SELECT typBezeichnung FROM kfztypen WHERE kfzTypID = ".$kfz["kfzTypID"]))[0];
+            $zustand;
+            $kilometerstand;
                 
-                if($marke != NULL)
-                {
-                    echo"<center>
-                    <table class='mietdaten'>
-                        <thead>
-                            <tr>
-                                <th>Mietstation ID</th>
-                                <th>Mietstation Name</th>
-                                <th>Tarif ID</th>
-                                <th>Marke</th>
-                                <th>Modell</th>
-                                <th>Typ Bezeichnung</th>
-                                <th>Kennzeichen</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>".$reservierungsdaten['mietstationID']."</td>
-                                <td>$mietstationName</td>
-                                <td>$tarifID_neu</td>
-                                <td>$marke</td>
-                                <td>$modell</td>
-                                <td>$kfzTyp</td>
-                                <td>$kennzeichen</td>
-                            </tr> 
-                        </tbody>
-                    </table>
-                    </center>";
-                    if($tarifID != $tarifID_neu)
-                    {
-                        echo "<span class=form_font_error>Fahrzeug mit Tarifnummer $tarifID sind nicht verfügbar. Nächsthöhere verfügbare Tarifnummer: $tarifID_neu</span>";
-                    }
+            echo"<center>
+                <table class='mietdaten'>
+                    <thead>
+                        <tr>
+                            <th>Mietstation ID</th>
+                             <th>Mietstation Name</th>
+                            <th>Tarif ID</th>
+                            <th>Marke</th>
+                            <th>Modell</th>
+                            <th>Typ Bezeichnung</th>
+                            <th>Kennzeichen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>".$reservierungsdaten['mietstationID']."</td>
+                            <td>$abholstation</td>
+                            <td>$tarif</td>
+                            <td>".$kfz['marke']."</td>
+                            <td>".$kfz['modell']."</td>
+                            <td>$kfzTyp</td>
+                            <td>".$kfz['kennzeichen']."</td>
+                        </tr> 
+                    </tbody>
+                </table>
+                </center>";
+
+                //Set status = aktiv
                     
-                }
-                //<!--Roter Text bei Eingabe einer ungültigen Reservierungsnummer-->
-                else
-                {
-                    echo"<span class=form_font_error>Keine Fahrzeuge mit gewünschten Tarif (oder höher) gefunden!</span>";
-                }
-                    mysqli_close($con);
+                mysqli_close($con);
                 }
             ?>
 <html>
@@ -139,7 +127,7 @@
                     <?php
                         verfuegbareKfzAnzeigen();
                     ?>  
-                /div>
+                </div>
             </center>
             
         </main>
