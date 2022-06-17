@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $message = '<!DOCTYPE html>
         <html>
         <body>
-        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'&emailAdresse='.$email.'" > Reset Your Password!</a> 
+        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'&emailAdresse='.$email.'&table='.$_table.'" > Reset Your Password!</a> 
         
         </body>
         </html>';
