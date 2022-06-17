@@ -51,7 +51,7 @@
                                         <h2 style='font-size:1.2em;'>Leider ist kein Fahrzeug der gewünschten<br> Kategorie verfügbar.</h2><br><br>
                                         <br><h3>Soll stattdessen ein Fahrzeug des Typs ".$typ['typBezeichnung']." zum selben Tarif gebucht werden?</h3>";
                             $buttons = '<div class="buttons" style="width:175px; margin: 25px;">
-                                            <button type="button" onclick="window.location=\'kfz_check.php?reservierungID='.$_GET["reservierungID"].'&kategorie='.$typ['kfzTypID'].'\'">Ja</button>
+                                            <button type="button" onclick="window.location=\'rental_check.php?reservierungID='.$_GET["reservierungID"].'&kategorie='.$typ['kfzTypID'].'\'">Ja</button>
                                             <button type="button" onclick="window.history.go(-1); return false;">Nein</button>
                                         </div>';
 
