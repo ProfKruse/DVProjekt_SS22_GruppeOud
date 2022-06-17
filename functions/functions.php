@@ -198,19 +198,19 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                             try {
                                 
                                 //Einfuegen des Ruecknahmeprotokolltupels in die Datenbank
-                                $statement = "insert INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (". $_SESSION['mitarbeiterID'].",'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
+                                $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (". $_SESSION['mitarbeiterID'].",'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
                                 $ergebnis = $con->query($statement);
                                 //Abfrage der kfzID durch die vertragid
-                                $kfzIDAbfrage =  "select kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
+                                $kfzIDAbfrage =  "SELECT kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
                                 $kfzIDs = mysqli_query($con,$kfzIDAbfrage);
                                 while($tupel = mysqli_fetch_assoc($kfzIDs)){
                                     $kfzID = $tupel["kfzID"];
                                 }
                                 //Aktualisierung des Kilometerstandes in der kfzs Datenbank
-                                $kfzUpdate = "update kfzs SET kilometerStand = " . $kilometerstand . " WHERE kfzID= " . $kfzID . ";";
+                                $kfzUpdate = "UPDATE kfzs SET kilometerStand = " . $kilometerstand . " WHERE kfzID= " . $kfzID . ";";
                                 mysqli_query($con, $kfzUpdate);
                                 //Abfrage der kundendaten
-                                $kundendatenAbfrage = "select * FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
+                                $kundendatenAbfrage = "SELECT * FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
                                 $kundendaten = mysqli_query($con,$kundendatenAbfrage);
                                 while($tupel = mysqli_fetch_assoc($kundendaten)){
                                     $kunde = $tupel;
@@ -226,6 +226,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
                                 } else {
                                     echo "<p>Fehler bei der Eingabe</p>";
+                                    throw $e;
                                 }
                             }                                                  
                         }
@@ -384,7 +385,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
     }
 
     function checkIfIdProtocoleExist(){
-        include("../database/db_inc.php");
+        include("database/db_inc.php");
         $stmt = "select ruecknahmeprotokollID from ruecknahmeprotokolle where mietvertragID = ".$_SESSION['mietvertragid'].";";
         $erg = mysqli_query($con, $stmt);
         $protocole_data = mysqli_fetch_assoc($erg); 
