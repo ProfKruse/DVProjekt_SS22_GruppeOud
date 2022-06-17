@@ -224,7 +224,7 @@ INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietge
 
 CREATE TABLE `mitarbeiter` (
   `mitarbeiterID` int(11) NOT NULL,
-  `nachname` varchar(10) DEFAULT NULL,
+  `nachname` varchar(50) DEFAULT NULL,
   `vorname` varchar(45) NOT NULL,
   `geburtsDatum` date NOT NULL,
   `position` varchar(45) NOT NULL,
