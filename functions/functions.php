@@ -374,8 +374,143 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         send_mail($kundendaten['emailAdresse'],$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
     }
 
-    function createMietvertragPDF() {
-        echo "YES";
+    function createMietvertragPDF($kundendaten, $vertragsdaten, $type) {
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
+        $pdf->setCreator(PDF_CREATOR);
+        $pdf->setAuthor('Rentalcar GmbH');
+        $pdf->setTitle('Rechnung');
+        $pdf->setSubject('Rechnungen');
+    
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+    
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+    
+        $pdf->AddPage();
+    
+        $style = <<<EOF
+            <style>
+                * {
+                    line-height: 100%;
+                    font-family: Monospace;
+                }
+            </style>
+            EOF;
+    
+        $vertragsdatum = date("d.m.Y");
+    
+        $sender_receiver_information = 
+            $style.'
+            <h1 style="font-family: Arial;">Rentalcar</h1>
+            <table>
+                <tr>
+                    <td>'.$kundendaten["name"].'</td>
+                    <td style="text-align:right;">Vertragsdatum: '.$vertragsdatum.'</td>
+                </tr>
+                <tr>
+                    <td>'.$kundendaten["straße"].'</td>
+                    <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
+                </tr>
+            <table>
+            <br>';
+    
+        $rental_data = 
+            $style.'
+            <b>Mietvertrag</b>
+            <pre>
+Sehr geehrter Herr/Frau '.$kundendaten["name"].'
+Vielen Dank für ihre Aufträge.
+Folgend die Mietvertragsdaten:
+            </pre>
+    
+            <table>
+                <tr style="background-color: rgb(228, 228, 228);">
+                    <th>Nr.</th>
+                    <th>Marke</th>
+                    <th>Modell</th>
+                    <th>Datum</th>
+                    <th>Mietdauer</th>
+                    <th>Mietgebühr</th>
+                    <th>Abholstation</th>
+                </tr>';
+
+
+                $rental_data.='<tr>';
+                foreach($vertragsdaten as $key => $value)
+                    $rental_data.="<td>$value</td>";
+                $rental_data.='</tr>';
+    
+        $rental_data.='
+            </table>
+            <br>
+            <hr>';
+    
+        $total_amount =
+            $style.'
+            <hr>
+            <pre style="text-align: right;">
+            Nettobetrag: ';
+    
+            $nettobetrag = $vertragsdaten["mietgebuehr"];
+        
+            $total_amount .=  $nettobetrag.'€
+            </pre>
+            <hr>
+            <br>';
+    
+        $contact_information = <<<EOF
+            $style
+            <table>
+                <tr>
+                    <td>Rentalcar GmbH</td>
+                    <td>Telefon: +49 1234 5678</td>
+                </tr>
+                <tr>
+                    <td>Straße 1</td>
+                    <td>E-Mail: contact@rentalcar.com</td>
+                </tr>
+                <tr>
+                    <td>12345 Ort</td>
+                    <td>Web: www.rentalcar.com</td>
+                </tr>
+            </table>
+            EOF;
+    
+        $pdf->writeHTML($sender_receiver_information, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 5);
+    
+        $pdf->writeHTML($rental_data, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 15);
+    
+        $pdf->writeHTML($total_amount, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 7);
+    
+        $pdf->writeHTML($contact_information, true, false, true, false, '');
+        if (ob_get_contents()) ob_end_clean();
+        
+        $output_type = $type == 'file' ? 'I' : 'S';
+        $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
+    
+        if($type == 'mail') {
+            send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
+            'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihren Mietvertrag entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+            $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
+        }
     }
 
     /*
