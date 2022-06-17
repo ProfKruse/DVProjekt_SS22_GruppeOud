@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.3
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Erstellungszeit: 17. Jun 2022 um 09:03
--- Server-Version: 10.4.21-MariaDB
+-- Host: 127.0.0.1
+-- Erstellungszeit: 17. Jun 2022 um 23:27
+-- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -42,11 +42,11 @@ CREATE TABLE `aktuellepersonalplaene` (
 -- Daten für Tabelle `aktuellepersonalplaene`
 --
 
-INSERT INTO `aktuellepersonalplaene` (`personalplanID`, `erstellDatum`, `gueltigBis`, `mitarbeiterID`, `ersteller`, `abgabestation`) VALUES
-(1, '2022-05-23', '2022-06-17', 1, 4, 1),
-(2, '2022-05-23', '2022-07-20', 3, 4, 3),
-(3, '2022-05-23', '2022-07-04', 2, 1, 4),
-(4, '2022-05-23', '2022-07-13', 4, 3, 2);
+INSERT INTO `aktuellepersonalplaene` (`creationDate`, `updateDate`, `personalplanID`, `erstellDatum`, `gueltigBis`, `mitarbeiterID`, `ersteller`, `abgabestation`) VALUES
+('2022-06-17 21:11:25', '2022-06-17 21:11:25', 1, '2022-05-23', '2022-06-17', 1, 4, 1),
+('2022-06-17 21:11:25', '2022-06-17 21:11:25', 2, '2022-05-23', '2022-07-20', 3, 4, 3),
+('2022-06-17 21:11:25', '2022-06-17 21:11:25', 3, '2022-05-23', '2022-07-04', 2, 1, 4),
+('2022-06-17 21:11:25', '2022-06-17 21:11:25', 4, '2022-05-23', '2022-07-13', 4, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -245,12 +245,13 @@ CREATE TABLE `mitarbeiter` (
 -- Daten für Tabelle `mitarbeiter`
 --
 
-INSERT INTO `mitarbeiter` (`creationDate`, `updateDate`,`mitarbeiterID`, `nachname`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
-('2022-06-06 21:36:06', '2022-06-06 21:36:06', 1 , 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
-('2022-06-06 21:36:06', '2022-06-06 21:36:06', 2 , 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
-('2022-06-06 21:36:06', '2022-06-06 21:36:06', 3 , 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
-('2022-06-06 21:36:06', '2022-06-06 21:36:06', 4 , 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung', NULL, NULL, NULL, NULL, NULL, NULL),
-('2022-06-06 21:36:06', '2022-06-06 21:36:06', 5 , 'Ould Mohand', 'Sihem', '2000-06-15', 'test', 'IT', 'SamCarter', '$2y$10$WHErDa2sEVV8a2.1vs63Lu2oPTNQmJqgzCbyU4gSRasr6tQNSsXne', 1, '16664', 0, 's.ouldmohand@gmail.com');
+INSERT INTO `mitarbeiter` (`creationDate`, `updateDate`, `mitarbeiterID`, `nachname`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 4, 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 5, 'Ould Mohand', 'Sihem', '2000-06-15', 'test', 'IT', 'SamCarter', '$2y$10$WHErDa2sEVV8a2.1vs63Lu2oPTNQmJqgzCbyU4gSRasr6tQNSsXne', 1, '16664', 0, 's.ouldmohand@gmail.com');
+
 -- --------------------------------------------------------
 
 --
@@ -291,21 +292,23 @@ CREATE TABLE `reservierungen` (
   `kundeID` int(11) NOT NULL,
   `kfzTypID` int(11) NOT NULL,
   `mietstationID` int(11) NOT NULL,
+  `abgabestationID` int(11) NOT NULL,
   `status` enum('bestätigt','aktiv','storniert','abgeschlossen','in bearbeitung') NOT NULL,
   `datum` date NOT NULL,
   `Mietbeginn` date NOT NULL,
-  `Mietende` date NOT NULL
+  `Mietende` date NOT NULL,
+  `message` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `reservierungen`
 --
 
-INSERT INTO `reservierungen` (`reservierungID`, `kundeID`, `kfzTypID`, `mietstationID`, `status`, `datum`, `Mietbeginn`, `Mietende`) VALUES
-(65, 5, 4, 1, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11'),
-(66, 5, 4, 1, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11'),
-(67, 5, 4, 1, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12'),
-(68, 5, 4, 1, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12');
+INSERT INTO `reservierungen` (`reservierungID`, `kundeID`, `kfzTypID`, `mietstationID`, `abgabestationID`, `status`, `datum`, `Mietbeginn`, `Mietende`, `message`) VALUES
+(65, 5, 4, 1, 0, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11', NULL),
+(66, 5, 4, 1, 0, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11', NULL),
+(67, 5, 4, 1, 0, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12', NULL),
+(68, 5, 4, 1, 0, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12', NULL);
 
 -- --------------------------------------------------------
 
@@ -454,7 +457,8 @@ ALTER TABLE `reservierungen`
   ADD PRIMARY KEY (`reservierungID`),
   ADD KEY `reservierungen_kfzTypID_idx` (`kfzTypID`),
   ADD KEY `reservierungen_mietstationID_idx` (`mietstationID`),
-  ADD KEY `reservierungen_kundeID_idx` (`kundeID`) USING BTREE;
+  ADD KEY `reservierungen_kundeID_idx` (`kundeID`) USING BTREE,
+  ADD KEY `reservierungen_abgabestationID` (`abgabestationID`);
 
 --
 -- Indizes für die Tabelle `ruecknahmeprotokolle`
@@ -516,19 +520,19 @@ ALTER TABLE `mietstationen`
 -- AUTO_INCREMENT für Tabelle `mietvertraege`
 --
 ALTER TABLE `mietvertraege`
-  MODIFY `mietvertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `mietvertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT für Tabelle `mitarbeiter`
 --
 ALTER TABLE `mitarbeiter`
-  MODIFY `mitarbeiterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `mitarbeiterID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `rechnungen`
 --
 ALTER TABLE `rechnungen`
-  MODIFY `rechnungNr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `rechnungNr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT für Tabelle `reservierungen`
@@ -552,7 +556,7 @@ ALTER TABLE `tarife`
 -- AUTO_INCREMENT für Tabelle `vertraege`
 --
 ALTER TABLE `vertraege`
-  MODIFY `vertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `vertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints der exportierten Tabellen
@@ -604,6 +608,7 @@ ALTER TABLE `rechnungen`
 -- Constraints der Tabelle `reservierungen`
 --
 ALTER TABLE `reservierungen`
+  ADD CONSTRAINT `reservierungen_abgabestationID` FOREIGN KEY (`abgabestationID`) REFERENCES `mietstationen` (`mietstationID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `reservierungen_kfzTypID` FOREIGN KEY (`kfzTypID`) REFERENCES `kfztypen` (`kfzTypID`),
   ADD CONSTRAINT `reservierungen_kundeID` FOREIGN KEY (`kundeID`) REFERENCES `kunden` (`kundeID`),
   ADD CONSTRAINT `reservierungen_mietstationID` FOREIGN KEY (`mietstationID`) REFERENCES `mietstationen` (`mietstationID`);
