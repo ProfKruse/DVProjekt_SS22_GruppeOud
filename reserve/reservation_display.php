@@ -4,9 +4,9 @@
         {
             //Datei für die Verbindung zur Datenbank
             require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
-            if (isset($_POST['reservierungID'])) 
+            if (isset($_GET['reservierungID'])) 
             {
-                $reservierungID = $_POST["reservierungID"];
+                $reservierungID = $_GET["reservierungID"];
 
                 //SQL Abfragen für die einzelnen geforderten Felder - Abbruch bei Fehlern
                 $result = mysqli_fetch_array($con->query("SELECT vorname, nachname FROM kunden JOIN reservierungen ON kunden.kundeID = reservierungen.kundeID WHERE reservierungID =" . $reservierungID));
@@ -122,7 +122,7 @@
             <h1>Reservierungsdaten anzeigen</h1>
             <center>
             <div class="frame">
-            <form action="reservation_display.php" method="POST">
+            <form action="reservation_display.php" method="GET">
                 <!-------------------------------------------------------------->
                 <div class="group">
                     <label for="reservierungID"><b>*Reservierungsnummer</b></label>
@@ -136,13 +136,12 @@
             </form>
             <?php
                 reservierungsdatenAnzeigen();
+                if (isset($_GET['reservierungID'])) {
+                    echo '<button type="submit" name="mieten" onclick="window.location.href=\'kfz_check.php?reservierungID='.$_GET['reservierungID'].'\'">Kfz mieten</button>';
+                }
             ?>
-            <br>  
-            <br>
-            <br>
-            <br>
-                
-            </form>
+
+             
             
         </div>
         </center>

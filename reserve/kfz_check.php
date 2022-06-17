@@ -6,82 +6,64 @@
 
             $reservierungsdaten = mysqli_fetch_array($con->query("SELECT * FROM reservierungen WHERE reservierungID = ".$_GET["reservierungID"]));
             $kategorie = $reservierungsdaten["kfzTypID"];
-            $kategorieBezeichnung = mysqli_fetch_array($con->query("SELECT typBezeichnung FROM kfztypen WHERE kfzTypID=".$kategorie));
+            $abholstation = $reservierungsdaten["mietstationID"];
             
-            //Autos der gewünschten Kategorie, welche allgemein existieren
-            $autosGewuenschterKategorie = $con->query("SELECT * FROM kfzs WHERE kfzTypID=".$kategorie);
-            $kfzids = array();
-            $kfz = array();
+            $kfzids = $con->query("SELECT kfzID FROM kfzs WHERE kfzTypID=$kategorie AND kfzID IN (SELECT kfzID FROM mietstationen_mietwagenbestaende WHERE
+                mietstationID=$abholstation)");
+            $id;
+            $ids = array();
 
-            if($autosGewuenschterKategorie) {
-                while($row = $autosGewuenschterKategorie->fetch_array()) {
-                    
-                    //Autos von der gewünschten Kategorie, welche in der gewünschten Abholstation existieren
-                    $autosAufBestand = mysqli_fetch_array($con->query("SELECT * FROM mietstationen_mietwagenbestaende WHERE mietstationID=".$reservierungsdaten["mietstationID"]
-                    ." AND kfzID=".$row["kfzID"]));
-                    if($autosAufBestand) {
-                        array_push($kfzids, $autosAufBestand["kfzID"]);
-                        echo $autosAufBestand["kfzID"];
+            //Alle IDs der KFZ speichern, welche von der gewünschten Kategorie sind und in der Abholstation stehen
+            if($kfzids) {
+                while($row = $kfzids->fetch_array()) {
+                    array_push($ids,$row["kfzID"]);
+                }
+            }
+
+            //Alle IDs der KFZ suchen, welche von der gewünschten Kategorie sind und in der Abholstation stehen und zur Zeit bereits schon vermietet sind
+            $vertragids = $con->query("SELECT kfzID FROM vertraege WHERE vertragID IN (SELECT vertragID FROM mietvertraege WHERE abholstation=$abholstation AND status!='abgeschlossen')
+                AND kfzID IN (".implode(",",$ids).")");            
+
+            //Entfernen der IDs der KFZ, welche bereits vermietet sind (Übrige KFZ der gewünschten Kategorie)
+            if($vertragids) {
+                while($row = $vertragids->fetch_array()) {
+                    unset($ids[array_search($row["kfzID"],$ids)]);
+                }
+            }
+
+            //Kein Auto der gewünschten Kategorie in der Abholstation verfügbar 
+            if(!$ids) {
+                $kfzids = $con->query("SELECT kfzID FROM kfzs WHERE kfzTypID!=$kategorie AND kfzID IN (SELECT kfzID FROM mietstationen_mietwagenbestaende WHERE
+                    mietstationID=$abholstation) ORDER BY kfzTypID");
+
+                //Wenn alternative Autos zur Verfügung stehen werden deren IDs gespeichert
+                if($kfzids) {
+                    while($row = $kfzids->fetch_array()) {
+                        $vermietet = mysqli_fetch_array($con->query("SELECT kfzID FROM vertraege WHERE vertragID IN (SELECT vertragID FROM mietvertraege WHERE abholstation=$abholstation AND status!='abgeschlossen')
+                            AND kfzID=".$row["kfzID"]));    
+    
+                        //Alternatives Auto anbieten, wenn dieses noch nicht vermietet wurde
+                        if(!$vermietet) {
+                            echo "Stattdessen ".$row["kfzID"]." zum selben Tarif mieten?";
+                            array_push($ids,$row["kfzID"]);
+
+                            //Wenn angemommen: break;
+                            //Sonst: Zurück & Abbrechen
+                            break;
+                        }            
                     }
                 }
-            }
-            else {
-                
-            }
 
-
-            //Alle Verträge mit einem Kfz der gewünschten Kategorie, welche in der gewünschten Abholstation existieren
-            $vertraegeMitGewuenschterKategorie = $con->query("SELECT * FROM vertraege WHERE kfzID IN (".implode(",",$kfzids).")");
-            $laufendeVertraege;
-
-            if($vertraegeMitGewuenschterKategorie) {
-                while($row = $vertraegeMitGewuenschterKategorie->fetch_array()) {
-                    $heute = strtotime(date("Y-m-d"));
-                    $datum = strtotime($row["datum"]);
-                    $maxTage = ($heute-$datum)/86400;
-
-                    //Alle Verträge mit einem Kfz der gewünschten Kategorie, welche spätestens heute enden
-                    $laufendeVertraege = mysqli_fetch_array($con->query("SELECT * FROM mietvertraege WHERE vertragID=".$row["vertragID"].
-                        " AND mietdauerTage <= $maxTage"));
-
-                    //Der Mietvertrag, der der Vertrag ID zugeordnet ist, endet spätestens heute und ist damit wieder verfügbar
-                    if($laufendeVertraege) {
-                        array_push($kfz,$row["kfzID"]);
-                        echo $row["kfzID"]." ist wieder verfügbar";
-                    }                                     
+                else {
+                    echo "Es existiert kein Fahrzeug der gewünschten Kategorie oder alternatives Fahrzeug zur Verfügung";
                 }
-            }
-            else {
-
-            }
-
-
-            /*Vermietbare/Verfügbare Autos: Autos mit der gewünschten Kategorie in der gewünschten Abholstation, welche noch nicht in einem Mietvertrag stehen, welcher
-             *heute noch nicht abläuft (datum+mietdauerTage > heute)
-             */ 
-
-
-            //$vermieteteAutos = ($con->query("SELECT * FROM mietvertraege WHERE abholstation=".$reservierungsdaten["mietstationID"]
-              //  ." AND vertragID IN (SELECT vertragID FROM vertraege WHERE kfzID IN (".implode(",",$kfzids)."))"));
+            }         
             
-            /*if($vermieteteAutos){
-                while($row = $vermieteteAutos->fetch_array()) {
-                    echo $row[""];
-                }
-            }/*
-            $mietstationName = mysqli_fetch_array($con->query("SELECT beschreibung as name FROM mietstationen WHERE mietstationID=".$reservierungsdaten["mietstationID"]))["name"];
-            if($vermieteteAutos) {
-                while($row = $vermieteteAutos->fetch_array()) {
-                    echo $row;
-                }
-            }
-            
-            /*
-             *Sollte kein KFZ der gewünschten Kategorie zur Verfügung stehen, wird ein KFZ der nächsthöheren Kategorie angeboten 
-             */
+            $id = array_values($ids)[0];
 
-            //Variable Werte die abhängig von der verfügbarkeit eines Fahrzeugs bestimmt werden
-            $tarifID_neu;
+            //Set status = aktiv
+
+            $tarif;
             $marke;
             $modell;
             $kfzTyp;
