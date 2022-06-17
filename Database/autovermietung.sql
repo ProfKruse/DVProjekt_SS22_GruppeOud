@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Erstellungszeit: 04. Jun 2022 um 18:41
--- Server-Version: 10.4.24-MariaDB
+-- Host: localhost
+-- Erstellungszeit: 17. Jun 2022 um 09:03
+-- Server-Version: 10.4.21-MariaDB
 -- PHP-Version: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -71,9 +71,9 @@ CREATE TABLE `kfzs` (
 --
 
 INSERT INTO `kfzs` (`kfzID`, `marke`, `modell`, `kfzTypID`, `gesamtnote`, `lackZustand`, `innenraumNote`, `technikZustandNote`, `anmerkungen`, `kilometerStand`, `kennzeichen`) VALUES
-(1, 'Ford', 'Mustang', 4, 2, 2, 1, 3, NULL, 15000, 'WES-DE-12'),
+(1, 'Ford', 'Mustang', 4, 2, 2, 1, 3, NULL, 50, 'WES-DE-12'),
 (2, 'Porsche', '911 Carrera', 4, 1, 1, 1, 1, NULL, 0, 'BO-CD-82'),
-(3, 'Mercedes', 'GLC', 1, 3, 3, 2, 2, NULL, 2500, 'DU-UD-59'),
+(3, 'Mercedes', 'GLC', 1, 3, 3, 2, 2, NULL, 50, 'DU-UD-59'),
 (4, 'Peugeot', '308 SW', 6, 1, 2, 1, 1, NULL, 2000, 'D-AZ-29');
 
 -- --------------------------------------------------------
@@ -108,40 +108,41 @@ INSERT INTO `kfztypen` (`kfzTypID`, `typBezeichnung`, `tarifID`) VALUES
 --
 
 CREATE TABLE `kunden` (
-`creationDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
-  `updateDate` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `kundeID` int NOT NULL AUTO_INCREMENT,
+  `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updateDate` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `kundeID` int(11) NOT NULL,
   `vorname` varchar(45) DEFAULT NULL,
   `nachname` varchar(45) DEFAULT NULL,
   `pseudo` varchar(45) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
-  `validatedAccount` Boolean DEFAULT NULL,
+  `validatedAccount` tinyint(1) DEFAULT NULL,
   `token` varchar(45) DEFAULT NULL,
   `strasse` varchar(45) DEFAULT NULL,
   `hausNr` varchar(4) DEFAULT NULL,
-  `plz` int DEFAULT NULL,
+  `plz` int(11) DEFAULT NULL,
   `ort` varchar(45) DEFAULT NULL,
   `land` varchar(45) DEFAULT NULL,
   `iban` varchar(45) DEFAULT NULL,
   `bic` varchar(45) DEFAULT NULL,
   `telefonNr` varchar(45) DEFAULT NULL,
   `emailAdresse` varchar(45) DEFAULT NULL,
-  `AnzVersuche` int DEFAULT (0),
+  `AnzVersuche` int(11) DEFAULT 0,
   `kontostand` double DEFAULT NULL,
   `sammelrechnungen` enum('keine','woechentlich','monatlich','quartalsweise','halbjaehrlich','jaehrlich') CHARACTER SET utf8 COLLATE utf8_general_mysql500_ci DEFAULT NULL,
   `zahlungszielTage` int(11) DEFAULT NULL,
-    PRIMARY KEY (`kundeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `letzterRechnungsversand` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `kunden`
 --
 
-INSERT INTO `kunden` ( `vorname`, `nachname`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `kontostand`, `pseudo`, `password`, `validatedAccount`, `token`,`AnzVersuche`,`sammelrechnungen`, `zahlungszielTage`) VALUES
-( 'Anne', 'Kappel', 'Bleibtreustraße', 34, 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'AnneKappel@einrot.com', 100, 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL,0,'keine', 1),
-( 'Sihem', 'Osterman', 'Neue Roßstraße', 80, 55545, 'Frankfurt', 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'SihemOstermann@cuvox.de', 200, 'SihemOstermann', '$2y$10$N3lMm01agYLv71ClWzDxdOaufBbbERXvJG1VeqB5uIAyF.tK.8iCy' , 1, NULL,0, 'woechentlich', 7),
-( 'Annabell', 'Bader', 'Joachimstaler Straße', 50, 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'AnnabellBader@einrot.com',500, 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2' , 1, NULL,0, 'monatlich', 14),
-( 'Andrea', 'Osterhagen', 'Feldstrasse', 63, 39446, 'Vreden', 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'AndreaOsterhagen@cuvox.de', 0, 'AndreaOsterhagen', '$2y$10$qvK7j7YpGV/bgKHIdgwoeuG7nmI2442/9uhBohPEst3kRDIicethW' , 1, NULL,0, 'monatlich', 1);
+INSERT INTO `kunden` (`creationDate`, `updateDate`, `kundeID`, `vorname`, `nachname`, `pseudo`, `password`, `validatedAccount`, `token`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `AnzVersuche`, `kontostand`, `sammelrechnungen`, `zahlungszielTage`) VALUES
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 1, 'Anne', 'Kappel', 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL, 'Bleibtreustraße', '34', 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'AnneKappel@einrot.com', 0, 100, 'keine', 1),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 2, 'Sihem', 'Osterman', 'SihemOstermann', '$2y$10$N3lMm01agYLv71ClWzDxdOaufBbbERXvJG1VeqB5uIAyF.tK.8iCy', 1, NULL, 'Neue Roßstraße', '80', 55545, 'Frankfurt', 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'SihemOstermann@cuvox.de', 0, 200, 'woechentlich', 7),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 3, 'Annabell', 'Bader', 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2', 1, NULL, 'Joachimstaler Straße', '50', 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'AnnabellBader@einrot.com', 0, 500, 'monatlich', 14),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 4, 'Andrea', 'Osterhagen', 'AndreaOsterhagen', '$2y$10$qvK7j7YpGV/bgKHIdgwoeuG7nmI2442/9uhBohPEst3kRDIicethW', 1, NULL, 'Feldstrasse', '63', 39446, 'Vreden', 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'AndreaOsterhagen@cuvox.de', 0, 0, 'monatlich', 1),
+('2022-06-06 21:51:30', '2022-06-06 23:52:05', 5, 'Sihem', 'Ould Mohand', 'SamCarter', '$2y$10$WHErDa2sEVV8a2.1vs63Lu2oPTNQmJqgzCbyU4gSRasr6tQNSsXne', 1, '16664', 'sdf', 'd', 4, 'd', 'd', 'd', 'd', 'd', 's.ouldmohand@gmail.com', 0, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -186,7 +187,7 @@ CREATE TABLE `mietstationen_mietwagenbestaende` (
 INSERT INTO `mietstationen_mietwagenbestaende` (`kfzID`, `mietstationID`) VALUES
 (1, 1),
 (2, 1),
-(4, 2),
+(4, 1),
 (3, 4);
 
 -- --------------------------------------------------------
@@ -211,9 +212,9 @@ CREATE TABLE `mietvertraege` (
 -- Daten für Tabelle `mietvertraege`
 --
 
-INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `zahlart`, `abholstation`, `rueckgabestation`, `vertragID` ,`kundeID` ) VALUES
-(1, 'bestätigt', 30, 500, 'Kreditkarte', 1, 2, 1,1),
-(2, 'bestätigt', 60, 2500, 'Rechnung', 4, 3, 2,1);
+INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `zahlart`, `abholstation`, `rueckgabestation`, `vertragID`, `kundeID`) VALUES
+(1, 'bestätigt', 30, 500, 'Kreditkarte', 1, 2, 1, 1),
+(2, 'bestätigt', 60, 2500, 'Rechnung', 4, 3, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -227,18 +228,24 @@ CREATE TABLE `mitarbeiter` (
   `vorname` varchar(45) NOT NULL,
   `geburtsDatum` date NOT NULL,
   `position` varchar(45) NOT NULL,
-  `abteilung` varchar(45) NOT NULL
+  `abteilung` varchar(45) NOT NULL,
+  `pseudo` varchar(50) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `validatedAccount` tinyint(1) DEFAULT NULL,
+  `token` varchar(10) DEFAULT NULL,
+  `AnzVersuche` int(1) DEFAULT NULL,
+  `emailAdresse` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `mitarbeiter`
 --
 
-INSERT INTO `mitarbeiter` (`mitarbeiterID`, `name`, `vorname`, `geburtsDatum`, `position`, `abteilung`) VALUES
-(1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung'),
-(2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb'),
-(3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb'),
-(4, 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung');
+INSERT INTO `mitarbeiter` (`mitarbeiterID`, `name`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
+(1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -254,7 +261,8 @@ CREATE TABLE `rechnungen` (
   `rechnungBetrag` double NOT NULL,
   `mahnstatus` enum('keine','erste Mahnung','zweite Mahnung') NOT NULL,
   `zahlungslimit` date DEFAULT NULL,
-  `bezahltAm` date DEFAULT NULL
+  `bezahltAm` date DEFAULT NULL,
+  `versanddatum` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -277,18 +285,20 @@ CREATE TABLE `reservierungen` (
   `kfzTypID` int(11) NOT NULL,
   `mietstationID` int(11) NOT NULL,
   `status` enum('bestätigt','aktiv','storniert','abgeschlossen','in bearbeitung') NOT NULL,
-  `datum` date NOT NULL
+  `datum` date NOT NULL,
+  `Mietbeginn` date NOT NULL,
+  `Mietende` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `reservierungen`
 --
 
-INSERT INTO `reservierungen` (`reservierungID`, `kundeID`, `kfzTypID`, `mietstationID`, `status`, `datum`) VALUES
-(1, 1, 4, 1, 'bestätigt', '2022-05-28'),
-(2, 3, 1, 4, 'bestätigt', '2022-07-21'),
-(3, 2, 5, 1, 'bestätigt', '2022-06-03'),
-(4, 1, 4, 1, 'bestätigt', '2022-05-31');
+INSERT INTO `reservierungen` (`reservierungID`, `kundeID`, `kfzTypID`, `mietstationID`, `status`, `datum`, `Mietbeginn`, `Mietende`) VALUES
+(65, 5, 4, 1, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11'),
+(66, 5, 4, 1, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11'),
+(67, 5, 4, 1, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12'),
+(68, 5, 4, 1, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12');
 
 -- --------------------------------------------------------
 
@@ -297,15 +307,14 @@ INSERT INTO `reservierungen` (`reservierungID`, `kundeID`, `kfzTypID`, `mietstat
 --
 
 CREATE TABLE `ruecknahmeprotokolle` (
-  `ruecknahmeprotokollID` int(11) NOT NULL AUTO_INCREMENT,
+  `ruecknahmeprotokollID` int(11) NOT NULL,
   `ersteller` int(11) NOT NULL,
   `protokollDatum` date NOT NULL DEFAULT current_timestamp(),
   `tank` float NOT NULL,
   `sauberkeit` enum('sehr schmutzig','leicht schmutzig','neutral','sauber','sehr sauber') NOT NULL,
   `mechanik` varchar(45) DEFAULT NULL,
   `kilometerstand` int(11) NOT NULL,
-  `mietvertragID` int(11) NOT NULL,
-   PRIMARY KEY (`ruecknahmeprotokollID`)
+  `mietvertragID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -386,7 +395,11 @@ ALTER TABLE `kfztypen`
   ADD PRIMARY KEY (`kfzTypID`),
   ADD KEY `kfztypen_tarifID_idx` (`tarifID`);
 
-
+--
+-- Indizes für die Tabelle `kunden`
+--
+ALTER TABLE `kunden`
+  ADD PRIMARY KEY (`kundeID`);
 
 --
 -- Indizes für die Tabelle `mietstationen`
@@ -439,6 +452,7 @@ ALTER TABLE `reservierungen`
 -- Indizes für die Tabelle `ruecknahmeprotokolle`
 --
 ALTER TABLE `ruecknahmeprotokolle`
+  ADD PRIMARY KEY (`ruecknahmeprotokollID`),
   ADD UNIQUE KEY `ruecknahmeprotokolle_mietvertragID` (`mietvertragID`),
   ADD KEY `ruecknahmeprotokolle_ersteller` (`ersteller`);
 
@@ -482,7 +496,7 @@ ALTER TABLE `kfztypen`
 -- AUTO_INCREMENT für Tabelle `kunden`
 --
 ALTER TABLE `kunden`
-  MODIFY `kundeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `kundeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT für Tabelle `mietstationen`
@@ -512,13 +526,13 @@ ALTER TABLE `rechnungen`
 -- AUTO_INCREMENT für Tabelle `reservierungen`
 --
 ALTER TABLE `reservierungen`
-  MODIFY `reservierungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `reservierungID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT für Tabelle `ruecknahmeprotokolle`
 --
 ALTER TABLE `ruecknahmeprotokolle`
-  MODIFY `ruecknahmeprotokollID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ruecknahmeprotokollID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT für Tabelle `tarife`
