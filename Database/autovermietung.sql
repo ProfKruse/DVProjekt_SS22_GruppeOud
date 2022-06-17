@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Erstellungszeit: 13. Jun 2022 um 08:56
+-- Erstellungszeit: 17. Jun 2022 um 09:03
 -- Server-Version: 10.4.21-MariaDB
 -- PHP-Version: 7.4.29
 
@@ -28,6 +28,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `aktuellepersonalplaene` (
+  `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updateDate` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `personalplanID` int(11) NOT NULL,
   `erstellDatum` date DEFAULT current_timestamp(),
   `gueltigBis` date DEFAULT NULL,
@@ -223,24 +225,32 @@ INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietge
 --
 
 CREATE TABLE `mitarbeiter` (
+  `creationDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updateDate` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `mitarbeiterID` int(11) NOT NULL,
-  `name` varchar(45) NOT NULL,
+  `nachname` varchar(50) DEFAULT NULL,
   `vorname` varchar(45) NOT NULL,
   `geburtsDatum` date NOT NULL,
   `position` varchar(45) NOT NULL,
-  `abteilung` varchar(45) NOT NULL
+  `abteilung` varchar(45) NOT NULL,
+  `pseudo` varchar(50) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `validatedAccount` tinyint(1) DEFAULT NULL,
+  `token` varchar(10) DEFAULT NULL,
+  `AnzVersuche` int(1) DEFAULT NULL,
+  `emailAdresse` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `mitarbeiter`
 --
 
-INSERT INTO `mitarbeiter` (`mitarbeiterID`, `name`, `vorname`, `geburtsDatum`, `position`, `abteilung`) VALUES
-(1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung'),
-(2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb'),
-(3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb'),
-(4, 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung');
-
+INSERT INTO `mitarbeiter` (`creationDate`, `updateDate`,`mitarbeiterID`, `nachname`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 1 , 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 2 , 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 3 , 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 4 , 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung', NULL, NULL, NULL, NULL, NULL, NULL),
+('2022-06-06 21:36:06', '2022-06-06 21:36:06', 5 , 'Ould Mohand', 'Sihem', '2000-06-15', 'test', 'IT', 'SamCarter', '$2y$10$WHErDa2sEVV8a2.1vs63Lu2oPTNQmJqgzCbyU4gSRasr6tQNSsXne', 1, '16664', 0, 's.ouldmohand@gmail.com');
 -- --------------------------------------------------------
 
 --
@@ -310,6 +320,14 @@ CREATE TABLE `ruecknahmeprotokolle` (
   `kilometerstand` int(11) NOT NULL,
   `mietvertragID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `ruecknahmeprotokolle`
+--
+
+INSERT INTO `ruecknahmeprotokolle` (`ruecknahmeprotokollID`, `ersteller`, `protokollDatum`, `tank`, `sauberkeit`, `mechanik`, `kilometerstand`, `mietvertragID`) VALUES
+(1, 1, '2022-05-23', 100, 'neutral', NULL, 20000, 1),
+(2, 2, '2022-05-23', 65, 'sauber', NULL, 4000, 2);
 
 -- --------------------------------------------------------
 

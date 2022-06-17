@@ -3,23 +3,21 @@ session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
 
-
-
-
 if ($_SERVER['REQUEST_METHOD'] == "GET") {
+    // Employee or custumer ?
+    $_SESSION['table'] = $_GET['table'];
     $_SESSION["password_token"]= $_GET['password_token'];
     $_SESSION["email"]= $_GET['emailAdresse'];
-    $query = "select * from kunden where token = '{$_SESSION["password_token"]}' limit 1 ";
+    $query = "select * from ".$_SESSION['table']  ." where token = '{$_SESSION["password_token"]}' limit 1 ";
     $result = mysqli_query($con, $query);
     $user_data = mysqli_fetch_assoc($result);
     $_SESSION["email"] = $user_data['emailAdresse'];
 }
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    
     $new_password = $_POST['new_password'];
     $hash = password_hash($new_password, PASSWORD_DEFAULT);
-    $query = "update kunden set password = '$hash' where emailAdresse = '{$_SESSION["email"]}' ";
+    $query = "update ".$_SESSION['table']  ." set password = '$hash' where emailAdresse = '{$_SESSION["email"]}' ";
     $result = mysqli_query($con, $query);
     header("Location: login.php");
     die;
