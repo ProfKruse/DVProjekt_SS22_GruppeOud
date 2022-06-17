@@ -230,7 +230,7 @@ CREATE TABLE `mitarbeiter` (
   `position` varchar(45) NOT NULL,
   `abteilung` varchar(45) NOT NULL,
   `pseudo` varchar(50) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
   `validatedAccount` tinyint(1) DEFAULT NULL,
   `token` varchar(10) DEFAULT NULL,
   `AnzVersuche` int(1) DEFAULT NULL,
