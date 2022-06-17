@@ -374,6 +374,10 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         send_mail($kundendaten['emailAdresse'],$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
     }
 
+    function createMietvertragPDF() {
+        echo "YES";
+    }
+
     /*
         Inhalt: Legt eine neue Rechnung für den Mietvertrag mit der übergebenen Mietvertrag ID in der Datenbank an
         Parameter: $mietvertragId: ID des Mietvertrags in der Datenbank, anhand dessen eine Rechnung erstellt werden soll

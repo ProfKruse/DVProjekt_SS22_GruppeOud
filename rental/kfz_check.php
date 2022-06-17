@@ -1,7 +1,10 @@
 <!DOCTYPE html>
     <?php
+        require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
+
         function verfuegbareKfzAnzeigen() {
-            require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
+
+            global $con;
 
             $reservierungsdaten = mysqli_fetch_array($con->query("SELECT * FROM reservierungen WHERE reservierungID = ".$_GET["reservierungID"]));
             $kategorie = $_GET["kategorie"];
@@ -105,7 +108,7 @@
                                 <th>Kennzeichen</th>
                             </tr>
                         </thead>
-                    <tbody>
+                        <tbody>
                             <tr>
                                 <td>".$reservierungsdaten['mietstationID']."</td>
                                 <td>$abholstation</td>
@@ -120,10 +123,8 @@
                 </center>";
                 echo $mietvertragDaten;
                 
-                $erstellButton = "<button type='button' onclick=''>Mietvertrag abschließen</button>";
+                $erstellButton = '<button type="button" onclick="window.location=\'rental_contract_completion.php?reservierungID='.$_GET["reservierungID"].'&kfztyp='.$id.'\'">Mietvertrag abschließen</button>';
                 echo $erstellButton;
-
-                //Set status = aktiv
                 }
             }
             ?>
