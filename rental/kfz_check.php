@@ -123,7 +123,7 @@
                 </center>";
                 echo $mietvertragDaten;
                 
-                $erstellButton = '<button type="button" onclick="window.location=\'rental_contract_completion.php?reservierungID='.$_GET["reservierungID"].'&kfztyp='.$id.'\'">Mietvertrag abschließen</button>';
+                $erstellButton = '<button type="button" onclick="window.location=\'rental_contract_completion.php?reservierungID='.$_GET["reservierungID"].'&kfzid='.$id.'\'">Mietvertrag abschließen</button>';
                 echo $erstellButton;
                 }
             }
