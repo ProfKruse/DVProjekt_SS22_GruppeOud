@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Erstellungszeit: 13. Jun 2022 um 08:56
+-- Erstellungszeit: 17. Jun 2022 um 09:03
 -- Server-Version: 10.4.21-MariaDB
 -- PHP-Version: 7.4.29
 
@@ -228,18 +228,24 @@ CREATE TABLE `mitarbeiter` (
   `vorname` varchar(45) NOT NULL,
   `geburtsDatum` date NOT NULL,
   `position` varchar(45) NOT NULL,
-  `abteilung` varchar(45) NOT NULL
+  `abteilung` varchar(45) NOT NULL,
+  `pseudo` varchar(50) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `validatedAccount` tinyint(1) DEFAULT NULL,
+  `token` varchar(10) DEFAULT NULL,
+  `AnzVersuche` int(1) DEFAULT NULL,
+  `emailAdresse` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `mitarbeiter`
 --
 
-INSERT INTO `mitarbeiter` (`mitarbeiterID`, `name`, `vorname`, `geburtsDatum`, `position`, `abteilung`) VALUES
-(1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung'),
-(2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb'),
-(3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb'),
-(4, 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung');
+INSERT INTO `mitarbeiter` (`mitarbeiterID`, `name`, `vorname`, `geburtsDatum`, `position`, `abteilung`, `pseudo`, `password`, `validatedAccount`, `token`, `AnzVersuche`, `emailAdresse`) VALUES
+(1, 'Pascal', 'Ewald', '2001-01-01', 'Abteilungsleiter', 'Verwaltung', NULL, NULL, NULL, NULL, NULL, NULL),
+(2, 'Tim', 'Middeke', '2002-02-02', 'Schichtleiter', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+(3, 'Bastian', 'Oymanns', '2003-03-03', 'Sales Manager', 'Vertrieb', NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 'Julian ', 'Eckerskorn', '2005-05-05', 'Geschäftsführer', 'Geschäftsführung', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
