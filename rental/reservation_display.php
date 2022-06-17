@@ -141,7 +141,7 @@
                 if (isset($_GET['reservierungID']) && $datenLesen == TRUE) {
                     global $con;
                     $kfztyp = mysqli_fetch_array($con->query("SELECT kfzTypID FROM reservierungen WHERE reservierungID=".$_GET['reservierungID']))[0];
-                    echo '<button type="submit" name="mieten" onclick="window.location.href=\'kfz_check.php?reservierungID='.$_GET['reservierungID'].'&kategorie='.$kfztyp.'\'">Kfz mieten</button>';
+                    echo '<button type="submit" name="mieten" onclick="window.location.href=\'rental_check.php?reservierungID='.$_GET['reservierungID'].'&kategorie='.$kfztyp.'\'">Kfz mieten</button>';
                 }
             ?>            
         </div>

@@ -374,12 +374,18 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
         send_mail($kundendaten['emailAdresse'],$subject,$message,$pdfString, 'ruecknahmeprotokoll'.date('Y-m-d').'.pdf');
     }
 
+    /*
+        Inhalt: Erzeugt einen Mietvertrag als Datei im PDF-Format
+        Parameter: $kundendaten: Alle relevanten über den Kunden, an den der Vertrag gestellt wird
+                   $vertragsdaten: Alle relevanten Daten eines Mietvertrags, welche in die PDF übernommen werden
+                   $type: Gibt an, ob der generierte Mietvertag als PDF im Format im Browser angezeigt wird oder ob dieser als PDF per E-Mail Anhang verschickt werden soll
+    */
     function createMietvertragPDF($kundendaten, $vertragsdaten, $type) {
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
         $pdf->setCreator(PDF_CREATOR);
         $pdf->setAuthor('Rentalcar GmbH');
-        $pdf->setTitle('Rechnung');
-        $pdf->setSubject('Rechnungen');
+        $pdf->setTitle('Mietvertrag');
+        $pdf->setSubject('Mietverträge');
     
         // set default monospaced font
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
@@ -444,18 +450,16 @@ Folgend die Mietvertragsdaten:
                     <th>Mietdauer</th>
                     <th>Mietgebühr</th>
                     <th>Abholstation</th>
-                </tr>';
+                </tr>
+                <tr>';
 
 
-                $rental_data.='<tr>';
                 foreach($vertragsdaten as $key => $value)
                     $rental_data.="<td>$value</td>";
-                $rental_data.='</tr>';
-    
-        $rental_data.='
-            </table>
-            <br>
-            <hr>';
+        $rental_data.='</tr>
+                    </table>
+                    <br>
+                    <hr>';
     
         $total_amount =
             $style.'
@@ -504,12 +508,12 @@ Folgend die Mietvertragsdaten:
         if (ob_get_contents()) ob_end_clean();
         
         $output_type = $type == 'file' ? 'I' : 'S';
-        $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
+        $pdfString = $pdf->Output("mietvertrag_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
     
         if($type == 'mail') {
-            send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
+            send_mail($kundendaten["email"],'Mietvertrag zum '.date('d.m.Y'),
             'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihren Mietvertrag entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
-            $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
+            $pdfString, 'mietvertrag_'.date('Y-m-d').'.pdf');
         }
     }
 
@@ -623,9 +627,9 @@ Folgend die Mietvertragsdaten:
 
     /*
         Inhalt: Erzeugt eine Rechnung als Datei im PDF-Format
-        Parameter: $kundendaten: Alle relevanten über den Kunden, an die Rechnung gestellt wird
+        Parameter: $kundendaten: Alle relevanten über den Kunden, an den die Rechnung gestellt wird
                    $rechnungsdaten: Alle relevanten Daten einer oder mehrerer Rechnungen, welche in die PDF übernommen werden
-                   $type: 
+                   $type: Gibt an, ob der generierte Mietvertag als PDF im Format im Browser angezeigt wird oder ob dieser als PDF per E-Mail Anhang verschickt werden soll
                    $einzelrechnungNr: Unterscheidung in Einzelrechnung & Sammelrechnungen für die Bezeichnung innerhalb des Textes
     */
     function createRechnungPDF($kundendaten, $rechnungsdaten, $type) {
