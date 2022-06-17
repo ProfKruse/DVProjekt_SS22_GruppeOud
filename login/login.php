@@ -20,19 +20,18 @@ if (isset($_SESSION["locked"])) {
 $pseudo = ""; // Das brauchen wir, um den Input wieder anzuzeigen, falls die Seite ein Fehler wirft
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    //Check if employee
+    //Check if employee or custumer
     if(isset($_POST['bedingung'])){
         $_table = 'mitarbeiter';
     }
     else{
-        $_table = 'kunde';
+        $_table = 'kunden';
     }
     //Daten der Benutzer abfrgen, nachdem den Button "Anmelden" gedrückt wird.
     $pseudo = $_POST['pseudo'];
     $password = $_POST['password'];
     $query = "select * from ". $_table  ." where pseudo = '$pseudo' limit 1 ";
     $result = mysqli_query($con, $query);
-
     //Falls der Benutzer vorhanden ist
     if (mysqli_num_rows($result) > 0) {
 
@@ -52,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 header("Location: ../index.php");
                 die;
             }
-
         }
         //falls das Passwort falsch ist starten wir den prozess der Abzhälung von den Versuchen
         else {
@@ -127,9 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     </div>
                     <label for="password">*Passwort</label>
                     <input type="password" name="password" placeholder="Passwort" required>
-                    
 
-                    
                     
                     <div><a href="forgot_password.php">Passwort vergessen?</a></div>
 
