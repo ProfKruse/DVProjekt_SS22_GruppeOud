@@ -787,6 +787,173 @@ Wir erlauben uns folgende Rechnungsstellung:
     }
 
     /*
+        Inhalt: Erzeugt eine Rechnung als Datei im PDF-Format
+        Parameter: $kundendaten: Alle relevanten über den Kunden, an den die Rechnung gestellt wird
+                   $rechnungsdaten: Alle relevanten Daten einer oder mehrerer Rechnungen, welche in die PDF übernommen werden
+                   $type: Gibt an, ob der generierte Mietvertag als PDF im Format im Browser angezeigt wird oder ob dieser als PDF per E-Mail Anhang verschickt werden soll
+                   $einzelrechnungNr: Unterscheidung in Einzelrechnung & Sammelrechnungen für die Bezeichnung innerhalb des Textes
+    */
+    function createMahnungPDF($kundendaten, $mahnungsdaten, $type) {
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
+        $pdf->setCreator(PDF_CREATOR);
+        $pdf->setAuthor('Rentalcar GmbH');
+        $pdf->setTitle('Mahnung');
+        $pdf->setSubject('Mahnungen');
+    
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+    
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+    
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+    
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+            require_once(dirname(__FILE__).'/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+    
+        $pdf->AddPage();
+        
+    
+        $style = <<<EOF
+            <style>
+                * {
+                    line-height: 100%;
+                    font-family: Monospace;
+                }
+            </style>
+            EOF;
+        
+        $betrag = $mahnungsdaten["rechnungbetrag"]+($mahnungsdaten["rechnungbetrag"]*0.19);
+
+        $mahngebuehr = 0;
+        $verzugszinsen = 0;
+        if($mahnungsdaten["mahnungnr"] > 1) {
+            $mahngebuehr = (0.05*$betrag) > 150 ? 150 : (0.05*$betrag);
+            
+            $säumnistage = (strtotime(date("Y-m-d"))-strtotime($mahnungsdaten["alte_zahlungsfrist"]))/86400;
+            $forderungsbetrag = $betrag;
+            $verzugszinsen = sprintf("%.2f",$forderungsbetrag*0.05*$säumnistage/365*100);             
+        }
+
+    
+        $mahnungsdatum = date("d.m.Y");
+    
+        $sender_receiver_information = 
+            $style.'
+            <h1 style="font-family: Arial;">Rentalcar</h1>
+            <table>
+                <tr>
+                    <td>'.$kundendaten["name"].'</td>
+                    <td style="text-align:right;">Rechnungsdatum: '.$mahnungsdatum.'</td>
+                </tr>
+                <tr>
+                    <td>'.$kundendaten["straße"].'</td>
+                    <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
+                </tr>
+            <table>
+            <br>';
+    
+        $reminder_1 = 
+            $style.'
+            <br>Da das Zahlungsziel nicht eingehalten wurde bitten wir sie bis zum <br>'.$mahnungsdaten["neue_zahlungsfrist"].
+            ' den geforderten Betrag von '.$mahnungsdaten["rechnungbetrag"].' zu zahlen.<br>'.
+            '<br>Wir erlauben uns Ihnen eine Mahngebühr und Verzugszinsen beim Überschreiten der neuen Zahlungsfrist in Rechnung zu stellen.';
+
+        $reminder_2 = 
+        $style.'
+            <br>Da das Zahlungsziel erneut nicht eingehalten wurde fordern wir sie <br>erneut zu einer Zahlung des Betrags bis zum '.$mahnungsdaten["neue_zahlungsfrist"].' auf.
+            <br>Da die zweite Zahlungsfrist nicht eingehalten wurde, wird eine Mahngebühr in Höhe von '.$mahngebuehr.'€ erhoben zuzuüglich Verzugszinsen in Höhe von <br>4% p.a.';
+           
+        $reminder_3 = 
+            $style.'
+            <br>Da der geforderte Betrag nach zweimaliger Aufforderungen nicht innerhalb der verlängerten Zahlungsfrist beglichen wurde, werden wir von<br>einem gerichtlichen Mahnverfahren Gebrauch machen, sollte der<br>
+unten geforderte Betrag nicht innerhalb von 7 Tagen, bis zum<br>'.$mahnungsdaten["neue_zahlungsfrist"].' eingangen sein.';
+
+        $reminder = ($mahnungsdaten["mahnungnr"] == 1) ? $reminder_1 : $reminder_2;
+
+        if($mahnungsdaten["mahnungnr"] == 3) {
+            $reminder = $reminder_3;
+        }
+
+        $reminder_data = 
+            $style.'
+            <b>Mahnung</b>
+            <pre>
+Sehr geehrter Herr/Frau '.$kundendaten["name"].'<br><
+<br>Die Rechnung mit der Nr. '.$mahnungsdaten["rechnungnr"].' vom '.$mahnungsdaten["rechnungdatum"].' hat eine Zahlungsfrist
+von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_zahlungsfrist"].' fällig.<br>'.$reminder.'
+            </pre>
+            </table>
+            <br>
+            <hr>';
+    
+       $total_amount =
+            $style.'
+            <hr>
+            <pre style="text-align: right;">
+            Nettobetrag: ';
+    
+            $nettobetrag = $mahnungsdaten["rechnungbetrag"];
+        
+            $total_amount .=  $nettobetrag.'€
+            zzgl. 19% MwSt: '.($nettobetrag*0.19).'€
+            <br>Mahngebühr +'.$mahngebuehr.'€
+            Verzugszinsen +'.$verzugszinsen.'€
+            <b>Gesamtbetrag:'.($betrag+$mahngebuehr+$verzugszinsen).'€</b>
+            </pre>
+            <hr>
+            <br>';
+    
+        $contact_information = <<<EOF
+            $style
+            <table>
+                <tr>
+                    <td>Rentalcar GmbH</td>
+                    <td>Telefon: +49 1234 5678</td>
+                </tr>
+                <tr>
+                    <td>Straße 1</td>
+                    <td>E-Mail: contact@rentalcar.com</td>
+                </tr>
+                <tr>
+                    <td>12345 Ort</td>
+                    <td>Web: www.rentalcar.com</td>
+                </tr>
+            </table>
+            EOF;
+    
+        $pdf->writeHTML($sender_receiver_information, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 5);
+    
+        $pdf->writeHTML($reminder_data, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 15);
+    
+        $pdf->writeHTML($total_amount, true, false, true, false, '');
+    
+            pdf_area_separation($pdf, 7);
+    
+        $pdf->writeHTML($contact_information, true, false, true, false, '');
+        if (ob_get_contents()) ob_end_clean();
+        
+        $output_type = $type == 'file' ? 'I' : 'S';
+        $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
+    
+        if($type == 'mail') {
+            send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
+            'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+            $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
+        }
+    }
+
+    /*
         Generiert für , jeden Kunden einzeln welcher Sammelrechnungen vereinbart hat, aus allen Rechnungen die am aktuellen Tag zu versenden sind eine Sammelrechnung und verschickt
         diese per E-Mail an den jeweiligen Kunden.
         Die Funktion wird 1x am Tag von der Aufgabe "Sammelrechnungen_Versand", beschrieben in trigger/Sammelrechnungen_Versand.xml, von der Windows Aufgabenplanung aufgerufen

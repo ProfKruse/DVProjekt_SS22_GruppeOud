@@ -125,6 +125,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         <th>Betrag</th>
                         <th>Mahngebühr</th>
                         <th>Zahlungsfrist</th>
+                        <th>Herunterladen</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -136,6 +137,8 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                             while($row = $result->fetch_assoc()) {
                                 $mahngebuehr = ($row["mahnstatus"] == "erste Mahnung") ? 0 : (0.05*$row["rechnungBetrag"]);
                                 $verlaengerung = ($row["mahnstatus"] == "erste Mahnung") ? 7 : 14;
+                                if($row["mahnstatus"] == "dritte Mahnung")
+                                    $verlaengerung = 21;
                                 $zahlungsfrist = date("Y-m-d",strtotime($row["zahlungslimit"])+($verlaengerung*86400));
 
                                 if($mahngebuehr > 150)
@@ -147,6 +150,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                                 "<td>".$row["rechnungBetrag"]."€</td>".
                                 "<td>".$mahngebuehr."€</td>".
                                 "<td>".$zahlungsfrist."</td>".
+                                '<td><button type="button" onclick="window.location.href=\'reminder.php?reminder_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>'.
                                 "</tr>";
                             }
                         }
