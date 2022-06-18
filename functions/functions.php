@@ -524,14 +524,14 @@ Folgend die Mietvertragsdaten:
     function rechnungAnlegen($mietvertragId) {
         global $con;
 
-        $mietvertrag = $con->query("SELECT * FROM mietvertraege WHERE mietvertragID=1");
-        if($mietvertrag->num_rows > 0) {
-            while($row = $mietvertrag->fetch_array()) {
+        $ID;
+        $mietvertrag = mysqli_fetch_array($con->query("SELECT * FROM mietvertraege WHERE mietvertragID=$mietvertragId"));
+        if($mietvertrag != NULL) {
                 $rechnungdatum   = strtotime(date("Y-m-d"));
                 $zahlungslimit;
                 $versanddatum;
 
-                $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$row["kundeID"]));
+                $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$mietvertrag["kundeID"]));
                 $zahlungszielTage = $kunde["zahlungszielTage"];
                 $zahlungslimit = ($zahlungszielTage*86400)+$rechnungdatum;
 
@@ -549,7 +549,7 @@ Folgend die Mietvertragsdaten:
                         break;
 
                     case "monatlich":
-                        if(explode('-',$row['rechnungDatum'])[2] != '01') {
+                        if(explode('-',$mietvertrag['rechnungDatum'])[2] != '01') {
                             $versanddatum = strtotime('first day of next month');
                             $zahlungslimit = $zahlungslimit - $rechnungdatum + strtotime('first day of next month');
                         }
@@ -617,12 +617,13 @@ Folgend die Mietvertragsdaten:
                     $zahlungslimit = date('Y-m-d',$zahlungslimit);
                     $versanddatum = date('Y-m-d',$versanddatum);
 
+                    $ID = mysqli_fetch_array($con->query("SELECT rechnungNr FROM rechnungen ORDER BY rechnungNr DESC"))[0]+1;
                     $insertStatement = "INSERT INTO rechnungen (mietvertragID, kundeID, rechnungDatum, rechnungBetrag, mahnstatus, zahlungslimit, versanddatum)
-                        VALUES ($mietvertragId, ".$row["kundeID"].", '".date('Y-m-d')."', ".$row["mietgebuehr"].", 'keine', '$zahlungslimit', '$versanddatum') ";
+                        VALUES ($mietvertragId, ".$mietvertrag["kundeID"].", '".date('Y-m-d')."', ".$mietvertrag["mietgebuehr"].", 'keine', '$zahlungslimit', '$versanddatum') ";
 
                     $con->query($insertStatement);
             }
-        }
+        return $ID;
     }
 
     /*
@@ -944,12 +945,12 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
         if (ob_get_contents()) ob_end_clean();
         
         $output_type = $type == 'file' ? 'I' : 'S';
-        $pdfString = $pdf->Output("rechung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
+        $pdfString = $pdf->Output("mahnung_".$kundendaten["kundennr"]."_".date('Y-m-d').'.pdf', $output_type);
     
         if($type == 'mail') {
-            send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
-            'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
-            $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
+            send_mail($kundendaten["email"],'Mahnung zum '.date('d.m.Y'),
+            'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie die Mahnung zur Zahlungsauforderung entnehmen.<br><br>Ihr Rentalcar Team.',
+            $pdfString, 'mahnung_'.date('Y-m-d').'.pdf');
         }
     }
 

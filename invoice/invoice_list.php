@@ -93,7 +93,10 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         */
                         if($result->num_rows > 0) {
                             while($row = $result->fetch_array()) {
-                                $verspaetung = $row["bezahltAm"] == NULL ? "-" : ceil((strtotime($row["bezahltAm"])-$zahlungslimit)/86400);                             
+                                $verspaetung = "-";
+                                if($row["bezahltAm"] != NULL && strtotime($row["bezahltAm"]) > strtotime($row["zahlungslimit"])) {
+                                    $verspaetung = ceil((strtotime($row["bezahltAm"])-strtotime($row["zahlungslimit"]))/86400);
+                                }                   
 
                                 echo '<tr>
                                 <td>'.$row["rechnungNr"].'</td>
