@@ -36,7 +36,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                 <thead>
                     <tr>
                         <th>Rechnungsnummer</th>            
-                        <th>Erstellt am</th>          
+                        <th>Versanddatum</th>          
                         <th>Zu bezahlen bis</th>          
                         <th>Bezahlt am</th>          
                         <th>Verspätung in Tagen</th>    
@@ -97,7 +97,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
 
                                 echo '<tr>
                                 <td>'.$row["rechnungNr"].'</td>
-                                <td>'.$row["rechnungDatum"].'</td>
+                                <td>'.$row["versanddatum"].'</td>
                                 <td>'.$row["zahlungslimit"].'</td>
                                 <td>'.$row["bezahltAm"].'</td>
                                 <td>'.$verspaetung.'</td>
@@ -123,6 +123,8 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         <th>Rechnungsnummer</th>
                         <th>Mahnungssstatus</th>
                         <th>Betrag</th>
+                        <th>Mahngebühr</th>
+                        <th>Zahlungsfrist</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,10 +134,19 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                             $result = $con->query("SELECT * FROM rechnungen WHERE mahnstatus != 'keine'");
                             
                             while($row = $result->fetch_assoc()) {
+                                $mahngebuehr = ($row["mahnstatus"] == "erste Mahnung") ? 0 : (0.05*$row["rechnungBetrag"]);
+                                $verlaengerung = ($row["mahnstatus"] == "erste Mahnung") ? 7 : 14;
+                                $zahlungsfrist = date("Y-m-d",strtotime($row["zahlungslimit"])+($verlaengerung*86400));
+
+                                if($mahngebuehr > 150)
+                                    $mahngebuehr = 150;
+
                                 echo "<tr>".
                                 "<td>".$row["rechnungNr"]."</td>".
                                 "<td>".$row["mahnstatus"]."</td>".
                                 "<td>".$row["rechnungBetrag"]."€</td>".
+                                "<td>".$mahngebuehr."€</td>".
+                                "<td>".$zahlungsfrist."</td>".
                                 "</tr>";
                             }
                         }
