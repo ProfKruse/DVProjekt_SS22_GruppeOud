@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 17. Jun 2022 um 23:27
+-- Erstellungszeit: 19. Jun 2022 um 16:27
 -- Server-Version: 10.4.24-MariaDB
 -- PHP-Version: 7.4.29
 
@@ -139,11 +139,11 @@ CREATE TABLE `kunden` (
 --
 
 INSERT INTO `kunden` (`creationDate`, `updateDate`, `kundeID`, `vorname`, `nachname`, `pseudo`, `password`, `validatedAccount`, `token`, `strasse`, `hausNr`, `plz`, `ort`, `land`, `iban`, `bic`, `telefonNr`, `emailAdresse`, `AnzVersuche`, `kontostand`, `sammelrechnungen`, `zahlungszielTage`) VALUES
-('2022-06-06 21:36:06', '2022-06-13 19:34:33', 1, 'Anne', 'Kappel', 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL, 'Bleibtreustraße', '34', 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'pascal_ewald@web.de', 0, 100, 'woechentlich', 1),
+('2022-06-06 21:36:06', '2022-06-18 17:34:28', 1, 'Anne', 'Kappel', 'AnneKappel', '$2y$10$ee9GJjP4Z8ecotEEadk4f.NAfLkuicMNlNBNrVzBsZEtZiF9KRYZK', 1, NULL, 'Bleibtreustraße', '34', 82061, 'Berlin', 'Deutschland', 'DE78500105172923411175', 'DE78500105172923411175', '07807 66 60 89', 'pascal_ewald@web.de', 0, 100, 'keine', 7),
 ('2022-06-06 21:36:06', '2022-06-13 18:33:13', 2, 'Sihem', 'Osterman', 'SihemOstermann', '$2y$10$N3lMm01agYLv71ClWzDxdOaufBbbERXvJG1VeqB5uIAyF.tK.8iCy', 1, NULL, 'Neue Roßstraße', '80', 55545, 'Frankfurt', 'Deutschland', 'DE14500105174682434577', 'DE14500105174682434577', '0671 10 14 97', 'SihemOstermann@cuvox.de', 0, 200, 'keine', 7),
 ('2022-06-06 21:36:06', '2022-06-16 17:22:41', 3, 'Annabell', 'Bader', 'AnnabellBader', '$2y$10$YkHckqRREHQDyCX6KBPy4eDEmJMNxVMXky9rgWvTkaYMm8NUsmZR2', 1, NULL, 'Joachimstaler Straße', '50', 56288, 'Bocholt', 'Deutschland', 'DE18500105179694155718', 'DE18500105179694155718', '06762 13 64 46', 'pascal_ewald@web.de', 0, 500, 'monatlich', 14),
 ('2022-06-06 21:36:06', '2022-06-06 21:36:06', 4, 'Andrea', 'Osterhagen', 'AndreaOsterhagen', '$2y$10$qvK7j7YpGV/bgKHIdgwoeuG7nmI2442/9uhBohPEst3kRDIicethW', 1, NULL, 'Feldstrasse', '63', 39446, 'Vreden', 'Deutschland', 'DE85500105173378848553', 'DE85500105173378848553', ' 039265 38 37', 'AndreaOsterhagen@cuvox.de', 0, 0, 'monatlich', 1),
-('2022-06-06 21:51:30', '2022-06-06 23:52:05', 5, 'Sihem', 'Ould Mohand', 'SamCarter', '$2y$10$WHErDa2sEVV8a2.1vs63Lu2oPTNQmJqgzCbyU4gSRasr6tQNSsXne', 1, '16664', 'sdf', 'd', 4, 'd', 'd', 'd', 'd', 'd', 's.ouldmohand@gmail.com', 0, NULL, NULL, NULL);
+('2022-06-06 21:51:30', '2022-06-18 17:51:10', 5, 'Sihem', 'Ould Mohand', 'SamCarter', '$2y$10$WHErDa2sEVV8a2.1vs63Lu2oPTNQmJqgzCbyU4gSRasr6tQNSsXne', 1, '16664', 'sdf', 'd', 4, 'd', 'd', 'd', 'd', 'd', 'pascal_ewald@web.de', 0, NULL, 'keine', 7);
 
 -- --------------------------------------------------------
 
@@ -188,8 +188,8 @@ CREATE TABLE `mietstationen_mietwagenbestaende` (
 INSERT INTO `mietstationen_mietwagenbestaende` (`kfzID`, `mietstationID`) VALUES
 (1, 1),
 (2, 1),
-(4, 1),
-(3, 4);
+(3, 4),
+(4, 1);
 
 -- --------------------------------------------------------
 
@@ -202,7 +202,6 @@ CREATE TABLE `mietvertraege` (
   `status` enum('bestätigt','aktiv','storniert','abgeschlossen','in bearbeitung') NOT NULL,
   `mietdauerTage` int(11) NOT NULL,
   `mietgebuehr` double NOT NULL,
-  `zahlart` varchar(45) NOT NULL,
   `abholstation` int(11) NOT NULL,
   `rueckgabestation` int(11) NOT NULL,
   `vertragID` int(11) NOT NULL,
@@ -213,10 +212,11 @@ CREATE TABLE `mietvertraege` (
 -- Daten für Tabelle `mietvertraege`
 --
 
-INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `zahlart`, `abholstation`, `rueckgabestation`, `vertragID`, `kundeID`) VALUES
-(1, 'bestätigt', 30, 500, 'Kreditkarte', 1, 2, 1, 1),
-(2, 'bestätigt', 60, 2500, 'Rechnung', 4, 3, 2, 1),
-(3, 'bestätigt', 9205, 90000, 'Karte', 4, 3, 3, 1);
+INSERT INTO `mietvertraege` (`mietvertragID`, `status`, `mietdauerTage`, `mietgebuehr`, `abholstation`, `rueckgabestation`, `vertragID`, `kundeID`) VALUES
+(1, 'bestätigt', 30, 500, 1, 2, 1, 1),
+(2, 'bestätigt', 60, 2500, 4, 3, 2, 1),
+(3, 'bestätigt', 9205, 90000, 4, 3, 3, 1),
+(24, 'bestätigt', 9, 2250, 1, 1, 4, 5);
 
 -- --------------------------------------------------------
 
@@ -264,7 +264,7 @@ CREATE TABLE `rechnungen` (
   `kundeID` int(11) NOT NULL,
   `rechnungDatum` date NOT NULL DEFAULT current_timestamp(),
   `rechnungBetrag` double NOT NULL,
-  `mahnstatus` enum('keine','erste Mahnung','zweite Mahnung') NOT NULL,
+  `mahnstatus` enum('keine','erste Mahnung','zweite Mahnung','dritte Mahnung') NOT NULL,
   `zahlungslimit` date DEFAULT NULL,
   `bezahltAm` date DEFAULT NULL,
   `versanddatum` date DEFAULT NULL
@@ -275,11 +275,9 @@ CREATE TABLE `rechnungen` (
 --
 
 INSERT INTO `rechnungen` (`rechnungNr`, `mietvertragID`, `kundeID`, `rechnungDatum`, `rechnungBetrag`, `mahnstatus`, `zahlungslimit`, `bezahltAm`, `versanddatum`) VALUES
-(1, 1, 1, '2022-05-23', 500, 'keine', '2022-06-22', NULL, '2022-06-16'),
-(2, 2, 3, '2022-05-23', 2500, 'keine', '2022-06-17', NULL, '2022-06-16'),
-(3, 3, 1, '2022-06-13', 10500, 'keine', '2022-06-24', NULL, '2022-06-23'),
-(6, 1, 1, '2022-06-16', 5000, 'keine', '2022-06-21', NULL, '2022-06-16'),
-(7, 1, 1, '2022-06-16', 500, 'keine', '2022-06-21', NULL, '2022-06-20');
+(1, 1, 1, '2022-05-25', 5000, 'zweite Mahnung', '2022-06-06', NULL, '2022-05-30'),
+(2, 2, 1, '2022-06-01', 2500, 'erste Mahnung', '2022-06-13', NULL, '2022-06-06'),
+(3, 3, 1, '2022-06-15', 10500, 'keine', '2022-06-25', '2022-06-27', '2022-06-18');
 
 -- --------------------------------------------------------
 
@@ -305,10 +303,10 @@ CREATE TABLE `reservierungen` (
 --
 
 INSERT INTO `reservierungen` (`reservierungID`, `kundeID`, `kfzTypID`, `mietstationID`, `abgabestationID`, `status`, `datum`, `Mietbeginn`, `Mietende`, `message`) VALUES
-(65, 5, 4, 1, 0, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11', NULL),
-(66, 5, 4, 1, 0, 'bestätigt', '2022-06-11', '2022-06-11', '2022-06-11', NULL),
-(67, 5, 4, 1, 0, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12', NULL),
-(68, 5, 4, 1, 0, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12', NULL);
+(65, 5, 4, 1, 2, 'aktiv', '2022-06-11', '2022-06-11', '2022-06-20', NULL),
+(66, 5, 4, 1, 3, 'aktiv', '2022-06-11', '2022-06-11', '2022-06-16', NULL),
+(67, 5, 4, 1, 2, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12', NULL),
+(68, 5, 4, 1, 2, 'bestätigt', '2022-06-12', '2022-06-12', '2022-06-12', NULL);
 
 -- --------------------------------------------------------
 
@@ -377,7 +375,8 @@ CREATE TABLE `vertraege` (
 INSERT INTO `vertraege` (`vertragID`, `datum`, `kundeID`, `kfzID`) VALUES
 (1, '2022-05-23', 1, 1),
 (2, '2022-05-23', 3, 3),
-(3, '2022-06-13', 1, 4);
+(3, '2022-06-13', 1, 4),
+(4, '2022-06-19', 5, 2);
 
 --
 -- Indizes der exportierten Tabellen
@@ -422,6 +421,7 @@ ALTER TABLE `mietstationen`
 -- Indizes für die Tabelle `mietstationen_mietwagenbestaende`
 --
 ALTER TABLE `mietstationen_mietwagenbestaende`
+  ADD PRIMARY KEY (`kfzID`,`mietstationID`),
   ADD UNIQUE KEY `mietstationen_mietwagenbestaende_kfzID` (`kfzID`),
   ADD KEY `mietwagenbestaende_mietstationID_idx` (`mietstationID`),
   ADD KEY `mietwagenbestaende_kfzID_idx` (`kfzID`) USING BTREE;
@@ -520,7 +520,7 @@ ALTER TABLE `mietstationen`
 -- AUTO_INCREMENT für Tabelle `mietvertraege`
 --
 ALTER TABLE `mietvertraege`
-  MODIFY `mietvertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `mietvertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT für Tabelle `mitarbeiter`
@@ -532,7 +532,7 @@ ALTER TABLE `mitarbeiter`
 -- AUTO_INCREMENT für Tabelle `rechnungen`
 --
 ALTER TABLE `rechnungen`
-  MODIFY `rechnungNr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `rechnungNr` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT für Tabelle `reservierungen`
@@ -556,7 +556,7 @@ ALTER TABLE `tarife`
 -- AUTO_INCREMENT für Tabelle `vertraege`
 --
 ALTER TABLE `vertraege`
-  MODIFY `vertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `vertragID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints der exportierten Tabellen
