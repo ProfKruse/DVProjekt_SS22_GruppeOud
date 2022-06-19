@@ -10,14 +10,14 @@ $email = "";
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     //Check if employee or custumer
     if(isset($_POST['bedingung'])){
-        $_table = 'mitarbeiter';
+        $_SESSION['table'] = 'mitarbeiter';
     }
     else{
-        $_table = 'kunden';
+        $_SESSION['table'] = 'kunden';
     }
     $email = $_POST['emailAdresse'];
 
-    $query_email = "select * from ". $_table  ." where emailAdresse = '$email' limit 1 ";
+    $query_email = "select * from ".$_SESSION['table']  ." where emailAdresse = '$email' limit 1 ";
     $result_email = mysqli_query($con, $query_email);
  
     if (mysqli_num_rows($result_email) == 0) {
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $message = '<!DOCTYPE html>
         <html>
         <body>
-        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'&emailAdresse='.$email.'&table='.$_table.'" > Reset Your Password!</a> 
+        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'&emailAdresse='.$email.'&table='.$_SESSION['table'].'" > Reset Your Password!</a> 
         
         </body>
         </html>';

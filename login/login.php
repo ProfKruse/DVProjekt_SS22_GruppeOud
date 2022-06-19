@@ -21,25 +21,26 @@ $pseudo = ""; // Das brauchen wir, um den Input wieder anzuzeigen, falls die Sei
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     //Check if employee or custumer
-    if(isset($_POST['bedingung'])){
-        $_table = 'mitarbeiter';
+    if(isset($_POST['bedingung']) and $_POST['bedingung'] == "on"){
+        $_SESSION['table'] = 'mitarbeiter';
+        echo $_SESSION['table'];
     }
     else{
-        $_table = 'kunden';
+        $_SESSION['table'] = 'kunden';
     }
     //Daten der Benutzer abfrgen, nachdem den Button "Anmelden" gedrückt wird.
+   
     $pseudo = $_POST['pseudo'];
     $password = $_POST['password'];
-    $query = "select * from ". $_table  ." where pseudo = '$pseudo' limit 1 ";
+    $query = "select * from ". $_SESSION['table']  ." where pseudo = '$pseudo' limit 1 ";
     $result = mysqli_query($con, $query);
     //Falls der Benutzer vorhanden ist
     if (mysqli_num_rows($result) > 0) {
-
+     
         // Daten in $user_data speichern
         $user_data = mysqli_fetch_assoc($result);
 
         // Ist das Konto aktiviert?
-
         //hier prüfen wir seinen Passwort, falls alles oki ist, wird die Anmeldung abgeschlossen
         if (password_verify($password, $user_data['password'])) {
             $_SESSION['pseudo'] = $user_data['pseudo'];
@@ -56,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         else {
             $_SESSION['login_attempts'] = $user_data['AnzVersuche'];
             $_SESSION['login_attempts'] += 1;
-            $insert_attempt = "update".$_table ."set AnzVersuche = {$_SESSION['login_attempts']}"; // Die Versuche in der Datenbankspeichern
+            $insert_attempt = "update".$_SESSION['table'] ."set AnzVersuche = {$_SESSION['login_attempts']}"; // Die Versuche in der Datenbankspeichern
             mysqli_query($con, $insert_attempt);
 
             //Checken ob der Anzahl der Versuche unter der erlaubte Grenze ist. In diesem fall 3 Versuche

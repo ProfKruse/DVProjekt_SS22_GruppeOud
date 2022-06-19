@@ -12,12 +12,28 @@ session_start();
         <header>
             <nav>
                 <ul class="left-bar">
-                    <img id="car-symbol" src="src/images/car_symbol.png">
-                    <li><b><a href="reserve/reservation.php">Auto reservieren</a></b></li>
-                    <li><b><a href="return/return_dialog.php">KFZ zurücknehmen</a></b></li>
-                    <li><b><a href="invoice/invoice_list.php">Rechnungen</a></b></li>
-                    <li><b><a href="#about">Über uns</a></b></li>
-                    <li><b><a href="#contact">Kontakt</a></b></li>
+                <img id="car-symbol" src="src/images/car_symbol.png">
+                    <?php
+                    if(isset($_SESSION['table']) and $_SESSION['table']=='mitarbeiter'){
+                    ?>
+                        <li><b><a href="reserve/reservation.php">Auto reservieren</a></b></li>
+                        <li><b><a href="invoice/invoice_list.php">Rechnungen</a></b></li>
+                        <li><b><a href="return/return_dialog.php">KFZ zurücknehmen</a></b></li>
+                        <li><b><a href="#about">Über uns</a></b></li>
+                        <li><b><a href="#contact">Kontakt</a></b></li>
+                    <?php
+                    }else{?>
+                        <li><b><a href="reserve/reservation.php">Auto reservieren</a></b></li>
+                        <li><b><a href="invoice/invoice_list.php">Rechnungen</a></b></li>
+                        <li><b><a href="#about">Über uns</a></b></li>
+                        <li><b><a href="#contact">Kontakt</a></b></li>
+                        <?php
+
+                    }?>
+                      
+
+
+
                 </ul>
                 <?php
                 //$_SESSION['pseudo'] = "pascal";
