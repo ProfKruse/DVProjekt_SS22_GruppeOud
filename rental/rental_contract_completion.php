@@ -21,8 +21,8 @@
         $abholstation = mysqli_fetch_array($con->query("SELECT beschreibung FROM mietstationen WHERE mietstationID = ".$reservierung["mietstationID"]))[0];
 
         $mietvertragID = mysqli_fetch_array($con->query("SELECT mietvertragID FROM mietvertraege ORDER BY mietvertragID DESC"))[0]+1;
-        $mietvertragInsertStatement = "INSERT INTO mietvertraege (status, mietdauerTage, mietgebuehr, abholstation, rueckgabestation, vertragID, kundeID)
-                        VALUES ('bestätigt', $mietdauer, $mietdauer*$tarif, ".$reservierung["mietstationID"].",".$reservierung["mietstationID"].",$vertragID,".$reservierung["kundeID"].")";
+        $mietvertragInsertStatement = "INSERT INTO mietvertraege (status, mietdauerTage, mietgebuehr, abholstation, rueckgabestation, vertragID, kundeID, reservierungID)
+                        VALUES ('bestätigt', $mietdauer, $mietdauer*$tarif, ".$reservierung["mietstationID"].",".$reservierung["mietstationID"].",$vertragID,".$reservierung["kundeID"].",$reservierungID)";
                         
         $con->query($vertragInsertStatement);
         $con->query($mietvertragInsertStatement);
