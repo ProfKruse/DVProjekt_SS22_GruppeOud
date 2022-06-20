@@ -2,7 +2,7 @@
 if(!isset($_SESSION)) session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
-$_SESSION["kunde"] = 202;
+$_SESSION["kunde"] = 487;
 $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden WHERE kundeID=".$_SESSION["kunde"]))[0];
 ?>
 
@@ -135,7 +135,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                     <?php
                         function mahnungen() {
                             global $con;
-                            $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." mahnstatus != 'keine'");
+                            $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND mahnstatus != 'keine'");
                             
                             if($result) {
                                 while($row = $result->fetch_assoc()) {
