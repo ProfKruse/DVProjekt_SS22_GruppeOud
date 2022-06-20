@@ -6,7 +6,7 @@
         include("../database/db_inc.php");
         //require fuer die Funkionsaufrufe
         include("../functions/functions.php");
-        $user_data = check_login($con);  
+        $user_data = check_login_Mitarbeiter($con);  
     ?> 
 <html> 
     <head> 

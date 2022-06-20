@@ -26,6 +26,21 @@ function check_login($con){
         die;
     }
 }
+function check_login_Mitarbeiter($con){
+    if(isset($_SESSION['pseudo'])){      
+        $id = $_SESSION['pseudo'];
+        $query = "select * from mitarbeiter where pseudo = '$id' limit 1";
+
+        $result = mysqli_query($con,$query);
+        if($result && mysqli_num_rows($result) > 0){
+            $user_data = mysqli_fetch_assoc($result);
+            return $user_data;
+        } 
+    }else{
+        header("Location: ../login/logout.php");
+        die;
+    }
+}
 
 function check_no_login($con){
     if(isset($_SESSION['pseudo'])){      
@@ -117,7 +132,6 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                             <th>Status</th> 
                             <th>Mietdauer in Tagen</th> 
                             <th>Mietgebuehr</th> 
-                            <th>Zahlart</th> 
                             <th>Abholstation</th> 
                             <th>Rueckgabestation</th> 
                             <th>Vertragsnummer</th> 
@@ -129,8 +143,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                             <td>{$zeile['mietvertragID']}</td> 
                             <td>{$zeile['status']}</td> 
                             <td>{$zeile['mietdauerTage']}</td> 
-                            <td>{$zeile['mietgebuehr']}</td>     
-                            <td>{$zeile['zahlart']}</td> 
+                            <td>{$zeile['mietgebuehr']}</td>  
                             <td>{$zeile['abholstation']}</td> 
                             <td>{$zeile['rueckgabestation']}</td> 
                             <td>{$zeile['vertragID']}</td> 
@@ -300,9 +313,9 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
             $style.'
             <b>Ruecknahmeprotokoll</b>
             <pre>
-            Sehr geehrter Herr/Frau '.$kundendaten["nachname"].'
-            Vielen Dank für Ihre Rueckgabe.
-            Sie hatten folgende Nutzungsdaten:
+Sehr geehrter Herr/Frau '.$kundendaten["nachname"].'
+Vielen Dank für Ihre Rueckgabe.
+Sie hatten folgende Nutzungsdaten:
             </pre>
             <table>
                 <tr style="background-color: rgb(228, 228, 228);">
