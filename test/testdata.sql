@@ -149,7 +149,8 @@ mietgebuehr = ExtractValue(@record, 'mietgebuehr'),
 abholstation = ExtractValue(@record, 'abholstation'),
 rueckgabestation = ExtractValue(@record, 'rueckgabestation'),
 vertragID = ExtractValue(@record, 'vertragID'),
-kundeID = ExtractValue(@record, 'kundeID');
+kundeID = ExtractValue(@record, 'kundeID'),
+reservierungID = ExtractValue(@record, 'reservierungID');
 
 LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/rechnungen.xml'
 INTO TABLE rechnungen
