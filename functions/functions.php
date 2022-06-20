@@ -293,7 +293,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                 <tr>
                     <td>'.$kundendaten["ort"].'</td>
                 </tr>
-            <table>
+            </table>
             <br>';
         //Text zum Ruecknahmeprotokoll und Tabelle mit den nutzungsrelevanten Daten.
         $invoices_data = 
@@ -429,7 +429,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                     <td>'.$kundendaten["straße"].'</td>
                     <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
                 </tr>
-            <table>
+            </table>
             <br>';
     
         $rental_data = 
@@ -687,7 +687,7 @@ Folgend die Mietvertragsdaten:
                     <td>'.$kundendaten["stadt"].'</td>
                     <td style="text-align:right;">Zahlbar bis: '.date("d.m.Y",strtotime($rechnungsdaten[0]["zahlungslimit"])).'</td>
                 </tr>
-            <table>
+            </table>
             <br>';
     
         $invoices_data = 
@@ -856,7 +856,7 @@ Wir erlauben uns folgende Rechnungsstellung:
                     <td>'.$kundendaten["straße"].'</td>
                     <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
                 </tr>
-            <table>
+            </table>
             <br>';
     
         $reminder_1 = 
@@ -889,7 +889,6 @@ Sehr geehrter Herr/Frau '.$kundendaten["name"].'<br><
 <br>Die Rechnung mit der Nr. '.$mahnungsdaten["rechnungnr"].' vom '.$mahnungsdaten["rechnungdatum"].' hat eine Zahlungsfrist
 von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_zahlungsfrist"].' fällig.<br>'.$reminder.'
             </pre>
-            </table>
             <br>
             <hr>';
     
@@ -959,16 +958,14 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
         Die Funktion wird 1x am Tag von der Aufgabe "Mahnungen_Versand", beschrieben in trigger/Mahnungen_Versand.xml, von der Windows Aufgabenplanung aufgerufen
     */
     function mahnungenEvent() {
-        require_once(realpath(dirname(__FILE__) . '/../database/db_inc.php'));
         require_once(realpath(dirname(__FILE__) . '/../invoice/reminder.php'));
         $con = mysqli_connect($host, $user, $passwd, $schema);
-        $heute = date("Y-m-d");
-        $ungezahlteRechnungen = $con->query("SELECT rechnungNr FROM rechnungen WHERE zahlungslimit = '".$heute."' AND bezahltAm IS NULL");
+        $zahltag = date("Y-m-d", strtotime('- 1 day'));
+        $ungezahlteRechnungen = $con->query("SELECT rechnungNr FROM rechnungen WHERE zahlungslimit = '".$zahltag."' AND bezahltAm IS NULL");
 
         if($ungezahlteRechnungen) {
             while($row = $ungezahlteRechnungen->fetch_assoc()) {
-                $data = getReminderData($row["rechnungNr"]);
-                createMahnungPDF($data[0],$data[1],'mail');
+                sendReminder($row["rechnungNr"],'mail');
             }
         }
     }
@@ -979,7 +976,7 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
         Die Funktion wird 1x am Tag von der Aufgabe "Sammelrechnungen_Versand", beschrieben in trigger/Sammelrechnungen_Versand.xml, von der Windows Aufgabenplanung aufgerufen
     */
     function sammelrechnungenEvent() {
-        require_once(realpath(dirname(__FILE__) . '/../database/db_inc.php'));
+        require_once(realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
         $con = mysqli_connect($host, $user, $passwd, $schema);
         $heute = date("Y-m-d");
         $zahlungsausstehendeKunden = $con->query("SELECT DISTINCT kundeID FROM rechnungen WHERE kundeID IN (SELECT kundeID FROM kunden WHERE sammelrechnungen != 'keine') AND versanddatum = '$heute'");
