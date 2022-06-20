@@ -72,8 +72,7 @@ mietstationTyp = ExtractValue(@record, 'mietstationTyp'),
 stellplaetze = ExtractValue(@record, 'stellplaetze'),
 lage = ExtractValue(@record, 'lage'),
 groesse = ExtractValue(@record, 'groesse'),
-beschreibung = ExtractValue(@record, 'beschreibung');
-";
+beschreibung = ExtractValue(@record, 'beschreibung');";
 
 $aktuellepersonalplaene = "LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/aktuellepersonalplaene.xml'
 INTO TABLE aktuellepersonalplaene
@@ -159,7 +158,8 @@ mietgebuehr = ExtractValue(@record, 'mietgebuehr'),
 abholstation = ExtractValue(@record, 'abholstation'),
 rueckgabestation = ExtractValue(@record, 'rueckgabestation'),
 vertragID = ExtractValue(@record, 'vertragID'),
-kundeID = ExtractValue(@record, 'kundeID');";
+kundeID = ExtractValue(@record, 'kundeID'),
+reservierungID = ExtractValue(@record, 'reservierungID');";
 
 $rechnungen = "LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/rechnungen.xml'
 INTO TABLE rechnungen
