@@ -841,8 +841,7 @@ Wir erlauben uns folgende Rechnungsstellung:
             $forderungsbetrag = $betrag;
             $verzugszinsen = sprintf("%.2f",$forderungsbetrag*0.05*$säumnistage/365*100);             
         }
-
-    
+        $mahngebuehr = round($mahngebuehr,2);    
         $mahnungsdatum = date("d.m.Y");
     
         $sender_receiver_information = 
@@ -869,7 +868,7 @@ Wir erlauben uns folgende Rechnungsstellung:
         $reminder_2 = 
         $style.'
             <br>Da das Zahlungsziel erneut nicht eingehalten wurde fordern wir sie <br>erneut zu einer Zahlung des Betrags bis zum '.$mahnungsdaten["neue_zahlungsfrist"].' auf.
-            <br>Da die zweite Zahlungsfrist nicht eingehalten wurde, wird eine Mahngebühr in Höhe von '.$mahngebuehr.'€ erhoben zuzuüglich Verzugszinsen in Höhe von <br>4% p.a.';
+            <br>Da die zweite Zahlungsfrist nicht eingehalten wurde, wird eine Mahngebühr in Höhe von '.$mahngebuehr.'€ erhoben zuzüglich Verzugszinsen in Höhe von <br>4% p.a.';
            
         $reminder_3 = 
             $style.'
@@ -951,6 +950,26 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
             send_mail($kundendaten["email"],'Mahnung zum '.date('d.m.Y'),
             'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie die Mahnung zur Zahlungsauforderung entnehmen.<br><br>Ihr Rentalcar Team.',
             $pdfString, 'mahnung_'.date('Y-m-d').'.pdf');
+        }
+    }
+
+    /*
+        Generiert für, für jeden Kunden einzeln, Mahnungen für die Rechnungen, dessen Zahlungslimit auf den aktuellen Tag fällt und noch nicht beglichen wurden und verschickt
+        diese per E-Mail an den jeweilgen Kunden.
+        Die Funktion wird 1x am Tag von der Aufgabe "Mahnungen_Versand", beschrieben in trigger/Mahnungen_Versand.xml, von der Windows Aufgabenplanung aufgerufen
+    */
+    function mahnungenEvent() {
+        require_once(realpath(dirname(__FILE__) . '/../database/db_inc.php'));
+        require_once(realpath(dirname(__FILE__) . '/../invoice/reminder.php'));
+        $con = mysqli_connect($host, $user, $passwd, $schema);
+        $heute = date("Y-m-d");
+        $ungezahlteRechnungen = $con->query("SELECT rechnungNr FROM rechnungen WHERE zahlungslimit = '".$heute."' AND bezahltAm IS NULL");
+
+        if($ungezahlteRechnungen) {
+            while($row = $ungezahlteRechnungen->fetch_assoc()) {
+                $data = getReminderData($row["rechnungNr"]);
+                createMahnungPDF($data[0],$data[1],'mail');
+            }
         }
     }
 

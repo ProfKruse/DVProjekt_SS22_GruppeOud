@@ -2,6 +2,7 @@
 if(!isset($_SESSION)) session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
+$_SESSION["kunde"] = 487;
 $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden WHERE kundeID=".$_SESSION["kunde"]))[0];
 ?>
 
@@ -46,7 +47,6 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                 <!-- Rechnungen -->
                 <tbody id="rechnungen">
                     <?php
-                        $_SESSION['kunde'] = 1;
                         $kundendaten;
                         $rechnungsdaten = array();
 
@@ -91,7 +91,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         /*
                             Einfügen der Rechnungsdaten in eine neue Tabellenzeile
                         */
-                        if($result->num_rows > 0) {
+                        if($result) {
                             while($row = $result->fetch_array()) {
                                 $verspaetung = "-";
                                 if($row["bezahltAm"] != NULL && strtotime($row["bezahltAm"]) > strtotime($row["zahlungslimit"])) {
@@ -135,26 +135,29 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                     <?php
                         function mahnungen() {
                             global $con;
-                            $result = $con->query("SELECT * FROM rechnungen WHERE mahnstatus != 'keine'");
+                            $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." mahnstatus != 'keine'");
                             
-                            while($row = $result->fetch_assoc()) {
-                                $mahngebuehr = ($row["mahnstatus"] == "erste Mahnung") ? 0 : (0.05*$row["rechnungBetrag"]);
-                                $verlaengerung = ($row["mahnstatus"] == "erste Mahnung") ? 7 : 14;
-                                if($row["mahnstatus"] == "dritte Mahnung")
-                                    $verlaengerung = 21;
-                                $zahlungsfrist = date("Y-m-d",strtotime($row["zahlungslimit"])+($verlaengerung*86400));
+                            if($result) {
+                                while($row = $result->fetch_assoc()) {
+                                    $mahngebuehr = ($row["mahnstatus"] == "erste Mahnung") ? 0 : (0.05*$row["rechnungBetrag"]);
+                                    $verlaengerung = ($row["mahnstatus"] == "erste Mahnung") ? 7 : 14;
 
-                                if($mahngebuehr > 150)
-                                    $mahngebuehr = 150;
+                                    if($row["mahnstatus"] == "dritte Mahnung")
+                                        $verlaengerung = 21;
+                                        $zahlungsfrist = date("Y-m-d",strtotime($row["zahlungslimit"])+($verlaengerung*86400));
 
-                                echo "<tr>".
-                                "<td>".$row["rechnungNr"]."</td>".
-                                "<td>".$row["mahnstatus"]."</td>".
-                                "<td>".$row["rechnungBetrag"]."€</td>".
-                                "<td>".$mahngebuehr."€</td>".
-                                "<td>".$zahlungsfrist."</td>".
-                                '<td><button type="button" onclick="window.location.href=\'reminder.php?reminder_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>'.
-                                "</tr>";
+                                    if($mahngebuehr > 150)
+                                        $mahngebuehr = 150;
+
+                                    echo "<tr>".
+                                    "<td>".$row["rechnungNr"]."</td>".
+                                    "<td>".$row["mahnstatus"]."</td>".
+                                    "<td>".$row["rechnungBetrag"]."€</td>".
+                                    "<td>".$mahngebuehr."€</td>".
+                                    "<td>".$zahlungsfrist."</td>".
+                                    '<td><button type="button" onclick="window.location.href=\'reminder.php?reminder_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>'.
+                                    "</tr>";
+                                }
                             }
                         }
                             
