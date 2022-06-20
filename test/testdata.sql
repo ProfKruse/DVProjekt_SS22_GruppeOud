@@ -65,7 +65,7 @@ lage = ExtractValue(@record, 'lage'),
 groesse = ExtractValue(@record, 'groesse'),
 beschreibung = ExtractValue(@record, 'beschreibung');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/aktuellePersonalplaene.xml'
+LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/aktuellepersonalplaene.xml'
 INTO TABLE aktuellepersonalplaene
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
