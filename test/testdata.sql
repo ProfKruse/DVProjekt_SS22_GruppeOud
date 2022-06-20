@@ -18,7 +18,6 @@ updateDate = ExtractValue(@record, 'updateDate'),
 vorname = ExtractValue(@record, 'vorname'),
 nachname = ExtractValue(@record, 'nachname'),
 pseudo = ExtractValue(@record, 'pseudo'),
-password = ExtractValue(@record, 'password'),
 validatedAccount = ExtractValue(@record, 'validatedAccount'),
 token = ExtractValue(@record, 'token'),
 strasse = ExtractValue(@record, 'strasse'),
@@ -49,7 +48,6 @@ geburtsDatum = ExtractValue(@record, 'geburtsDatum'),
 position = ExtractValue(@record, 'position'),
 abteilung = ExtractValue(@record, 'abteilung'),
 pseudo = ExtractValue(@record, 'pseudo'),
-password = ExtractValue(@record, 'password'),
 validatedAccount = ExtractValue(@record, 'validatedAccount'),
 token = ExtractValue(@record, 'token'),
 AnzVersuche = ExtractValue(@record, 'AnzVersuche'),
@@ -103,7 +101,6 @@ gesamtnote = ExtractValue(@record, 'gesamtnote'),
 lackZustand = ExtractValue(@record, 'lackZustand'),
 innenraumNote = ExtractValue(@record, 'innenraumNote'),
 technikZustandNote = ExtractValue(@record, 'technikZustandNote'),
-anmerkungen = ExtractValue(@record, 'anmerkungen'),
 kilometerStand = ExtractValue(@record, 'kilometerStand'),
 kennzeichen = ExtractValue(@record, 'kennzeichen');
 
@@ -128,8 +125,7 @@ abgabestationID = ExtractValue(@record, 'abgabestationID'),
 status = ExtractValue(@record, 'status'),
 datum = ExtractValue(@record, 'datum'),
 Mietbeginn = ExtractValue(@record, 'Mietbeginn'),
-Mietende = ExtractValue(@record, 'Mietende'),
-message = ExtractValue(@record, 'message');
+Mietende = ExtractValue(@record, 'Mietende');
 
 LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/vertraege.xml'
 INTO TABLE vertraege
