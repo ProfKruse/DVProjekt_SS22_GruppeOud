@@ -111,7 +111,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
     function mietvertragsAnzeige($mietvertragsdaten,$con){
         //Abfrage der Mietvertragsdaten, welche nur geschehen soll, wenn eine 'mietvertragid' uebergeben wurde
         if (isset($mietvertragsdaten['mietvertragid'])) {   
-            $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsdaten["mietvertragid"]; 
+            $statement = "SELECT * FROM mietvertraege WHERE mietvertragID =" . $mietvertragsdaten["mietvertragid"];  
             $db_erg = mysqli_query( $con, $statement );
             //Fehlerbehandlung, falls die SQL-Anfrage falsch sein sollte 
             if (!$db_erg ) 
@@ -136,6 +136,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                             <th>Rueckgabestation</th> 
                             <th>Vertragsnummer</th> 
                             <th>Kundennummer</th>
+                            <th>Reservierung</th>
                         </tr> 
                     </thead> 
                     <tbody> 
@@ -148,20 +149,27 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                             <td>{$zeile['rueckgabestation']}</td> 
                             <td>{$zeile['vertragID']}</td> 
                             <td>{$zeile['kundeID']}</td> 
+                            <th>{$zeile['reservierungID']}</th>
                         </tr>  
                     </tbody> 
                 </table> 
                 </center>";
                 //Speicherung der 'kundenid' und 'vertragid' fuer die spaetere Verwendung
                 $_SESSION['kundenid'] = $zeile['kundeID'];
-                $_SESSION['vertragid'] = $zeile['vertragID'];    
+                $_SESSION['vertragid'] = $zeile['vertragID'];  
+                $_SESSION['reservierungid'] = $zeile['reservierungID'];
+                if($zeile['status']=="abgeschlossen")
+                {
+                    $ergebnisTupel =  false;
+                }  
             }
-            //Ueberpruefen ob $ergebnisTupel true ist. Falls nicht, wird die Fehlermeldung ausgegeben und die 'kundenid' und 'vertragid' auf null gesetzt
+            //Ueberpruefen ob $ergebnisTupel true ist. Falls nicht, wird die Fehlermeldung ausgegeben und die 'kundenid', 'vertragid' und 'reservierungid' auf null gesetzt
             if($ergebnisTupel ==  false) 
             { 
-                echo "<p>Die eingegebene ID existiert nicht in der DB</p>";
+                echo "<p>Die eingegebene ID existiert nicht in der DB oder der Mietvertrag wurde schon abgeschlossen</p>";
                 $_SESSION['kundenid'] = null;
                 $_SESSION['vertragid'] = null;
+                $_SESSION['reservierungid'] = null;
             }
             //Ende der Datenbankverbindung
             mysqli_free_result( $db_erg ); 
@@ -219,9 +227,13 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                 //Aktualisierung des Kilometerstandes in der kfzs Datenbank
                                 $kfzUpdate = "update kfzs SET kilometerStand = " . $kilometerstand . " WHERE kfzID= " . $kfzID . ";";
                                 mysqli_query($con, $kfzUpdate);
+                                //Aktualisierung des Reservierungsstatus in der Reservierungs Datenbank
+                                $reservierungUpdate = "update reservierungen SET status = 'abgeschlossen' WHERE reservierungid= " . $_SESSION['reservierungid'] . ";";
+                                mysqli_query($con, $reservierungUpdate);
                                 //Abfrage der kundendaten
                                 $kundendatenAbfrage = "select * FROM kunden WHERE kundeID=" . $_SESSION['kundenid'] . ";";
                                 $kundendaten = mysqli_query($con,$kundendatenAbfrage);
+                                $kunde = null;
                                 while($tupel = mysqli_fetch_assoc($kundendaten)){
                                     $kunde = $tupel;
                                 } 
