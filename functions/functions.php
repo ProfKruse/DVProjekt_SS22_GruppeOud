@@ -960,13 +960,31 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
     function mahnungenEvent() {
         require_once(realpath(dirname(__FILE__) . '/../invoice/reminder.php'));
         $con = mysqli_connect($host, $user, $passwd, $schema);
-        $zahltag = date("Y-m-d", strtotime('- 1 day'));
-        $ungezahlteRechnungen = $con->query("SELECT rechnungNr FROM rechnungen WHERE zahlungslimit = '".$zahltag."' AND bezahltAm IS NULL");
+        $rechnungnummern = array();
 
-        if($ungezahlteRechnungen) {
-            while($row = $ungezahlteRechnungen->fetch_assoc()) {
-                sendReminder($row["rechnungNr"],'mail');
+        $rechnungen = $con->query("SELECT * FROM rechnungen WHERE bezahltAm IS NULL");
+        if($rechnungen) {
+            while($row = $rechnungen->fetch_assoc()) {
+                $verzug = 0;
+                if($row["mahnstatus"] == 'erste Mahnung') {
+                    $verzug = 7;
+                }
+                if($row["mahnstatus"] == 'zweite Mahnung') {
+                    $verzug = 14;
+                }
+                if($row["mahnstatus"] == 'dritte Mahnung') {
+                    $verzug = 21;
+                }
+                $zahltag = date("Y-m-d",  strtotime(" + ".($verzug+1)." day", strtotime($row["zahlungslimit"])));
+
+                if(date("Y-m-d") == $zahltag) {
+                    array_push($rechnungnummern, $row["rechnungNr"]);
+                }
             }
+        }
+
+        foreach($rechnungnummern as $nummer) {
+            sendReminder($nummer,'mail');
         }
     }
 
