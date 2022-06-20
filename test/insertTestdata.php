@@ -7,12 +7,18 @@ if(!$con) {
     echo "Es konnte keine Verbindung hergestellt werden!".mysqli_connect_errno();   
     die();
 }
-$sqlStatements = "LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/dataset.xml'
-INTO TABLE tarife
+$sqlStatements = "LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/ruecknahmeprotokolle.xml'
+INTO TABLE ruecknahmeprotokolle
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
 (@record)
-SET tarifID = ExtractValue(@record:=CONVERT(@record using utf8), 'tarifID')";
+SET ruecknahmeprotokollID  = ExtractValue(@record:=CONVERT(@record using utf8), 'ruecknahmeprotokollID'),
+ersteller  = ExtractValue(@record, 'ersteller'),
+protokollDatum = ExtractValue(@record, 'protokollDatum'),
+tank = ExtractValue(@record, 'tank'),
+sauberkeit = ExtractValue(@record, 'sauberkeit'),
+kilometerstand = ExtractValue(@record, 'kilometerstand'),
+mietvertragID  = ExtractValue(@record, 'mietvertragID');";
 
 echo "<br>".!$connection->query($sqlStatements);
 ?>
