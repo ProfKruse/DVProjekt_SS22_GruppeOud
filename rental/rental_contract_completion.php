@@ -40,7 +40,9 @@
             createRechnungPDF($kundendaten,$rechnungsdaten,'mail');
         }
 
-        //Mietvertrag PDF
+        //Mietvertrag Mail
         createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
+        //Mietvertrag PDF
+        createMietvertragPDF($kundendaten,$mietvertragsdaten,'file');
     }
 ?>
