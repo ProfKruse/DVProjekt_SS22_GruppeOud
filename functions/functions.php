@@ -246,7 +246,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
                                 } else {
                                     echo "<p>Fehler bei der Eingabe</p>";
-                                    #throw $e;
+                                    $_SESSION['errormessage'] = $e->getMessage();
                                 }
                             }                                                  
                         }

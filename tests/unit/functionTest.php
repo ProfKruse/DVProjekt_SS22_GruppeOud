@@ -29,15 +29,22 @@ class functionTest extends TestCase
             $this->assertTrue($_SESSION['vertragid']==1);
 
     }
-    public function test_this_sendeRuecknahmeprotokoll():void
+    public function test_this_sendeRuecknahmeprotokoll_mit_ungueltiger_ID():void
     {
-        try
-        {
-            $nutzungsdaten = array("tank" => 1,"kilometerstand" => 100,"sauberkeit"=>"sehr sauber","mechanik"=>"Teststring");
-            $mietvertragid = rand(201,500);
+            $nutzungsdaten = array("tank" => 1,"kilometerstand" => 100,"sauberkeit"=>"sehr sauber","mechanik"=>"Teststing");
+            $mietvertragid = 123234534;
             $con = mysqli_connect('localhost', 'root', '', 'autovermietung');
             sendeRuecknahmeprotokoll($nutzungsdaten,$con,$mietvertragid); 
-            $statement = "SELECT * FROM ruecknahmeprotokolle WHERE mietvertragID = ".  $mietvertragid; 
+            $this->assertStringStartsWith('Cannot add or update a child row: a foreign key constraint fails (`autovermietung`.`ruecknahmeprotokolle`, CONSTRAINT `ruecknahmeprotokolle_mietvertragID` FOREIGN KEY (`mietvertragID`) REFERENCES `mietvertraege` (`mietvertragID`))',$_SESSION['errormessage']);
+    }
+    public function test_this_sendeRuecknahmeprotokoll_mit_gueltiger_ID():void
+    {
+        try{
+            $nutzungsdaten = array("tank" => 77.1,"kilometerstand" => 262284,"sauberkeit"=>"neutral","mechanik"=>"");
+            $mietvertragid = 1;
+            $con = mysqli_connect('localhost', 'root', '', 'autovermietung');
+            sendeRuecknahmeprotokoll($nutzungsdaten,$con,$mietvertragid);
+            $statement = "SELECT * FROM ruecknahmeprotokolle WHERE mietvertragID = 1"; 
             $ergebnis = $con->query($statement);
             while($tupel = mysqli_fetch_assoc($ergebnis)){
                 $tank = $tupel["tank"];
@@ -45,30 +52,16 @@ class functionTest extends TestCase
                 $sauberkeit = $tupel["sauberkeit"];
                 $mechanik = $tupel["mechanik"];
             }
-            $this->assertTrue($tank==1);
-            $this->assertTrue($kilometerstand==100);
-            $this->assertTrue($sauberkeit=="sehr sauber");
-            $this->assertTrue($mechanik=="Teststring");
+            $this->assertTrue($tank==77.1);
+            $this->assertTrue($kilometerstand==262284);
+            $this->assertTrue($sauberkeit=="neutral");
+            $this->assertTrue($mechanik=="");
         }
-        catch(mysqli_sql_exception $error)
+        catch(Error $error)
         {
-            $this->fail("Fehlschlag");
+            $this->fail("Dies haette nicht fehlschlagen sollen");
         }
-    }
-        public function test_this_sendeRuecknahmeprotokoll_Ungueltig():void
-    {
-        try
-        {
-            $nutzungsdaten = array("tank" => 1,"kilometerstand" => 100,"sauberkeit"=>"sehr sauber","mechanik"=>"Teststring");
-            $mietvertragid = 100;
-            $con = mysqli_connect('localhost', 'root', '', 'autovermietung');
-            sendeRuecknahmeprotokoll($nutzungsdaten,$con,$mietvertragid); 
-            $this->fail("Fehlschlag");
-        }
-        catch(mysqli_sql_exception $error)
-        {
-            $this->assertStringStartsWith('Cannot add or update a child row: a foreign key constraint fails (`autovermietung`.`ruecknahmeprotokolle`, CONSTRAINT `ruecknahmeprotokolle_mietvertragID` FOREIGN KEY (`mietvertragID`) REFERENCES `mietvertraege` (`mietvertragID`))',$error->getMessage());
-        }
+
     }
 }
 ?>
