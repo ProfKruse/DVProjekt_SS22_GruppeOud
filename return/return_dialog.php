@@ -34,16 +34,6 @@
         <main> 
             <h1>KFZ Rücknahme</h1> 
             <center> 
-            <?php
-                    //sendeRuecknahmeprotokoll soll nur aufgerufen werden, wenn $_SESSION['mietvertragid'] gesetzt ist.
-                    if(isset($_POST['mietvertragid']))
-                    {
-                        $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
-                        if(checkIfIdProtocoleExist()){
-                            ?><div><p><?php echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die Mietvertragsnummer ".$_SESSION['mietvertragid'] ." erstellt.</p>"; ?></p></div><?php
-                        }
-                    }
-                ?> 
             <div class="frame"> 
             <form action="return_dialog.php" method="POST"> 
                 <!--------------------------------------------------------------> 
