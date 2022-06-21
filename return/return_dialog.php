@@ -61,8 +61,9 @@
                 //mietvertragsAnzeige soll nur aufgerufen werden, wenn die Mietvertragsnummer eingegeben wurde
                 if(isset($_POST['mietvertragid']) )
                     //speichern der Mietvertragsnummer
+                {
                     $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
-                { if ( !checkIfIdProtocoleExist()){
+                 if ( !checkIfIdProtocoleExist()){
 
                     //Funktionsaufruf der mietvertragsAnzeige mit den Formulardaten und der Datenbankverbindung
                     mietvertragsAnzeige($_POST,$con);
