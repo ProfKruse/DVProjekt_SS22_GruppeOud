@@ -1,12 +1,14 @@
 <?php
+    set_include_path('C:\xampp\htdocs\rentalCar');
+
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
-    require '../library/PHPMailer/src/Exception.php';
+    require 'library/PHPMailer/src/Exception.php';
     /* PHPMailer-Klasse */
-    require '../library/PHPMailer/src/PHPMailer.php';
+    require 'library/PHPMailer/src/PHPMailer.php';
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
-    require '../library/PHPMailer/src/SMTP.php';
+    require 'library/PHPMailer/src/SMTP.php';
     /* TCPDF Einbindung, um eine PDF zu erzeugen*/
-    require '../library/TCPDF/tcpdf.php';
+    require 'library/TCPDF/tcpdf.php';
     
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
@@ -19,6 +21,7 @@ function check_login($con){
         $result = mysqli_query($con,$query);
         if($result && mysqli_num_rows($result) > 0){
             $user_data = mysqli_fetch_assoc($result);
+            $_SESSION['mitarbeiterID'] = $user_data['kundeID'];
             return $user_data;
         } 
     }else{
@@ -216,10 +219,10 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                             try {
                                 
                                 //Einfuegen des Ruecknahmeprotokolltupels in die Datenbank
-                                $statement = "insert INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (1,'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
+                                $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (". $_SESSION['mitarbeiterID'].",'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
                                 $ergebnis = $con->query($statement);
                                 //Abfrage der kfzID durch die vertragid
-                                $kfzIDAbfrage =  "select kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
+                                $kfzIDAbfrage =  "SELECT kfzID FROM vertraege WHERE vertragID = " . $_SESSION['vertragid'] . ";";
                                 $kfzIDs = mysqli_query($con,$kfzIDAbfrage);
                                 while($tupel = mysqli_fetch_assoc($kfzIDs)){
                                     $kfzID = $tupel["kfzID"];
