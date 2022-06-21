@@ -37,6 +37,7 @@ function check_login_Mitarbeiter($con){
         $result = mysqli_query($con,$query);
         if($result && mysqli_num_rows($result) > 0){
             $user_data = mysqli_fetch_assoc($result);
+            $_SESSION['mitarbeiterID'] = $user_data['mitarbeiterID'];
             return $user_data;
         } 
     }else{
@@ -173,10 +174,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                 $_SESSION['kundenid'] = null;
                 $_SESSION['vertragid'] = null;
                 $_SESSION['reservierungid'] = null;
-            }
-            //Ende der Datenbankverbindung
-            mysqli_free_result( $db_erg ); 
-            mysqli_close($con); 
+            } 
         } 
     }
     /*
@@ -198,7 +196,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                    wird die Dopplungsfehlermeldung geworfen, andernfalls wird eine allgemeine Fehlermeldung ausgegeben.   
     */
     function sendeRuecknahmeprotokoll($nutzungsdaten,$con,$mietvertragid)
-        {  
+        { 
             //Abfrage ob alle Nutzungsdaten eingetragen wurden und trimmen dieser.
             if (isset($nutzungsdaten['tank'])) 
             {
@@ -239,9 +237,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                 $kunde = null;
                                 while($tupel = mysqli_fetch_assoc($kundendaten)){
                                     $kunde = $tupel;
-                                } 
-                                //Datenbankverbindungsende
-                                mysqli_close($con);
+                                }
                                 //Ruecknahmeprotokollerzeugungsmethodenaufruf
                                 createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragid);
                                 header("Location: ../index.php");
@@ -251,6 +247,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
                                 } else {
                                     echo "<p>Fehler bei der Eingabe</p>";
+                                    throw $e;
                                 }
                             }                                                  
                         }
@@ -378,9 +375,6 @@ Sie hatten folgende Nutzungsdaten:
     
             pdf_area_separation($pdf, 15);
     
-        $pdf->writeHTML($total_amount, true, false, true, false, '');
-    
-            pdf_area_separation($pdf, 7);
     
         $pdf->writeHTML($contact_information, true, false, true, false, '');
         ob_end_clean();
@@ -409,7 +403,7 @@ Sie hatten folgende Nutzungsdaten:
     }
 
     function checkIfIdProtocoleExist(){
-        include("../database/db_inc.php");
+        include("database/db_inc.php");
         $stmt = "select ruecknahmeprotokollID from ruecknahmeprotokolle where mietvertragID = ".$_SESSION['mietvertragid'].";";
         $erg = mysqli_query($con, $stmt);
         $protocole_data = mysqli_fetch_assoc($erg); 
