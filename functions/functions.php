@@ -241,7 +241,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                 mysqli_close($con);
                                 //Ruecknahmeprotokollerzeugungsmethodenaufruf
                                 createRuecknahme_pdf($kunde,$nutzungsdaten,$mietvertragid);
-                                header("Location: ../return/return_dialog.php");
+                                header("Location: ../index.php");
                             //Catch Block zum Fehlerauswurf
                             } catch (mysqli_sql_exception $e) {
                                 if ($e->getCode() == 1062) {
