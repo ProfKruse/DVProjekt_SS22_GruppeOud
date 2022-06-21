@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        
-            .container{
+           .container{
                 width: 80%;
                 margin:auto;
                 background-color:#008080;
@@ -20,18 +19,12 @@
                 border:2px solid silver;
                 outline: none; 
             }
-        
     </style>
 </head>
 <body>
 
 <div class= "container"> 
-
     <h2><centre>Autovermietung - Reservierung</centre></h2>
-
-
-
-
    <form name="" action="index.php" method= "post" target="ausgabe"enctype="text/html">
         <fieldset>
             <legend>Daten</legend>
@@ -174,5 +167,3 @@
         </div>
 </body>
 </html>
-
-

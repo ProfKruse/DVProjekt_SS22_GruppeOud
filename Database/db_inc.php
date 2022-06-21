@@ -1,5 +1,4 @@
 <?php
-
 /* Host name of the MySQL server */
 $host = 'localhost';
 
@@ -16,9 +15,13 @@ $schema = 'autovermietung';
 $con = mysqli_connect($host, $user, $passwd, $schema);
 
 /* Check if the connection succeeded */
-if (!$con) {
+if (!$con)
+{
    echo 'Connection failed<br>';
    echo 'Error number: ' . mysqli_connect_errno() . '<br>';
    echo 'Error message: ' . mysqli_connect_error() . '<br>';
    die();
 }
+
+
+?>

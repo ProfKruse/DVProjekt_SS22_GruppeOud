@@ -1,11 +1,12 @@
 <!DOCTYPE html> 
-    <?php
+    <?php 
+        //Session start, zum setzen von Objekten    
+        session_start();
         //require fuer die Datenbankverbindung
-        require("../database/db_inc.php");
+        include("../database/db_inc.php");
         //require fuer die Funkionsaufrufe
-        require("../functions/functions.php");
-        //Session start, zum setzen von Objekten
-        session_start();       
+        include("../functions/functions.php");
+        $user_data = check_login_Mitarbeiter($con);  
     ?> 
 <html> 
     <head> 
@@ -19,10 +20,12 @@
             <nav> 
                 <ul> 
                     <b> 
-                        <li><a href="">Reservieren</a></li> 
-                        <li><a href="">Reservierungen</a></li> 
-                        <li><a href="">Rechnungen</a></li> 
-                        <li><a href="">Konto</a></li> 
+                        <li><a href="../index.php">Home</a></li>
+                        <li><a href="../reserve/reservation.php">Reservieren</a></li>
+                        <li><a href="">Reservierungen</a></li>
+                        <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
+                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                        <li><a href="../login/logout.php">Logout</a></li>
                     </b> 
                 </ul> 
             </nav> 
@@ -31,6 +34,16 @@
         <main> 
             <h1>KFZ Rücknahme</h1> 
             <center> 
+            <?php
+                    //sendeRuecknahmeprotokoll soll nur aufgerufen werden, wenn $_SESSION['mietvertragid'] gesetzt ist.
+                    if(isset($_POST['mietvertragid']))
+                    {
+                        $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
+                        if(checkIfIdProtocoleExist()){
+                            ?><div><p><?php echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die Mietvertragsnummer ".$_SESSION['mietvertragid'] ." erstellt.</p>"; ?></p></div><?php
+                        }
+                    }
+                ?> 
             <div class="frame"> 
             <form action="return_dialog.php" method="POST"> 
                 <!--------------------------------------------------------------> 
