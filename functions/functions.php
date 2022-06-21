@@ -215,7 +215,6 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                         {
                             //try-catch Block, welcher die benoetigten Datenbank-Ab- und Anfragen ausfuehrt und die Methode zur Ruecknahmeprotokollerstellung als PDF und dem Email-Versand aufruft
                             try {
-                                
                                 //Einfuegen des Ruecknahmeprotokolltupels in die Datenbank
                                 $statement = "INSERT INTO ruecknahmeprotokolle (ersteller,tank,sauberkeit, mechanik, kilometerstand, mietvertragID) VALUES (". $_SESSION['mitarbeiterID'].",'$tank','$sauberkeit','$mechanik','$kilometerstand','$mietvertragid')"; 
                                 $ergebnis = $con->query($statement);
@@ -247,7 +246,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
                                     echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die angegegebene Mietvertragsnummer erstellt.</p>";
                                 } else {
                                     echo "<p>Fehler bei der Eingabe</p>";
-                                    throw $e;
+                                    #throw $e;
                                 }
                             }                                                  
                         }
@@ -414,14 +413,19 @@ Sie hatten folgende Nutzungsdaten:
         }
     }
 
-    function checkIfIdMiertvertragExist(){
-        include("../database/db_inc.php");
-        $stmt = "select mietvertragidID from mietvertreage where mietvertragID = ".$_SESSION['mietvertragid'].";";
-        $erg = mysqli_query($con, $stmt);
-        $protocole_data = mysqli_fetch_assoc($erg); 
-        if($protocole_data){
-            return true;
-        } else{
+    function checkIfIdMietvertragExist(){
+        include("database/db_inc.php");
+        try{
+            $stmt = "select mietvertragID from mietvertreage where mietvertragID = ". $_SESSION['mietvertragid'].";";
+            $erg = mysqli_query($con, $stmt);
+            $protocole_data = mysqli_fetch_assoc($erg);
+            if($protocole_data){
+                return true;
+            } else{
+                return false;
+            } 
+        }
+        catch(mysqli_sql_exception $e){
             return false;
         }
     }

@@ -85,7 +85,7 @@
                 <br>
                 <?php
                     //sendeRuecknahmeprotokoll soll nur aufgerufen werden, wenn $_SESSION['mietvertragid'] gesetzt ist und noch kein Mietvertrag erzeugt wurde.
-                    if(isset($_SESSION['mietvertragid']) and !checkIfIdProtocoleExist() and !checkIfIdMiertvertragExist())
+                    if(isset($_SESSION['mietvertragid']) and !checkIfIdProtocoleExist() and !checkIfIdMietvertragExist())
                     {
                             sendeRuecknahmeprotokoll($_POST,$con,$_SESSION['mietvertragid']);
                             echo "<button type='submit'>Protokoll erzeugen</button></div>";
