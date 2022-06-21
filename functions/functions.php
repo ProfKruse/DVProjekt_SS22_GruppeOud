@@ -420,6 +420,18 @@ Sie hatten folgende Nutzungsdaten:
         }
     }
 
+    function checkIfIdMiertvertragExist(){
+        include("../database/db_inc.php");
+        $stmt = "select mietvertragidID from mietvertreage where mietvertragID = ".$_SESSION['mietvertragid'].";";
+        $erg = mysqli_query($con, $stmt);
+        $protocole_data = mysqli_fetch_assoc($erg); 
+        if($protocole_data){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
     function databaseSelectQuery($spalte, $tabelle, $bedingung=NULL) {
         global $con; 
     
