@@ -39,7 +39,7 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 - [Kanbanboard](https://trello.com/b/hfhRnngV/mietvorgang-durchf%C3%BChren-und-abrechnen)
 - [Leistungserfassung](https://docs.google.com/spreadsheets/d/1pIhPirbzJjo5-i-Uyj6I9yZHlmOF9URTQR_yK-8TZAc/edit#gid=0)
 - [Projektplanung](https://docs.google.com/spreadsheets/d/1pIhPirbzJjo5-i-Uyj6I9yZHlmOF9URTQR_yK-8TZAc/edit#gid=1287143819)
-- [Risikomanagement]()
+- [Risikomanagement](https://docs.google.com/spreadsheets/d/1pIhPirbzJjo5-i-Uyj6I9yZHlmOF9URTQR_yK-8TZAc/edit#gid=2017540598)
 - [Retrospektiv](https://app.mural.co/invitation/mural/gammarentalcar8410/1653594056922?sender=u187d15a1f9ae16452d562123&key=8dd91700-bffc-4eb1-9d39-7bd89520ff4c)
 - [Präsentation](https://docs.google.com/presentation/d/1iW4qCfWezLK3xSINQNOWRDD_FVTMBnKBksKLLdLec3g/edit#slide=id.g12f74f780d8_0_646)
 
