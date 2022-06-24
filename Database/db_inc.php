@@ -1,5 +1,4 @@
 <?php
-
 /* Host name of the MySQL server */
 $host = 'localhost';
 
@@ -23,3 +22,6 @@ if (!$con)
    echo 'Error message: ' . mysqli_connect_error() . '<br>';
    die();
 }
+
+
+?>

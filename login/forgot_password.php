@@ -3,15 +3,23 @@ session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
 
+
+
 $email = "";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-
+    //Check if employee or custumer
+    if(isset($_POST['bedingung'])){
+        $_SESSION['table'] = 'mitarbeiter';
+    }
+    else{
+        $_SESSION['table'] = 'kunden';
+    }
     $email = $_POST['emailAdresse'];
 
-    $query_email = "select * from kunden where emailAdresse = '$email' limit 1 ";
+    $query_email = "select * from ".$_SESSION['table']  ." where emailAdresse = '$email' limit 1 ";
     $result_email = mysqli_query($con, $query_email);
-
+ 
     if (mysqli_num_rows($result_email) == 0) {
         $error = " Die Email Adresse $email existiert nicht in unsere Datenbank!";
     } else {
@@ -22,7 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $message = '<!DOCTYPE html>
         <html>
         <body>
-        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'" > Reset Your Password!</a> 
+        <a href="localhost/rentalCar/login/reset_password.php?password_token='.$password_token.'&emailAdresse='.$email.'&table='.$_SESSION['table'].'" > Reset Your Password!</a> 
+        
         </body>
         </html>';
     
@@ -47,10 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <nav>
         <ul>
             <b>
-                <li><a href="">Reservieren</a></li>
+                <li><a href="../index.php">Home</a></li>
+                <li><a href="../reserve/reservation.php">Reservieren</a></li>
                 <li><a href="">Reservierungen</a></li>
-                <li><a href="">Rechnungen</a></li>
-                <li><a href="login.php">Anmeldung</a></li>
+                <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
+                <li><a href="../login/login.php">Anmeldung</a></li>
             </b>
         </ul>
     </nav>
@@ -67,6 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <?php endif ?>
                 <div class="frame">
                     <form method="POST">
+                        <label for="bedingung" id="checkbox">
+                            <input type="checkbox" name="bedingung"><b>Mitarbeier</b>
+                        </label>
+                        <br>
                         <label for="email">*E-Mail</label>
                         <div <?php if (isset($error)) : ?> class="form_frame_error" <?php endif ?>>
                             <input type="email" name="emailAdresse" placeholder="E-Mail" required value="<?php echo $email; ?>">

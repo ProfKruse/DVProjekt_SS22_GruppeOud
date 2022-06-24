@@ -4,19 +4,58 @@
 }
 
 @font-face {
-    font-family: custom;
+    font-family: calibri-regular;
     src: url("../fonts/Calibri Regular.ttf");
-  }
+}
+
+@font-face {
+    font-family: uni-sans-thin;
+    src: url('../fonts/Uni Sans Thin.ttf');
+}
 
 * {
-    font-family: custom; 
+    font-family: calibri-regular; 
     color: #212568;
+    margin: 0px;
+}
+
+.username {
+    color: #4f5fb8;
 }
 
 body {
     background-image: url("../images/background.png");
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+div.buttons {
+    display:flex;
+    justify-content: space-around;
+}
+
+div.buttons button {
+    margin: 5px;
+}
+
+div#successFrame {
+    border: 3px solid #49bd3f;
+}
+
+div#failureFrame {
+    border: 3px solid #f65656;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+#fehlermeldung {
+    color: rgb(204, 0, 0);
+}
+
+#erfolgsmeldung {
+    color: rgb(29, 107, 29);
 }
 
 /* Footer */
@@ -50,7 +89,6 @@ ul {
     overflow: hidden;
     display: flex;
     justify-content: center;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   }
   
   li {
@@ -114,6 +152,10 @@ input[type=checkbox] {
 
 input:hover, textarea:hover, select:hover{
     background-color: rgb(241, 241, 241);
+}
+
+input[readonly] {
+    background-color:rgba(194, 194, 194, 0.4);
 }
 
 button {
