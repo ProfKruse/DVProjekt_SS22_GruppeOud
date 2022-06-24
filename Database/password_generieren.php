@@ -15,7 +15,6 @@
            echo "done";
         }
     endwhile;
-    $con->close();
 
     $result = $con -> query("SELECT mitarbeiterID FROM Mitarbeiter");
     echo "Returned rows are: " . $result -> num_rows;
