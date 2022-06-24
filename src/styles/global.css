@@ -19,6 +19,10 @@
     margin: 0px;
 }
 
+.username {
+    color: #4f5fb8;
+}
+
 body {
     background-image: url("../images/background.png");
     background-repeat: no-repeat;

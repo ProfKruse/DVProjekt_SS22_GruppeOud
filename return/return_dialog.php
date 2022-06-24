@@ -21,10 +21,8 @@
                 <ul> 
                     <b> 
                         <li><a href="../index.php">Home</a></li>
-                        <li><a href="../reserve/reservation.php">Reservieren</a></li>
-                        <li><a href="">Reservierungen</a></li>
-                        <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                        <li><b><a href="../rental/reservation_display.php">Mietvertrag abschließen</a></b></li>
+                        <li><b><?php echo $user_data['pseudo'] ?><b></li>
                         <li><a href="../login/logout.php">Logout</a></li>
                     </b> 
                 </ul> 

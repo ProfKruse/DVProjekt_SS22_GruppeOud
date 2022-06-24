@@ -1,6 +1,9 @@
 <!DOCTYPE html>
     <?php
+        if(!isset($_SESSION)) session_start();
         require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
+        require_once(realpath(dirname(__FILE__) . '/../functions/functions.php'));
+        $user_data = check_login_mitarbeiter($con);
 
         function verfuegbareKfzAnzeigen() {
 
@@ -140,10 +143,10 @@
             <nav>
                 <ul>
                     <b>
-                        <li><a href="">Reservieren</a></li>
-                        <li><a href="">Reservierungen</a></li>
-                        <li><a href="">Rechnungen</a></li>
-                        <li><a href="">Konto</a></li>
+                        <li><a href="../index.php">Home</a></li>
+                        <li><b><a href="../return/return_dialog.php">KFZ zurücknehmen</a></b></li>
+                        <li><b class="username"> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                        <li><a href="../login/logout.php">Logout</a></li>
                     </b>
                 </ul>
             </nav>

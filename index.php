@@ -16,9 +16,8 @@ session_start();
                     <?php
                     if(isset($_SESSION['table']) and $_SESSION['table']=='mitarbeiter'){
                     ?>
-                        <li><b><a href="reserve/reservation.php">Auto reservieren</a></b></li>
-                        <li><b><a href="invoice/invoice_list.php">Rechnungen</a></b></li>
                         <li><b><a href="return/return_dialog.php">KFZ zurücknehmen</a></b></li>
+                        <li><b><a href="rental/reservation_display.php">Mietvertrag abschließen</a></b></li>
                         <li><b><a href="#about">Über uns</a></b></li>
                         <li><b><a href="#contact">Kontakt</a></b></li>
                     <?php
@@ -40,7 +39,7 @@ session_start();
 
                 if(isset($_SESSION['pseudo'])) {
                     echo '<li><button onclick="window.location.href=\'login/logout.php\'">Abmelden</button></li>
-                        <b>'.$_SESSION['pseudo'].'</b>';
+                        <b class="username">Hallo '.$_SESSION['pseudo'].'</b>';
                 }
 
                 else {

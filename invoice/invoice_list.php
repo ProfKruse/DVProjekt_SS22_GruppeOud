@@ -20,9 +20,8 @@ $user_data = check_login($con);
                     <b>
                         <li><a href="../index.php">Home</a></li>
                         <li><a href="../reserve/reservation.php">Reservieren</a></li>
-                        <li><a href="">Reservierungen</a></li>
                         <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                        <li><b class="username"> Hallo <?php echo $user_data['pseudo'] ?><b></li>
                         <li><a href="../login/logout.php">Logout</a></li>
                     </b>
                 </ul>
@@ -31,6 +30,7 @@ $user_data = check_login($con);
         <!--Hauptteil-->
         <main>
             <h1>Rechnungen</h1>
+            <br>
 
             <table>
                 <thead>
@@ -123,6 +123,7 @@ $user_data = check_login($con);
             <br>
 
 		<h1>Mahnungen</h1>
+        <br>
 
             <table>
                 <thead>
@@ -171,6 +172,9 @@ $user_data = check_login($con);
                     ?>
                 </tbody>
             </table>
+            <br>
+            <br>
+            <br>
 
         </main>
         <!--Sonstige Links-->

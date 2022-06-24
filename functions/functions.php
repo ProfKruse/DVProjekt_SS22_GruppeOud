@@ -10,7 +10,7 @@
     /* TCPDF Einbindung, um eine PDF zu erzeugen*/
     //require '/library/TCPDF/tcpdf.php';
 
-    
+    if(!isset($_SESSION)) session_start();
     require(realpath(dirname(__FILE__) . '/../library/PHPMailer/src/Exception.php'));
     /* PHPMailer-Klasse */
     require (realpath(dirname(__FILE__) . '/../library/PHPMailer/src/PHPMailer.php'));
@@ -484,8 +484,14 @@ Folgend die Mietvertragsdaten:
                 <tr>';
 
 
-                foreach($vertragsdaten as $key => $value)
-                    $rental_data.="<td>$value</td>";
+                foreach($vertragsdaten as $key => $value) {
+                    $rental_data.="<td>$value";
+
+                    if($key == 'mietgebuehr')
+                        $rental_data.="€";
+                        
+                    $rental_data.="</td>";
+                }
         $rental_data.='</tr>
                     </table>
                     <br>

@@ -1,9 +1,14 @@
 <!DOCTYPE html>
     <?php
+        if(!isset($_SESSION)) session_start();
         require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
+        require_once(realpath(dirname(__FILE__) . '/../functions/functions.php'));
+        $user_data = check_login_mitarbeiter($con);
         function reservierungsdatenAnzeigen() {
             global $con;
             //Datei für die Verbindung zur Datenbank
+            //$user_data = check_login_mitarbeiter($con);
+            
             if (isset($_GET['reservierungID'])) 
             {
                 $reservierungID = $_GET["reservierungID"];
@@ -110,10 +115,10 @@
             <nav>
                 <ul>
                     <b>
-                        <li><a href="">Reservieren</a></li>
-                        <li><a href="">Reservierungen</a></li>
-                        <li><a href="">Rechnungen</a></li>
-                        <li><a href="">Konto</a></li>
+                        <li><a href="../index.php">Home</a></li>
+                        <li><b><a href="../return/return_dialog.php">KFZ zurücknehmen</a></b></li>
+                        <li><b class="username"> Hallo <?php echo $user_data['pseudo'] ?><b></li>
+                        <li><a href="../login/logout.php">Logout</a></li>
                     </b>
                 </ul>
             </nav>
@@ -122,29 +127,31 @@
         <main>
             <h1>Reservierungsdaten anzeigen</h1>
             <center>
-            <div class="frame">
-            <form action="reservation_display.php" method="GET">
-                <!-------------------------------------------------------------->
-                <div class="group">
-                    <label for="reservierungID"><b>*Reservierungsnummer</b></label>
-                    <input type="number" name="reservierungID" id="reservierungID" maxlength=11 required >
-                </div>
+            <div class="frame" style="height:350px; width:1050px;">
+                <form action="reservation_display.php" method="GET">
+                    <!-------------------------------------------------------------->
+                    <div class="group">
+                        <label for="reservierungID"><b>*Reservierungsnummer</b></label>
+                        <input type="number" name="reservierungID" id="reservierungID" maxlength=11 required >
+                    </div>
                 
-                <div class="group">
-                    <label for="abfragen"><b>Daten abfragen</b></label> 
-                    <button type="submit" name='submit'>Abfragen</button>
-                </div>
-            </form>
-            <?php
-                $datenLesen = reservierungsdatenAnzeigen();
+                    <div class="group">
+                        <label for="abfragen"><b>Daten abfragen</b></label> 
+                        <button type="submit" name='submit'>Abfragen</button>
+                    </div>
+                </form>
+                <?php
+                    $datenLesen = reservierungsdatenAnzeigen();
 
-                if (isset($_GET['reservierungID']) && $datenLesen == TRUE) {
-                    global $con;
-                    $kfztyp = mysqli_fetch_array($con->query("SELECT kfzTypID FROM reservierungen WHERE reservierungID=".$_GET['reservierungID']))[0];
-                    echo '<button type="submit" name="mieten" onclick="window.location.href=\'rental_check.php?reservierungID='.$_GET['reservierungID'].'&kategorie='.$kfztyp.'\'">Kfz mieten</button>';
-                }
-            ?>            
-        </div>
+                    if (isset($_GET['reservierungID']) && $datenLesen == TRUE) {
+                        global $con;
+                        $reservierung = mysqli_fetch_array($con->query("SELECT * FROM reservierungen WHERE reservierungID=".$_GET['reservierungID']));
+                        $status = $reservierung["status"];
+                        if($status != "storniert" && $status != "abgeschlossen" && $status != "aktiv") 
+                            echo '<button type="submit" name="mieten" onclick="window.location.href=\'rental_check.php?reservierungID='.$_GET['reservierungID'].'&kategorie='.$reservierung["kfzTypID"].'\'">Kfz mieten</button>';
+                    }
+                ?>            
+            </div>
         </center>
             
         </main>
