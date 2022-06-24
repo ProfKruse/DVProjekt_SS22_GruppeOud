@@ -3,7 +3,6 @@ session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
 
-
 // Dieser Teil wird nur aktiviert wenn der Benutzen sich schon versucht anzumelden, und einen falschen Password eingetragen.
 // Hier wird gecjeckt, ob $_SESSION["locked"] schon vorher mit einem Zeitstemple initialisiert wurde, 
 //wenn ja d.h. wir müssen dann 30 sekenden warten bis die Anmeldung wieder möglich ist.
@@ -55,9 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
         //falls das Passwort falsch ist starten wir den prozess der Abzhälung von den Versuchen
         else {
+
             $_SESSION['login_attempts'] = $user_data['AnzVersuche'];
             $_SESSION['login_attempts'] += 1;
-            $insert_attempt = "update".$_SESSION['table'] ."set AnzVersuche = {$_SESSION['login_attempts']}"; // Die Versuche in der Datenbankspeichern
+
+            $insert_attempt = "update ".$_SESSION['table'] ." set AnzVersuche = {$_SESSION['login_attempts']}"; // Die Versuche in der Datenbankspeichern
             mysqli_query($con, $insert_attempt);
 
             //Checken ob der Anzahl der Versuche unter der erlaubte Grenze ist. In diesem fall 3 Versuche
