@@ -179,7 +179,7 @@ function send_mail($recipient,$subject, $message,$stringAttachment=null,$nameAtt
             //Ueberpruefen ob $ergebnisTupel true ist. Falls nicht, wird die Fehlermeldung ausgegeben und die 'kundenid', 'vertragid' und 'reservierungid' auf null gesetzt
             if($ergebnisTupel ==  false) 
             { 
-                echo "<p>Die eingegebene ID existiert nicht in der DB oder der Mietvertrag wurde schon abgeschlossen</p>";
+                echo "<br><br><br><br><br><p>Die eingegebene ID existiert nicht in der DB oder der Mietvertrag wurde schon abgeschlossen</p><br>";
                 $_SESSION['kundenid'] = null;
                 $_SESSION['vertragid'] = null;
                 $_SESSION['reservierungid'] = null;
