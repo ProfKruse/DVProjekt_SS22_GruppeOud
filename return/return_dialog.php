@@ -6,7 +6,7 @@
         include("../database/db_inc.php");
         //require fuer die Funkionsaufrufe
         include("../functions/functions.php");
-        $user_data = check_login($con);  
+        $user_data = check_login_Mitarbeiter($con);  
     ?> 
 <html> 
     <head> 
@@ -34,16 +34,6 @@
         <main> 
             <h1>KFZ Rücknahme</h1> 
             <center> 
-            <?php
-                    //sendeRuecknahmeprotokoll soll nur aufgerufen werden, wenn $_SESSION['mietvertragid'] gesetzt ist.
-                    if(isset($_POST['mietvertragid']))
-                    {
-                        $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
-                        if(checkIfIdProtocoleExist()){
-                            ?><div><p><?php echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die Mietvertragsnummer ".$_SESSION['mietvertragid'] ." erstellt.</p>"; ?></p></div><?php
-                        }
-                    }
-                ?> 
             <div class="frame"> 
             <form action="return_dialog.php" method="POST"> 
                 <!--------------------------------------------------------------> 
@@ -59,16 +49,16 @@
             </form> 
             <?php
                 //mietvertragsAnzeige soll nur aufgerufen werden, wenn die Mietvertragsnummer eingegeben wurde
-                if(isset($_POST['mietvertragid']) )
+                if(isset($_POST['mietvertragid']))
+                {
                     //speichern der Mietvertragsnummer
                     $_SESSION['mietvertragid'] = $_POST['mietvertragid'];
-                { if ( !checkIfIdProtocoleExist()){
-
+                    //Warnung, dass es bereits ein Ruecknahmeprotokoll für die Mietvertragsnummer gibt
+                    if(checkIfIdProtocoleExist()){
+                        echo "<p>Es wurde bereits ein Ruecknahmeprotokoll fuer die Mietvertragsnummer ". $_SESSION['mietvertragid'] ." erstellt.</p>"; 
+                    }
                     //Funktionsaufruf der mietvertragsAnzeige mit den Formulardaten und der Datenbankverbindung
                     mietvertragsAnzeige($_POST,$con);
-                }
-                    
-
                 }
             ?>
             <!--Formular zur Abfrage KFZ-relevanter Nutzungsdaten-->
@@ -94,18 +84,16 @@
                 </div> 
                 <br>
                 <?php
-                    //sendeRuecknahmeprotokoll soll nur aufgerufen werden, wenn $_SESSION['mietvertragid'] gesetzt ist.
-                    if(isset($_SESSION['mietvertragid']) and !checkIfIdProtocoleExist())
+                    //sendeRuecknahmeprotokoll soll nur aufgerufen werden, wenn $_SESSION['mietvertragid'] gesetzt ist und noch kein Mietvertrag erzeugt wurde.
+                    if(isset($_SESSION['mietvertragid']) and !checkIfIdProtocoleExist() and !checkIfIdMietvertragExist())
                     {
                             sendeRuecknahmeprotokoll($_POST,$con,$_SESSION['mietvertragid']);
-                            ?><button type="submit">Protokoll erzeugen</button></div><?php
+                            echo "<button type='submit'>Protokoll erzeugen</button></div>";
                     }
                     else{
-                        ?><div><span><?php echo "Bitte fragen Sie eine Mietvertragsnummer ab"; ?></span></div><?php
+                         echo "<div><span>Bitte fragen Sie eine Mietvertragsnummer ab</span></div>"; 
                     }
                 ?>  
-
-                
                 <!-- Erklaerung zur Verwendung der Seite und Hinweis wenn nur das untere Formular ausgefuellt und abgesendet werden soll, ohne vorherige Abfrage der Mietvertragsnummer-->
             
             </div>
