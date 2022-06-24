@@ -30,7 +30,7 @@ function check_login($con){
         $result = mysqli_query($con,$query);
         if($result && mysqli_num_rows($result) > 0){
             $user_data = mysqli_fetch_assoc($result);
-            $_SESSION['mitarbeiterID'] = $user_data['kundeID'];
+            $_SESSION['kundeID'] = $user_data['kundeID'];
             return $user_data;
         } 
     }else{
