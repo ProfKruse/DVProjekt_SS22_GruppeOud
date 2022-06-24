@@ -182,7 +182,6 @@ values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$or
             <b>
                 <li><a href="../index.php">Home</a></li>
                 <li><a href="../reserve/reservation.php">Reservieren</a></li>
-                <li><a href="">Reservierungen</a></li>
                 <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
                 <li><a href="../login/login.php">Anmeldung</a></li>
             </b>

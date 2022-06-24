@@ -1,7 +1,12 @@
 <?php   
-    session_start();
+    if(!isset($_SESSION)) session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
+    
+    if(check_login_mitarbeiter($con)) {
+        header("Location: ../index.php");
+    }
+
     $user_data = check_login($con);
 ?>
 
