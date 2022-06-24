@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <form method="POST">
               
                     <label for="bedingung" id="checkbox">
-                        <input type="checkbox" name="bedingung"><b>Mitarbeier</b>
+                        <input type="checkbox" name="bedingung"><b>Mitarbeiter</b>
                     </label>
                     <br>
                     <label for="pseudo">*Username</label>

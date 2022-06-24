@@ -554,7 +554,7 @@ Folgend die Mietvertragsdaten:
     function rechnungAnlegen($mietvertragId) {
         global $con;
 
-        $ID;
+        $ID = 0;
         $mietvertrag = mysqli_fetch_array($con->query("SELECT * FROM mietvertraege WHERE mietvertragID=$mietvertragId"));
         if($mietvertrag != NULL) {
                 $rechnungdatum   = strtotime(date("Y-m-d"));
