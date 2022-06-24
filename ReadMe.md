@@ -64,7 +64,7 @@ Kontakt:
 <br>Backend Entwickler
 <br>Bastian.oymanns@studmail.w-hs.de
 
-- Julian Echerskorn 
+- Julian Eckerskorn 
 <br>Backend Entwickler
 <br>Julian.Eckerskorn@studmail.w-hs.de
 
