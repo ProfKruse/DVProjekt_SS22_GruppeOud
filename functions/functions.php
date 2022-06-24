@@ -1,5 +1,5 @@
 <?php
-    set_include_path('C:\xampp\htdocs\rentalCar');
+    //set_include_path('C:\xampp\htdocs\rentalCar');
 
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
     //require '/library/PHPMailer/src/Exception.php';
@@ -1067,7 +1067,7 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
     }
 
     function checkIfIdProtocoleExist(){
-        include("database/db_inc.php");
+        include("../database/db_inc.php");
         $stmt = "select ruecknahmeprotokollID from ruecknahmeprotokolle where mietvertragID = ".$_SESSION['mietvertragid'].";";
         $erg = mysqli_query($con, $stmt);
         $protocole_data = mysqli_fetch_assoc($erg); 
@@ -1079,7 +1079,7 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
     }
 
     function checkIfIdMietvertragExist(){
-        include("database/db_inc.php");
+        include("../database/db_inc.php");
         try{
             $stmt = "select mietvertragID from mietvertreage where mietvertragID = ". $_SESSION['mietvertragid'].";";
             $erg = mysqli_query($con, $stmt);
