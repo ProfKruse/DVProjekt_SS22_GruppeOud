@@ -866,6 +866,9 @@ Wir erlauben uns folgende Rechnungsstellung:
         $verzugszinsen = 0;
         if($mahnungsdaten["mahnungnr"] > 1) {
             $mahngebuehr = (0.05*$betrag) > 150 ? 150 : (0.05*$betrag);
+            if($mahngebuehr < 5) {
+                $mahngebuehr = 5;
+            }
             
             $säumnistage = (strtotime(date("Y-m-d"))-strtotime($mahnungsdaten["alte_zahlungsfrist"]))/86400;
             $forderungsbetrag = $betrag;
