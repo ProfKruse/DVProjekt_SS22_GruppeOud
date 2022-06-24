@@ -1,14 +1,14 @@
 <?php
-    //set_include_path('C:\xampp\htdocs\rentalCar');
+    set_include_path('C:\xampp\htdocs\rentalCar');
 
     /* Klasse zur Behandlung von Ausnahmen und Fehlern */
-    require '../library/PHPMailer/src/Exception.php';
+    require '/library/PHPMailer/src/Exception.php';
     /* PHPMailer-Klasse */
-    require '../library/PHPMailer/src/PHPMailer.php';
+    require '/library/PHPMailer/src/PHPMailer.php';
     /* SMTP-Klasse, die benötigt wird, um die Verbindung mit einem SMTP-Server herzustellen */
-    require '../library/PHPMailer/src/SMTP.php';
+    require '/library/PHPMailer/src/SMTP.php';
     /* TCPDF Einbindung, um eine PDF zu erzeugen*/
-    require '../library/TCPDF/tcpdf.php';
+    require '/library/TCPDF/tcpdf.php';
 
     
     /*require(realpath(dirname(__FILE__) . '/../library/PHPMailer/src/Exception.php'));*/
