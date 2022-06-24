@@ -1081,7 +1081,7 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
     function checkIfIdMietvertragExist(){
         include(realpath(dirname(__FILE__) . '/../database/db_inc.php'));
         try{
-            $stmt = "select mietvertragID from mietvertreage where mietvertragID = ". $_SESSION['mietvertragid'].";";
+            $stmt = "select mietvertragID from mietvertraege where mietvertragID = ". $_SESSION['mietvertragid'].";";
             $erg = mysqli_query($con, $stmt);
             $protocole_data = mysqli_fetch_assoc($erg);
             if($protocole_data){
