@@ -2,8 +2,7 @@
 if(!isset($_SESSION)) session_start();
 include("../database/db_inc.php");
 include("../functions/functions.php");
-$_SESSION["kunde"] = 487;
-$_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden WHERE kundeID=".$_SESSION["kunde"]))[0];
+$user_data = check_login($con);
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +22,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         <li><a href="../reserve/reservation.php">Reservieren</a></li>
                         <li><a href="">Reservierungen</a></li>
                         <li><a href="../invoice/invoice_list.php">Rechnungen</a></li>
-                        <li><b> Hallo <?php echo $_SESSION['pseudo'] ?><b></li>
+                        <li><b> Hallo <?php echo $user_data['pseudo'] ?><b></li>
                         <li><a href="../login/logout.php">Logout</a></li>
                     </b>
                 </ul>
@@ -57,11 +56,12 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                             global $con;
                             global $kundendaten;
                             global $rechnungsdaten;
+                            global $user_data;
 
-                            $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$_SESSION["kunde"]));
+                            $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$user_data["kundeID"]));
                             $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"],"sammelrechnungen"=>$kunde["sammelrechnungen"]);
 
-                            $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND bezahltAm IS NULL");
+                            $rechnungen = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$user_data["kundeID"]." AND bezahltAm IS NULL");
                             if($rechnungen != NULL) {
                                 while($row = $rechnungen->fetch_array()) {
                                     $rechnungnr = $row["rechnungNr"];
@@ -86,7 +86,7 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         $_SESSION['invoice_kundendaten'] = $kundendaten;
                         $_SESSION['invoice_rechnungsdaten'] = $rechnungsdaten;
     
-                        $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]);
+                        $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$user_data["kundeID"]);
 
                         /*
                             Einfügen der Rechnungsdaten in eine neue Tabellenzeile
@@ -94,15 +94,19 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                         if($result) {
                             while($row = $result->fetch_array()) {
                                 $verspaetung = "-";
+                                $bezahltAm = $row["bezahltAm"];
                                 if($row["bezahltAm"] != NULL && strtotime($row["bezahltAm"]) > strtotime($row["zahlungslimit"])) {
                                     $verspaetung = ceil((strtotime($row["bezahltAm"])-strtotime($row["zahlungslimit"]))/86400);
+                                }
+                                if($row["bezahltAm"] == NULL) {
+                                    $bezahltAm = "-";
                                 }                   
 
                                 echo '<tr>
                                 <td>'.$row["rechnungNr"].'</td>
                                 <td>'.$row["versanddatum"].'</td>
                                 <td>'.$row["zahlungslimit"].'</td>
-                                <td>'.$row["bezahltAm"].'</td>
+                                <td>'.$bezahltAm.'</td>
                                 <td>'.$verspaetung.'</td>
                                 <td><button type="button" onclick="window.location.href=\'invoice.php?invoice_type=file&einzelrechnungnr='.$row["rechnungNr"].'\'">Download</button></td>
                                 </tr>';
@@ -135,7 +139,8 @@ $_SESSION['pseudo'] = mysqli_fetch_array($con->query("SELECT pseudo FROM kunden 
                     <?php
                         function mahnungen() {
                             global $con;
-                            $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$_SESSION["kunde"]." AND mahnstatus != 'keine'");
+                            global $user_data;
+                            $result = $con->query("SELECT * FROM rechnungen WHERE kundeID=".$user_data["kundeID"]." AND mahnstatus != 'keine'");
                             
                             if($result) {
                                 while($row = $result->fetch_assoc()) {
