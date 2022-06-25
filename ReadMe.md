@@ -24,10 +24,11 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 3. Erstellen Sie eine Datenbank name: "autovermietung"
 4. Führen Sie den [SQL-Script](https://github.com/som-ould/rentalCar/blob/main/Database/autovermietung_mit_testdaten.sql) durch
 5. Passen Sie [DB-Config](https://github.com/som-ould/rentalCar/blob/feature/database/Database/db_inc.php) an, nur falls Sie die Default Parameter der Datanbank geändert haben
-6. Rufen sie mit dem Betriebssystem Windows die Aufgabenplanung (ggf. unter dem Namen "taskschd") auf
-7. Klicken sie in der rechts befindlichen Leiste unter "Aktionen" auf die Option "Aufgabe importieren" und importeren sie nacheinander die Dateien
+6. Clonen sie diesen Repository in dem Ordner xampp/htdocs
+7. Rufen Sie mit dem Betriebssystem Windows die Aufgabenplanung (ggf. unter dem Namen "taskschd") auf
+8. Klicken Sie in der rechts befindlichen Leiste unter "Aktionen" auf die Option "Aufgabe importieren" und importeren Sie nacheinander die Dateien
 [Sammelrechnungen_Versand.xml](https://github.com/som-ould/rentalCar/trigger/Sammelrechnungen_Versand.xml) und [Mahnungen_Versand.xml](https://github.com/som-ould/rentalCar/trigger/Mahnungen_Versand.xml) und klicken sie auf "OK"
-8. Rufen Sie Local/rentalCar/index.html 
+9. Rufen Sie localhost/rentalCar/index.html 
 
 ### Dokumentation
 
