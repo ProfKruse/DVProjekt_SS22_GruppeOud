@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <body>
     <main>
-        <h1> Möchten Sie ein Auto reservieren?<br> Melden Sie sich ein!</h1>
+        <h1> Möchten Sie ein Auto reservieren?<br> Melden Sie sich an!</h1>
         <center>
             <!--Hier werden ggf. die Nachrichten angezeigt-->
             <!--Nachricht falls es ein Fehlversuch war-->
