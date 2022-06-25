@@ -54,7 +54,7 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 
 #### Testdatengenerierung
 
-Die bereits generierten Testdaten befinden sich mit der Datenbankstruktur in der Datei [autovermietung_mit_testdaten.sql](https://github.com/som-ould/rentalCar/blob/main/Database/autovermietung_mit_testdaten.sql) und werden automatisch beim erstellen der Datenbank eingefügt.
+Die bereits generierten Testdaten befinden sich mit der Datenbankstruktur in der Datei [autovermietung_mit_testdaten.sql](https://github.com/som-ould/rentalCar/blob/main/Database/autovermietung_mit_testdaten.sql) und werden automatisch beim Erstellen der Datenbank eingefügt.
 Das Generieren der Testdaten erfolgte anhand von Schemas mithilfe von Mockaroo, die in der vorgegebenen Reihenfolge generiert werden müssen.
 - [tarife](https://www.mockaroo.com/845de730)
 - [kunden](https://www.mockaroo.com/ff312e30)
