@@ -3,12 +3,6 @@ session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
-    
-    /*echo "kundenid: ".$user_data["kundeID"]
-    ." kfztypid: ".$_SESSION["kfztyp"]
-    ." mietstationid: ".$_SESSION["mietstation"]
-    ." Mietbeginn: ".$_SESSION['Mietbeginn']
-    ." Mietende: ".$_SESSION['Mietende'];*/
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,8 +35,15 @@ session_start();
                         $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
                         $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietende >= '".$_SESSION['Mietbeginn']."') AND (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietbeginn <= '".$_SESSION['Mietende']."')");  
                         $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
+                        echo count($anzahlVerfuegbareAutos). "  ". count($anzahlReservierteAutos);
                         if ($anzahlUebrigeAutos > 0 && $user_data != null) {
-                            $record = "INSERT INTO reservierungen (kundeID, kfzTypID, mietstationID, status,datum, Mietbeginn, Mietende) VALUES (".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", 'bestätigt','".date('Y-m-d')."', '".$_SESSION['Mietbeginn']."','".$_SESSION['Mietende']."');";
+                            $record = "INSERT INTO reservierungen (kundeID, kfzTypID, mietstationID,abgabestationID, status,datum, Mietbeginn, Mietende,message) VALUES (".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", ".$_SESSION["abgabestation"]." , 'bestätigt','".date('Y-m-d')."', '".$_SESSION['Mietbeginn']."','".$_SESSION['Mietende']."','".$_SESSION['message']."');";
+                            /*echo "kundenid: ".$user_data["kundeID"]
+                            ." kfztypid: ".$_SESSION["kfztyp"]
+                            ." mietstationid: ".$_SESSION["mietstation"]
+                            ." Mietbeginn: ".$_SESSION['Mietbeginn']
+                            ." Mietende: ".$_SESSION['Mietende']
+                            ." Message: ".$_SESSION['message'];*/
                             $result = $con->query($record);
                             $confirmation = "Reservierung durchgeführt";
                             $frametype = "successFrame";

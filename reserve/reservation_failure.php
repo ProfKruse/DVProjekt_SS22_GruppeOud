@@ -3,6 +3,18 @@ session_start();
     include("../database/db_inc.php");
     include("../functions/functions.php");
     $user_data = check_login($con);
+
+    /*echo $_SESSION["kfztyp"]."    ";
+    echo $_SESSION["mietstation"]."    ";
+    echo $_SESSION["abholstation"] ."  KFZ BEZEICHNUNG  ";
+
+    echo $_SESSION["kfzTypBezeichnung"][0]."  Abholstation bezeichung  ";
+    echo $_SESSION['abholstationBezeichnung'][0] ."  anza verfügbare autos  ";
+    //alles 0
+    echo $_SESSION["anzahlVerfuegbareAutos"] ."  anza reservierte autos  ";
+    echo $_SESSION["anzahlReservierteAutos"]."  total autos  ";
+    echo $_SESSION["totavailableKfz"]."    ";*/
+
 ?>
 <!DOCTYPE html>
 <html>
