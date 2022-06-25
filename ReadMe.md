@@ -53,7 +53,22 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 
 
 #### Testdatengenerierung
+
+Die bereits generierten Testdaten befinden sich mit der Datenbankstruktur in der Datei [autovermietung_mit_testdaten.sql](https://github.com/som-ould/rentalCar/blob/main/Database/autovermietung_mit_testdaten.sql) und werden automatisch beim erstellen der Datenbank eingefügt.
+Das Generieren der Testdaten erfolgte anhand von Schemas mithilfe von Mockaroo, die in der vorgegebenen Reihenfolge generiert werden müssen.
 - [tarife](https://www.mockaroo.com/845de730)
+- [kunden](https://www.mockaroo.com/ff312e30)
+- [mitarbeiter](https://www.mockaroo.com/0caf8e90) 
+- [mietstationen](https://www.mockaroo.com/b778c940) 
+- [aktuellepersonalplaene](https://www.mockaroo.com/4fdb7870)
+- [kfztypen](https://www.mockaroo.com/d117be20)
+- [kfzs](https://www.mockaroo.com/9c841930)
+- [mietstationen_mietwagenbestaende](https://www.mockaroo.com/691aeda0)
+- [reservierungen](https://www.mockaroo.com/c4a90490)
+- [vertraege](https://www.mockaroo.com/03f3d9f0)
+- [mietvertraege](https://www.mockaroo.com/5f4172a0)
+- [rechnungen](https://www.mockaroo.com/aa9fd740)
+- [ruecknahmeprotokolle](https://www.mockaroo.com/d92573c0)
 
 #### Webanwendung
 - [Autovermietung](http://localhost/rentalCar/index.php)
@@ -61,7 +76,7 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 Kontakt:
 =========
 
-- Anne Lötter 
+- Anne Löttert
 <br>Backend Entwicklerin
 <br>Anne.loettert@studmail.w-hs.de
 
