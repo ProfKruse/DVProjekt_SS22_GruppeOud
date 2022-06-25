@@ -33,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $iban = $_POST['iban'];
     $bic = $_POST['bic'];
     $telefonNr = $_POST['telefonNr'];
+    $sammelrechnungen = $_POST['sammelrechnungen'];
+    $zahlungsziel = $_POST['zahlungszielTage'];
 
     $query_pseudo = "select * from kunden where pseudo = '$pseudo' limit 1 ";
     $query_email = "select * from kunden where emailAdresse = '$emailAdresse' limit 1 ";
@@ -48,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email_error = " Die Email Adresse $emailAdresse existiert schon!";
     } else {
         $token = rand(10000, 99999);
-        $stmt = "insert into kunden (vorname, nachname, pseudo, password, strasse, hausNr, plz,ort, land, iban, bic, telefonNr, emailAdresse,token) 
-values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$ort','$land','$iban','$bic','$telefonNr','$emailAdresse','$token')";
+        $stmt = "insert into kunden (vorname, nachname, pseudo, password, strasse, hausNr, plz,ort, land, iban, bic, telefonNr, emailAdresse,token,sammelrechnungen,zahlungszielTage) 
+values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$ort','$land','$iban','$bic','$telefonNr','$emailAdresse','$token','$sammelrechnungen',$zahlungsziel)";
         mysqli_query($con, $stmt);
 
         $recipient = $emailAdresse;
@@ -233,7 +235,16 @@ values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$or
 
                         <label for="hausnr">*Haus-Nr</label>
                         <input type="text" name="hausNr" placeholder="Haus Nr." required value="<?php echo $hausNr; ?>">
-
+                        
+                        <label for="hausnr">*Sammelrechnungen</label>
+                        <select name="sammelrechnungen" required selected="<?php echo $sammelrechnungen; ?>">
+                            <option value="keine">Keine</option>
+                            <option value="woechentlich">Wöchentlich</option>
+                            <option value="monatlich">Monatlich</option>
+                            <option value="quartalsweise">Quartalsweise</option>
+                            <option value="halbjaehrlich">Halbjährlich</option>
+                            <option value="jaehrlich">Jährlich</option>
+                        </select>
                     </div>
 
                     <div class="group">
@@ -256,10 +267,12 @@ values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$or
                         <label for="telefonnr">*Telefonnummer</label>
                         <input type="text" name="telefonNr" placeholder="Telefonnummer" required value="<?php echo $telefonNr; ?>">
 
+                        <label for="hausnr">*Zahlungsziel in Tagen</label>
+                        <input type="number" min="1" max="30" name="zahlungszielTage" placeholder="Zahlungsziel" required value="<?php echo $zahlungsziel; ?>">
                     </div>
                     <br>
-                    <button type="submit">Regestrieren</button>
-                    <a href="login.php">Ich habe schon einen Konto</a>
+                    <button type="submit">Registrieren</button>
+                    <a href="login.php">Ich habe schon ein Konto</a>
                 </form>
             </div>
         </center>
