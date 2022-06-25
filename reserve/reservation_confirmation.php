@@ -35,7 +35,7 @@ session_start();
                         $anzahlVerfuegbareAutos = databaseSelectQuery("kfzID","mietstationen_mietwagenbestaende","WHERE mietstationID=".$_SESSION['abholstation']." AND kfzID IN (SELECT kfzID FROM kfzs WHERE kfzTypID=".$_SESSION["kfztyp"].")");
                         $anzahlReservierteAutos = databaseSelectQuery("kfzTypID","reservierungen","WHERE (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietende >= '".$_SESSION['Mietbeginn']."') AND (mietstationID = ".$_SESSION['abholstation']." AND kfzTypID=".$_SESSION["kfztyp"]." AND Mietbeginn <= '".$_SESSION['Mietende']."')");  
                         $anzahlUebrigeAutos = count($anzahlVerfuegbareAutos)-count($anzahlReservierteAutos);
-                        echo count($anzahlVerfuegbareAutos). "  ". count($anzahlReservierteAutos);
+                        
                         if ($anzahlUebrigeAutos > 0 && $user_data != null) {
                             $record = "INSERT INTO reservierungen (kundeID, kfzTypID, mietstationID,abgabestationID, status,datum, Mietbeginn, Mietende,message) VALUES (".$user_data["kundeID"].",".$_SESSION["kfztyp"].",".$_SESSION["mietstation"].", ".$_SESSION["abgabestation"]." , 'bestätigt','".date('Y-m-d')."', '".$_SESSION['Mietbeginn']."','".$_SESSION['Mietende']."','".$_SESSION['message']."');";
                             /*echo "kundenid: ".$user_data["kundeID"]
