@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
     <?php 
         //Session start, zum setzen von Objekten    
-        session_start();
+        if(!isset($_SESSION)) session_start();
         //require fuer die Datenbankverbindung
         include("../database/db_inc.php");
         //require fuer die Funkionsaufrufe
@@ -22,7 +22,7 @@
                     <b> 
                         <li><a href="../index.php">Home</a></li>
                         <li><b><a href="../rental/reservation_display.php">Mietvertrag abschließen</a></b></li>
-                        <li><b><?php echo $user_data['pseudo'] ?><b></li>
+                        <li><b class="username"> Hallo <?php echo $user_data['pseudo'] ?><b></li>
                         <li><a href="../login/logout.php">Logout</a></li>
                     </b> 
                 </ul> 

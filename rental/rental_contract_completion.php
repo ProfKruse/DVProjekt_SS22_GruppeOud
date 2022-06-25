@@ -16,7 +16,7 @@
 
         $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$reservierung["kundeID"]));
         $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"],"sammelrechnungen"=>$kunde["sammelrechnungen"]);        
-        $mietdauer = (strtotime($reservierung["Mietende"])-strtotime($reservierung["Mietbeginn"]))/86400;
+        $mietdauer = intval((strtotime($reservierung["Mietende"])-strtotime($reservierung["Mietbeginn"]))/86400);
         $tarif = mysqli_fetch_array($con->query("SELECT tarifPreis FROM tarife WHERE tarifID = (SELECT tarifID FROM kfztypen WHERE kfzTypID = ".$kfz["kfzTypID"].")"))[0];
         $abholstation = mysqli_fetch_array($con->query("SELECT beschreibung FROM mietstationen WHERE mietstationID = ".$reservierung["mietstationID"]))[0];
 
@@ -32,7 +32,7 @@
 
         $reservierungUpdateStatement = $con->query("UPDATE reservierungen SET status='aktiv' WHERE reservierungID=$reservierungID");
         
-        $mietvertragsdaten = array("mietvertragnr"=>$mietvertragID,"marke"=>$kfz["marke"],"modell"=>$kfz["modell"],"datum"=>date("Y-m-d"),"mietdauer"=>$mietdauer,"mietgebuehr"=>$mietdauer*$tarif,"abholstation"=>$abholstation);
+        $mietvertragsdaten = array("mietvertragnr"=>$mietvertragID,"marke"=>$kfz["marke"],"modell"=>$kfz["modell"],"datum"=>date("Y-m-d"),"mietdauer"=>$mietdauer,"mietgebuehr"=>($mietdauer*$tarif)    ,"abholstation"=>$abholstation);
 
         if ($kunde["sammelrechnungen"] == "keine") {
             $rechnung = mysqli_fetch_array($con->query("SELECT * FROM rechnungen WHERE rechnungNr=".$rechnungnr));
@@ -41,7 +41,7 @@
         }
 
         //Mietvertrag Mail
-        createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
+        //createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
         //Mietvertrag PDF
         createMietvertragPDF($kundendaten,$mietvertragsdaten,'file');
     }

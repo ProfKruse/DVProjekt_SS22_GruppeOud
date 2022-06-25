@@ -485,6 +485,8 @@ Folgend die Mietvertragsdaten:
 
 
                 foreach($vertragsdaten as $key => $value) {
+                    if($key == 'mietgebuehr')
+                        $value = round($value,2);
                     $rental_data.="<td>$value";
 
                     if($key == 'mietgebuehr')
@@ -504,6 +506,7 @@ Folgend die Mietvertragsdaten:
             Nettobetrag: ';
     
             $nettobetrag = $vertragsdaten["mietgebuehr"];
+            $nettobetrag = round($nettobetrag,2);
         
             $total_amount .=  $nettobetrag.'€
             </pre>
@@ -1036,11 +1039,13 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
         require_once(realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
         $con = mysqli_connect($host, $user, $passwd, $schema);
         $heute = date("Y-m-d");
-        $zahlungsausstehendeKunden = $con->query("SELECT DISTINCT kundeID FROM rechnungen WHERE kundeID IN (SELECT kundeID FROM kunden WHERE sammelrechnungen != 'keine') AND versanddatum = '$heute'");
+        echo $heute;
+        $zahlungsausstehendeKunden = $con->query("SELECT DISTINCT kundeID FROM rechnungen WHERE kundeID IN (SELECT DISTINCT kundeID FROM kunden WHERE sammelrechnungen != 'keine') AND versanddatum = '$heute'");
         $kundendaten;
         $rechnungsdaten = array();
 
         if($zahlungsausstehendeKunden != null) {
+            
             while($rowKunde = $zahlungsausstehendeKunden->fetch_assoc()) {
                 $kunde = mysqli_fetch_array($con->query("SELECT * FROM kunden WHERE kundeID=".$rowKunde["kundeID"]));
                 $kundendaten = array("kundennr"=>$kunde["kundeID"],"name"=>$kunde["vorname"]." ".$kunde["nachname"],"straße"=>$kunde["strasse"]." ".$kunde["hausNr"],"stadt"=>$kunde["plz"]." ".$kunde["ort"],"email"=>$kunde["emailAdresse"],"sammelrechnungen"=>$kunde["sammelrechnungen"]);
