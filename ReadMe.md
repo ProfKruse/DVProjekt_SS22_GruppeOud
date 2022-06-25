@@ -36,7 +36,8 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 - [Lastenheft](https://github.com/som-ould/rentalCar/blob/develop/Projektauftrag/20220403_Lastenheft_DVProjektWinfo_SS2022_Autovermietung.pdf)
 - [Projektauftrag](https://github.com/som-ould/rentalCar/wiki/Projektauftrag)
 
-#### Protokole
+#### Protokolle
+
 - [Logbuch](https://docs.google.com/document/d/1gyoO3umH7sQYfjQJlo43idK8eAwMnH-QW_iQgBw24R0/edit#)
 - [Leistungserfassung](https://docs.google.com/spreadsheets/d/1pIhPirbzJjo5-i-Uyj6I9yZHlmOF9URTQR_yK-8TZAc/edit#gid=0)
 - [Projektplanung](https://docs.google.com/spreadsheets/d/1pIhPirbzJjo5-i-Uyj6I9yZHlmOF9URTQR_yK-8TZAc/edit#gid=1287143819)
@@ -71,6 +72,7 @@ Das Generieren der Testdaten erfolgte anhand von Schemas mithilfe von Mockaroo, 
 - [ruecknahmeprotokolle](https://www.mockaroo.com/d92573c0)
 
 #### Webanwendung
+
 - [Autovermietung](http://localhost/rentalCar/index.php)
 
 Kontakt:
