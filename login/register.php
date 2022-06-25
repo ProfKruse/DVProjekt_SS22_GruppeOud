@@ -144,7 +144,7 @@ values ('$vorname','$nachname', '$pseudo','$hash','$strasse','$hausNr',$plz,'$or
                 <main>
                     <center>
                 <div>
-                    <p style= \"font-size: 20px\">Danke f&uumlr die Registrierung! <br> Sind Sie bereit f&uumlr Ihren ersten Trip?
+                    <p style= \"font-size: 20px\">Danke für die Registrierung! <br> Sind Sie bereit für Ihren ersten Trip?
                     <br> Ihr Aktivierungscode: $token </b></p>
                 </div>
                 <div>
