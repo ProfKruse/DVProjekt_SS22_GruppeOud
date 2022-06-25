@@ -821,7 +821,7 @@ Wir erlauben uns folgende Rechnungsstellung:
     
         if($type == 'mail') {
             send_mail($kundendaten["email"],'Rechnung zum '.date('d.m.Y'),
-            'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie ihre '.$rechnungstyp.' entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
+            'Sehr geehrte/r Frau/Herr'.$kundendaten['name'].',<br><br>Dem Anhang koennen sie ihre '.$rechnungstyp.' entnehmen.<br><br>Vielen Dank fuer ihren Auftrag.',
             $pdfString, 'rechnung_'.date('Y-m-d').'.pdf');
         }
     }
@@ -989,7 +989,7 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
     
         if($type == 'mail') {
             send_mail($kundendaten["email"],'Mahnung zum '.date('d.m.Y'),
-            'Sehr geehrte/r Frau/Herr,<br><br>Dem Anhang koennen sie die Mahnung zur Zahlungsauforderung entnehmen.<br><br>Ihr Rentalcar Team.',
+            'Sehr geehrte/r Frau/Herr'.$kundendaten['name'].',<br><br>Dem Anhang koennen sie die Mahnung zur Zahlungsauforderung entnehmen.<br><br>Ihr Rentalcar Team.',
             $pdfString, 'mahnung_'.date('Y-m-d').'.pdf');
         }
     }
