@@ -57,7 +57,7 @@ session_start();
                             <p>Sie haben ein KFZ des Typs ".$_SESSION ['kfzTypBezeichnung'][0]." 
                             <br> in der Abholstation ". $_SESSION ['abholstationBezeichnung'][0]." 
                             reseriviert. Zeitraum von ".$_SESSION['Mietbeginn']." bis ".$_SESSION['Mietende']." <br> Sie können die reservierung bis 24 Std vor der Mitbeginn stornieren. <a href= 'localhost/rentalcar/reserve/reservation_cancel.php?reservierungID=".$reservierungID['MAXID']."'> Ihre Reservierung stornieren </a></h2><center>";
-                            send_mail($user_data['emailAdresse'],"Ihre Reservierung bei Rentalcar GmBH wurde erfolgreich durchgeführt!",$mail);
+                            send_mail($user_data['emailAdresse'],"Ihre Reservierung bei Rentalcar GmBH wurde erfolgreich durchgefuehrt!",$mail);
                         }
   
                         else {
