@@ -1,4 +1,4 @@
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/tarife.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/tarife.xml'
 INTO TABLE tarife
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -7,7 +7,7 @@ SET tarifID = ExtractValue(@record:=CONVERT(@record using utf8), 'tarifID'),
 tarifBez = ExtractValue(@record, 'tarifBez'),
 tarifPreis = ExtractValue(@record, 'tarifPreis');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/kunden.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/kunden.xml'
 INTO TABLE kunden
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -34,7 +34,7 @@ kontostand = ExtractValue(@record, 'kontostand'),
 sammelrechnungen = ExtractValue(@record, 'sammelrechnungen'),
 zahlungszielTage = ExtractValue(@record, 'zahlungszielTage');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/mitarbeiter.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/mitarbeiter.xml'
 INTO TABLE mitarbeiter
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -53,7 +53,7 @@ token = ExtractValue(@record, 'token'),
 AnzVersuche = ExtractValue(@record, 'AnzVersuche'),
 emailAdresse = ExtractValue(@record, 'emailAdresse');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/mietstationen.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/mietstationen.xml'
 INTO TABLE mietstationen
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -65,7 +65,7 @@ lage = ExtractValue(@record, 'lage'),
 groesse = ExtractValue(@record, 'groesse'),
 beschreibung = ExtractValue(@record, 'beschreibung');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/aktuellepersonalplaene.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/aktuellepersonalplaene.xml'
 INTO TABLE aktuellepersonalplaene
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -79,7 +79,7 @@ mitarbeiterID = ExtractValue(@record, 'mitarbeiterID'),
 ersteller = ExtractValue(@record, 'ersteller'),
 abgabestation = ExtractValue(@record, 'abgabestation');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/kfztypen.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/kfztypen.xml'
 INTO TABLE kfztypen
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -88,7 +88,7 @@ SET kfzTypID  = ExtractValue(@record:=CONVERT(@record using utf8), 'kfzTypID'),
 typBezeichnung = ExtractValue(@record, 'typBezeichnung'),
 tarifID = ExtractValue(@record, 'tarifID');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/kfzs.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/kfzs.xml'
 INTO TABLE kfzs
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -104,7 +104,7 @@ technikZustandNote = ExtractValue(@record, 'technikZustandNote'),
 kilometerStand = ExtractValue(@record, 'kilometerStand'),
 kennzeichen = ExtractValue(@record, 'kennzeichen');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/mietstationen_mietwagenbestaende.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/mietstationen_mietwagenbestaende.xml'
 INTO TABLE mietstationen_mietwagenbestaende
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -112,7 +112,7 @@ LINES STARTING BY '<record>' TERMINATED BY '</record>'
 SET kfzID  = ExtractValue(@record:=CONVERT(@record using utf8), 'kfzID'),
 mietstationID  = ExtractValue(@record, 'mietstationID');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/reservierungen.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/reservierungen.xml'
 INTO TABLE reservierungen
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -127,7 +127,7 @@ datum = ExtractValue(@record, 'datum'),
 Mietbeginn = ExtractValue(@record, 'Mietbeginn'),
 Mietende = ExtractValue(@record, 'Mietende');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/vertraege.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/vertraege.xml'
 INTO TABLE vertraege
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -137,7 +137,7 @@ datum = ExtractValue(@record, 'datum'),
 kundeID = ExtractValue(@record, 'kundeID'),
 kfzID = ExtractValue(@record, 'kfzID');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/mietvertraege.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/mietvertraege.xml'
 INTO TABLE mietvertraege
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -152,7 +152,7 @@ vertragID = ExtractValue(@record, 'vertragID'),
 kundeID = ExtractValue(@record, 'kundeID'),
 reservierungID = ExtractValue(@record, 'reservierungID');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/rechnungen.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/rechnungen.xml'
 INTO TABLE rechnungen
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
@@ -166,7 +166,7 @@ mahnstatus = ExtractValue(@record, 'mahnstatus'),
 zahlungslimit = ExtractValue(@record, 'zahlungslimit'),
 versanddatum = ExtractValue(@record, 'versanddatum');
 
-LOAD DATA LOCAL INFILE 'D:/STUDIUM/Semester/4/Module/DV Projekt/Projekt/testdata/ruecknahmeprotokolle.xml'
+LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/rentalCar/test/testdata/ruecknahmeprotokolle.xml'
 INTO TABLE ruecknahmeprotokolle
 CHARACTER SET binary
 LINES STARTING BY '<record>' TERMINATED BY '</record>'
