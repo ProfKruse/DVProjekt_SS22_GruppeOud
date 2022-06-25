@@ -22,7 +22,7 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 1. Installieren Sie [XAMPP](https://www.apachefriends.org/de/index.html) PHP 7.4.29.
 2. Starten Sie PhpMyAdmin and Apache Server
 3. Erstellen Sie eine Datenbank name: "autovermietung"
-4. Führen Sie den [SQL-Script](https://github.com/som-ould/rentalCar/blob/feature/database/Database/autovermietung.sql) durch
+4. Führen Sie den [SQL-Script]([https://github.com/som-ould/rentalCar/blob/feature/database/Database/autovermietung.sql](https://github.com/som-ould/rentalCar/blob/main/Database/autovermietung_mit_testdaten.sql)) durch
 5. Passen Sie [DB-Config](https://github.com/som-ould/rentalCar/blob/feature/database/Database/db_inc.php) an, nur falls Sie die Default Parameter der Datanbank geändert haben
 6. Rufen sie mit dem Betriebssystem Windows die Aufgabenplanung (ggf. unter dem Namen "taskschd") auf
 7. Klicken sie in der rechts befindlichen Leiste unter "Aktionen" auf die Option "Aufgabe importieren" und importeren sie nacheinander die Dateien
