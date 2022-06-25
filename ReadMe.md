@@ -51,6 +51,10 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 - [Sequenz- und Anwendungsfalldiagramme](https://github.com/som-ould/rentalCar/wiki/UML)
 - [Mockup](https://claritee.io/public-view/nDkaooP70sWy2DDGCRoJow%253d%253d/tree)
 
+
+#### Testdatengenerierung
+- [tarife](https://www.mockaroo.com/845de730)
+
 #### Webanwendung
 - [Autovermietung](http://localhost/rentalCar/index.php)
 
