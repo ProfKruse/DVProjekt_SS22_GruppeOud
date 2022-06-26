@@ -12,19 +12,17 @@ function sendReminder($rechnungnr, $type) {
     $con = mysqli_connect("localhost","root","","autovermietung");
     $rechnung = mysqli_fetch_array($con->query("SELECT * FROM rechnungen WHERE rechnungNr=".$rechnungnr));
 
-    $mahnungnr = 1;
-    $verlaengerung = 7;
+    $mahnungnr = ($rechnung["mahnstatus"] == "erste Mahnung") ? 1 : 2;
+    if($rechnung["mahnstatus"] == "dritte Mahnung")
+        $mahnungnr = 3;
     
-    if($rechnung["mahnstatus"] == "zweite Mahnung") {
-        $mahnungnr = 2;
+    $verlaengerung = 7;
+    if($rechnung["mahnstatus"] == "erste Mahnung") {
         $verlaengerung = 14;
     }
-
-    if($rechnung["mahnstatus"] == "dritte Mahnung") {
-        $mahnungnr = 3;
+    if($rechnung["mahnstatus"] == 'zweite Mahnung') {
         $verlaengerung = 21;
     }
-
     $zahlungsfrist = date("Y-m-d",strtotime($rechnung["zahlungslimit"])+($verlaengerung*86400));
     
     $mahnungsdaten = array("rechnungnr"=>$rechnungnr,"rechnungbetrag"=>$rechnung["rechnungBetrag"],"rechnungdatum"=>$rechnung["versanddatum"],"mahnungnr"=>$mahnungnr,
