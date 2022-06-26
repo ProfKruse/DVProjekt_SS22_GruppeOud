@@ -1039,7 +1039,7 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
         }
 
         foreach($rechnungnummern as $nummer) {
-            sendReminder($nummer,'file');
+            sendReminder($nummer,'mail');
         }
     }
 
