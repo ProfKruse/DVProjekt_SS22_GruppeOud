@@ -892,12 +892,16 @@ Wir erlauben uns folgende Rechnungsstellung:
             <table>
                 <tr>
                     <td>'.$kundendaten["name"].'</td>
-                    <td style="text-align:right;">Rechnungsdatum: '.$mahnungsdatum.'</td>
+                    <td style="text-align:right;">Mahnungsdatum: '.$mahnungsdatum.'</td>
                 </tr>
                 <tr>
                     <td>'.$kundendaten["straße"].'</td>
                     <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
                 </tr>
+                <tr>
+                    <td>'.$kundendaten["stadt"].'</td>
+                    <td style="text-align:right;">Zahlbar bis: '.date("d.m.Y",strtotime($mahnungsdaten["neue_zahlungsfrist"])).'</td>
+            </tr>
             </table>
             <br>';
     
@@ -1007,26 +1011,35 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
         $rechnungen = $con->query("SELECT * FROM rechnungen WHERE bezahltAm IS NULL");
         if($rechnungen) {
             while($row = $rechnungen->fetch_assoc()) {
-                $verzug = 0;
+                $alterVerzug = 0;
+                $neueMahnungnr = 1;
+                $neuerMahnstatus = 'erste Mahnung';
+
                 if($row["mahnstatus"] == 'erste Mahnung') {
-                    $verzug = 7;
+                    $alterVerzug = 7;
+                    $neueMahnungnr = 2;
+                    $neuerMahnstatus = 'zweite Mahnung';
                 }
                 if($row["mahnstatus"] == 'zweite Mahnung') {
-                    $verzug = 14;
+                    $alterVerzug = 14;
+                    $neueMahnungnr = 3;
+                    $neuerMahnstatus = 'dritte Mahnung';
                 }
                 if($row["mahnstatus"] == 'dritte Mahnung') {
-                    $verzug = 21;
+                    $alterVerzug = 21;
+                    $neueMahnungnr = 4;
                 }
-                $zahltag = date("Y-m-d",  strtotime(" + ".($verzug+1)." day", strtotime($row["zahlungslimit"])));
+                $zahltag = date("Y-m-d",  strtotime(" + ".($alterVerzug+1)." day", strtotime($row["zahlungslimit"])));
 
-                if(date("Y-m-d") == $zahltag) {
+                if(date("Y-m-d") == $zahltag && $neueMahnungnr < 4) {
                     array_push($rechnungnummern, $row["rechnungNr"]);
+                    $con->query("UPDATE rechnungen SET mahnstatus = '$neueMahnungnr' WHERE rechnungNr=".$row["rechnungNr"]);
                 }
             }
         }
 
         foreach($rechnungnummern as $nummer) {
-            sendReminder($nummer,'mail');
+            sendReminder($nummer,'file');
         }
     }
 
