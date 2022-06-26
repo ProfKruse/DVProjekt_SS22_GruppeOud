@@ -385,7 +385,7 @@ Sie hatten folgende Nutzungsdaten:
     
     
         $pdf->writeHTML($contact_information, true, false, true, false, '');
-        ob_end_clean();
+        if (ob_get_contents()) ob_end_clean();
         //Speichern der PDF als String
         $pdfString = $pdf->Output('rechnung'.$kundendaten["kundeID"]."_".date('Y-m-d').'.pdf', 'S');
         //Email Versendungsinformationen
