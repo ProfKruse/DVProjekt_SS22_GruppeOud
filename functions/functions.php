@@ -385,7 +385,7 @@ Sie hatten folgende Nutzungsdaten:
     
     
         $pdf->writeHTML($contact_information, true, false, true, false, '');
-        ob_end_clean();
+        if (ob_get_contents()) ob_end_clean();
         //Speichern der PDF als String
         $pdfString = $pdf->Output('rechnung'.$kundendaten["kundeID"]."_".date('Y-m-d').'.pdf', 'S');
         //Email Versendungsinformationen
@@ -908,7 +908,7 @@ Wir erlauben uns folgende Rechnungsstellung:
         $reminder_1 = 
             $style.'
             <br>Da das Zahlungsziel nicht eingehalten wurde bitten wir sie bis zum <br>'.$mahnungsdaten["neue_zahlungsfrist"].
-            ' den geforderten Betrag von '.$mahnungsdaten["rechnungbetrag"].' zu zahlen.<br>'.
+            ' den geforderten Betrag von '.$mahnungsdaten["rechnungbetrag"].'€ zu zahlen.<br>'.
             '<br>Wir erlauben uns Ihnen eine Mahngebühr und Verzugszinsen beim Überschreiten der neuen Zahlungsfrist in Rechnung zu stellen.';
 
         $reminder_2 = 
