@@ -2,8 +2,9 @@
     require (realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
     require (realpath(dirname(__FILE__) . '/../functions/functions.php'));
 
-    mietvertragErstellen($_GET['reservierungID'],$_GET['kfzid']);
-    
+    if(isset($_GET['reservierungID']) && isset($_GET['kfzid']))
+        mietvertragErstellen($_GET['reservierungID'], $_GET['kfzid']);
+
     function mietvertragErstellen($reservierungID, $kfzid) {
         global $con;
 
@@ -21,18 +22,18 @@
         $abholstation = mysqli_fetch_array($con->query("SELECT beschreibung FROM mietstationen WHERE mietstationID = ".$reservierung["mietstationID"]))[0];
 
         $mietvertragID = mysqli_fetch_array($con->query("SELECT mietvertragID FROM mietvertraege ORDER BY mietvertragID DESC"))[0]+1;
-        $mietvertragInsertStatement = "INSERT INTO mietvertraege (status, mietdauerTage, mietgebuehr, abholstation, rueckgabestation, vertragID, kundeID, reservierungID)
-                        VALUES ('bestätigt', $mietdauer, $mietdauer*$tarif, ".$reservierung["mietstationID"].",".$reservierung["mietstationID"].",$vertragID,".$reservierung["kundeID"].",$reservierungID)";
-                        
+        $mietvertragInsertStatement = "INSERT INTO mietvertraege (mietvertragID, status, mietdauerTage, mietgebuehr, abholstation, rueckgabestation, vertragID, kundeID, reservierungID)
+                        VALUES ($mietvertragID, 'bestätigt', $mietdauer, $mietdauer*$tarif, ".$reservierung["mietstationID"].",".$reservierung["mietstationID"].",$vertragID,".$reservierung["kundeID"].",$reservierungID)";
+
         $con->query($vertragInsertStatement);
         $con->query($mietvertragInsertStatement);
         
         //Anlegen einer neuen Rechnung in der Datenbank
         $rechnungnr = rechnungAnlegen($mietvertragID);
 
-        $reservierungUpdateStatement = $con->query("UPDATE reservierungen SET status='aktiv' WHERE reservierungID=$reservierungID");
+        //$reservierungUpdateStatement = $con->query("UPDATE reservierungen SET status='aktiv' WHERE reservierungID=$reservierungID");
         
-        $mietvertragsdaten = array("mietvertragnr"=>$mietvertragID,"marke"=>$kfz["marke"],"modell"=>$kfz["modell"],"datum"=>date("Y-m-d"),"mietdauer"=>$mietdauer,"mietgebuehr"=>($mietdauer*$tarif)    ,"abholstation"=>$abholstation);
+        $mietvertragsdaten = array("mietvertragnr"=>$mietvertragID,"marke"=>$kfz["marke"],"modell"=>$kfz["modell"],"datum"=>date("Y-m-d"),"mietdauer"=>$mietdauer,"mietgebuehr"=>($mietdauer*$tarif),"abholstation"=>$abholstation);
 
         if ($kunde["sammelrechnungen"] == "keine") {
             $rechnung = mysqli_fetch_array($con->query("SELECT * FROM rechnungen WHERE rechnungNr=".$rechnungnr));
@@ -43,6 +44,7 @@
         //Mietvertrag Mail
         //createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
         //Mietvertrag PDF
-        createMietvertragPDF($kundendaten,$mietvertragsdaten,'file');
+        //createMietvertragPDF($kundendaten,$mietvertragsdaten,'file');
+
     }
 ?>
