@@ -31,7 +31,7 @@
         //Anlegen einer neuen Rechnung in der Datenbank
         $rechnungnr = rechnungAnlegen($mietvertragID);
 
-        //$reservierungUpdateStatement = $con->query("UPDATE reservierungen SET status='aktiv' WHERE reservierungID=$reservierungID");
+        $reservierungUpdateStatement = $con->query("UPDATE reservierungen SET status='aktiv' WHERE reservierungID=$reservierungID");
         
         $mietvertragsdaten = array("mietvertragnr"=>$mietvertragID,"marke"=>$kfz["marke"],"modell"=>$kfz["modell"],"datum"=>date("Y-m-d"),"mietdauer"=>$mietdauer,"mietgebuehr"=>($mietdauer*$tarif),"abholstation"=>$abholstation);
 
@@ -42,9 +42,9 @@
         }
 
         //Mietvertrag Mail
-        //createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
+        createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
         //Mietvertrag PDF
-        //createMietvertragPDF($kundendaten,$mietvertragsdaten,'file');
+        createMietvertragPDF($kundendaten,$mietvertragsdaten,'file');
 
     }
 ?>
