@@ -459,10 +459,6 @@ Sie hatten folgende Nutzungsdaten:
                     <td>'.$kundendaten["straße"].'</td>
                     <td style="text-align:right;">Kundennr.:'.$kundendaten["kundennr"].'</td>
                 </tr>
-                <tr>
-                    <td>'.$kundendaten["stadt"].'</td>
-                    <td style="text-align:right;">Mietvertragsnummer: '.$vertragsdaten["mietvertragnr"].'</td>
-                </tr>
             </table>
             <br>';
     
@@ -661,8 +657,8 @@ Folgend die Mietvertragsdaten:
                     $versanddatum = date('Y-m-d',$versanddatum);
 
                     $ID = mysqli_fetch_array($con->query("SELECT rechnungNr FROM rechnungen ORDER BY rechnungNr DESC"))[0]+1;
-                    $insertStatement = "INSERT INTO rechnungen (rechnungNr, mietvertragID, kundeID, rechnungDatum, rechnungBetrag, mahnstatus, zahlungslimit, versanddatum)
-                        VALUES ($ID, $mietvertragId, ".$mietvertrag["kundeID"].", '".date('Y-m-d')."', ".$mietvertrag["mietgebuehr"].", 'keine', '$zahlungslimit', '$versanddatum') ";
+                    $insertStatement = "INSERT INTO rechnungen (mietvertragID, kundeID, rechnungDatum, rechnungBetrag, mahnstatus, zahlungslimit, versanddatum)
+                        VALUES ($mietvertragId, ".$mietvertrag["kundeID"].", '".date('Y-m-d')."', ".$mietvertrag["mietgebuehr"].", 'keine', '$zahlungslimit', '$versanddatum') ";
 
                     $con->query($insertStatement);
             }
@@ -1056,6 +1052,7 @@ von '.$kundendaten["zahlungsziel"].' Tagen und war zum '.$mahnungsdaten["alte_za
         require_once(realpath(dirname(__FILE__) . '/../Database/db_inc.php'));
         $con = mysqli_connect($host, $user, $passwd, $schema);
         $heute = date("Y-m-d");
+        echo $heute;
         $zahlungsausstehendeKunden = $con->query("SELECT DISTINCT kundeID FROM rechnungen WHERE kundeID IN (SELECT DISTINCT kundeID FROM kunden WHERE sammelrechnungen != 'keine') AND versanddatum = '$heute'");
         $kundendaten;
         $rechnungsdaten = array();

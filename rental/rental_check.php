@@ -134,7 +134,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="../src/styles/global.css">
+        <link rel="stylesheet" href="../src/styles/style_returnDialog.css">
         <title>Reservierungsdaten anzeigen</title>
     </head>
     <body style="background-image:url()">   
