@@ -41,7 +41,7 @@
         }
 
         //Mietvertrag Mail
-        //createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
+        createMietvertragPDF($kundendaten,$mietvertragsdaten,'mail');
         //Mietvertrag PDF
         createMietvertragPDF($kundendaten,$mietvertragsdaten,'file');
     }
