@@ -27,7 +27,7 @@ Dieses Repository befasst sich mit der Entwicklung eines Teil der Webseite Autov
 6. Clonen sie diesen Repository in dem Ordner xampp/htdocs
 7. Rufen Sie mit dem Betriebssystem Windows die Aufgabenplanung (ggf. unter dem Namen "taskschd") auf
 8. Klicken Sie in der rechts befindlichen Leiste unter "Aktionen" auf die Option "Aufgabe importieren" und importeren Sie nacheinander die Dateien
-[Sammelrechnungen_Versand.xml](https://github.com/som-ould/rentalCar/trigger/Sammelrechnungen_Versand.xml) und [Mahnungen_Versand.xml](https://github.com/som-ould/rentalCar/trigger/Mahnungen_Versand.xml) und klicken sie auf "OK"
+[Sammelrechnungen_Versand.xml](https://github.com/som-ould/rentalCar/blob/main/trigger/Sammelrechnungen_Versand.xml) und [Mahnungen_Versand.xml](https://github.com/som-ould/rentalCar/blob/main/trigger/Mahnungen_Versand.xml) und klicken sie auf "OK"
 9. Rufen Sie localhost/rentalCar/index.html 
 
 ### Dokumentation
